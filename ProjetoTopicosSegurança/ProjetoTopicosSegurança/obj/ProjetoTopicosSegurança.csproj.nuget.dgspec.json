@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Boti\\source\\repos\\ProjetoTopicosSegurança\\ProjetoTopicosSegurança\\ProjetoTopicosSegurança.csproj": {}
+    "C:\\Users\\Boti\\Desktop\\TS\\projeto\\ProjetoTopicosSegurança\\ProjetoTopicosSegurança\\ProjetoTopicosSegurança.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Boti\\source\\repos\\ProjetoTopicosSegurança\\ProjetoTopicosSegurança\\ProjetoTopicosSegurança.csproj": {
+    "C:\\Users\\Boti\\Desktop\\TS\\projeto\\ProjetoTopicosSegurança\\ProjetoTopicosSegurança\\ProjetoTopicosSegurança.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Boti\\source\\repos\\ProjetoTopicosSegurança\\ProjetoTopicosSegurança\\ProjetoTopicosSegurança.csproj",
+        "projectUniqueName": "C:\\Users\\Boti\\Desktop\\TS\\projeto\\ProjetoTopicosSegurança\\ProjetoTopicosSegurança\\ProjetoTopicosSegurança.csproj",
         "projectName": "ProjetoTopicosSegurança",
-        "projectPath": "C:\\Users\\Boti\\source\\repos\\ProjetoTopicosSegurança\\ProjetoTopicosSegurança\\ProjetoTopicosSegurança.csproj",
+        "projectPath": "C:\\Users\\Boti\\Desktop\\TS\\projeto\\ProjetoTopicosSegurança\\ProjetoTopicosSegurança\\ProjetoTopicosSegurança.csproj",
         "packagesPath": "C:\\Users\\Boti\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Boti\\source\\repos\\ProjetoTopicosSegurança\\ProjetoTopicosSegurança\\obj\\",
+        "outputPath": "C:\\Users\\Boti\\Desktop\\TS\\projeto\\ProjetoTopicosSegurança\\ProjetoTopicosSegurança\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\Boti\\AppData\\Roaming\\NuGet\\NuGet.Config",

@@ -1,24 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\marko\\Documents\\2021_TESP_PSI\\2Semestre\\Seguranca\\Projeto\\Cliente\\Cliente.csproj": {}
+    "C:\\Users\\Boti\\Desktop\\TS\\projeto\\TopicosSeguranca\\Cliente\\Cliente.csproj": {}
   },
   "projects": {
-    "C:\\Users\\marko\\Documents\\2021_TESP_PSI\\2Semestre\\Seguranca\\Projeto\\Cliente\\Cliente.csproj": {
+    "C:\\Users\\Boti\\Desktop\\TS\\projeto\\TopicosSeguranca\\Cliente\\Cliente.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\marko\\Documents\\2021_TESP_PSI\\2Semestre\\Seguranca\\Projeto\\Cliente\\Cliente.csproj",
+        "projectUniqueName": "C:\\Users\\Boti\\Desktop\\TS\\projeto\\TopicosSeguranca\\Cliente\\Cliente.csproj",
         "projectName": "Cliente",
-        "projectPath": "C:\\Users\\marko\\Documents\\2021_TESP_PSI\\2Semestre\\Seguranca\\Projeto\\Cliente\\Cliente.csproj",
-        "packagesPath": "C:\\Users\\marko\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\marko\\Documents\\2021_TESP_PSI\\2Semestre\\Seguranca\\Projeto\\Cliente\\obj\\",
+        "projectPath": "C:\\Users\\Boti\\Desktop\\TS\\projeto\\TopicosSeguranca\\Cliente\\Cliente.csproj",
+        "packagesPath": "C:\\Users\\Boti\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Boti\\Desktop\\TS\\projeto\\TopicosSeguranca\\Cliente\\obj\\",
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-        ],
         "configFilePaths": [
-          "C:\\Users\\marko\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Users\\Boti\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -61,7 +57,7 @@
               "privateAssets": "none"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.101\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.201\\RuntimeIdentifierGraph.json"
         }
       }
     }

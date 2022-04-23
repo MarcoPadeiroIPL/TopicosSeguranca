@@ -8,12 +8,14 @@ namespace Servidor
     internal class ClientHandler
     {
         // informacao do cliente
-        private TcpClient client; 
+        private List<TcpClient> tcpClients; 
         private int clientID;
-        internal ClientHandler(TcpClient client, int clientID)
+        private TcpClient currClient;
+        internal ClientHandler(List<TcpClient> clients, int clientID)
         {
-            this.client = client;
+            this.tcpClients = clients;
             this.clientID = clientID;
+            this.currClient = tcpClients.ElementAt(clientID);
         }
 
         internal void Handle()
@@ -26,8 +28,16 @@ namespace Servidor
         private void threadHandler()
         {
             // Armazena a conexão do cliente
-            NetworkStream networkStream = this.client.GetStream();
+            NetworkStream networkStream = this.currClient.GetStream();
             ProtocolSI protocolSI = new ProtocolSI();
+
+            string mensagem = "Cliente " + clientID + " conectou-se";
+            Console.WriteLine(mensagem);
+            //byte[] pct = System.Text.Encoding.ASCII.GetBytes(mensagem);
+            //foreach(TcpClient a in tcpClients)
+            //{
+              //  a.GetStream().Write(pct, 0, pct.Length);
+            //}
 
             // Enquanto a transmissão com o cliente não acabar
             while(protocolSI.GetCmdType() != ProtocolSICmdType.EOT)
@@ -38,7 +48,24 @@ namespace Servidor
                 // cria um ACK - um sinal que o recetor (servidor) envia para confirmar a receção da mensagem
                 byte[] ack;
 
-                switch(protocolSI.GetCmdType())
+                string msg = string.Empty;
+
+                if(protocolSI.GetCmdType() == ProtocolSICmdType.DATA)
+                {
+                    msg = "Cliente " + clientID + ": " + protocolSI.GetStringFromData();
+                } else
+                {
+                    msg = "Cliente " + clientID + " desconectou-se";
+                }
+                Console.WriteLine(msg);
+                byte [] pacote = System.Text.Encoding.ASCII.GetBytes(msg);
+
+                foreach(TcpClient c in tcpClients)
+                {
+                    NetworkStream stream = c.GetStream();
+                    stream.Write(pacote, 0, pacote.Length);
+                }
+                /*switch(protocolSI.GetCmdType())
                 {
                     // caso a informação recebida seja uma mensagem
                     case ProtocolSICmdType.DATA:
@@ -55,12 +82,12 @@ namespace Servidor
                         ack = protocolSI.Make(ProtocolSICmdType.ACK);
                         networkStream.Write(ack, 0, ack.Length);
                         break;
-                }
+                }*/
 
             }
             // encerramento de ligação com o cliente
             networkStream.Close();
-            client.Close();
+            currClient.Close();
         }
     }
 }

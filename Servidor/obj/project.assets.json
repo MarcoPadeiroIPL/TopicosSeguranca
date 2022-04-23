@@ -14,11 +14,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\marko\\Documents\\2021_TESP_PSI\\2Semestre\\Seguranca\\Projeto\\Servidor\\Servidor.csproj",
+      "projectUniqueName": "C:\\Users\\marko\\Documents\\2021_TESP_PSI\\2Semestre\\Seguranca\\Projeto\\master\\Servidor\\Servidor.csproj",
       "projectName": "Servidor",
-      "projectPath": "C:\\Users\\marko\\Documents\\2021_TESP_PSI\\2Semestre\\Seguranca\\Projeto\\Servidor\\Servidor.csproj",
+      "projectPath": "C:\\Users\\marko\\Documents\\2021_TESP_PSI\\2Semestre\\Seguranca\\Projeto\\master\\Servidor\\Servidor.csproj",
       "packagesPath": "C:\\Users\\marko\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\marko\\Documents\\2021_TESP_PSI\\2Semestre\\Seguranca\\Projeto\\Servidor\\obj\\",
+      "outputPath": "C:\\Users\\marko\\Documents\\2021_TESP_PSI\\2Semestre\\Seguranca\\Projeto\\master\\Servidor\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

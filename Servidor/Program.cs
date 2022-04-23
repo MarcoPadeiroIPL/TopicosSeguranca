@@ -27,15 +27,15 @@ namespace Servidor // Note: actual namespace depends on the project name.
             Console.WriteLine("Servidor pronto!\n");
             Console.WriteLine("A aguardar clientes...\n");
 
+            List<TcpClient> tcpClients = new List<TcpClient>();
             
             while(true)
             {
-                TcpClient client = listener.AcceptTcpClient();
-                clientConter++;
-                Console.WriteLine("Cliente {0} ligado", clientConter);
+                tcpClients.Add(listener.AcceptTcpClient());
 
-                ClientHandler handler = new ClientHandler(client, clientConter);
+                ClientHandler handler = new ClientHandler(tcpClients, clientConter);
                 handler.Handle();
+                clientConter++;
 
             }
 

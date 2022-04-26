@@ -7,8 +7,13 @@ using System.Threading;
 
 namespace Servidor // Note: actual namespace depends on the project name.
 {
+    static class Globals
+    {
+        public static List<User> users = new List<User>();
+    }
     internal class Program
     {
+        
         // porto do servidor
         private const int PORT = 5000;
 
@@ -20,7 +25,7 @@ namespace Servidor // Note: actual namespace depends on the project name.
             TcpListener listener = new TcpListener(endpoint);
             listener.Start();
             ProtocolSI protocolSI = new ProtocolSI();
-            int clientConter = 0;
+            int clientCounter = 0;
             Console.WriteLine("A iniciar o servidor " + IPAddress.Loopback + "...");
             Console.WriteLine("A definir a porta do servidor...");
             Console.WriteLine("PORTA: " + PORT);
@@ -31,14 +36,25 @@ namespace Servidor // Note: actual namespace depends on the project name.
             while(true)
             {
                 TcpClient client = listener.AcceptTcpClient();
-                clientConter++;
-                Console.WriteLine("Cliente {0} ligado", clientConter);
+                clientCounter++;
 
-                ClientHandler handler = new ClientHandler(client, clientConter);
+                User currUtilizador = new User(client, false);  
+                Globals.users.Add(currUtilizador);
+
+                Console.WriteLine("Alguém está a tentar entrar...");
+
+                ClientHandler handler = new ClientHandler(currUtilizador);
                 handler.Handle();
-
             }
-
         } 
+        public static void SendToEveryone(byte[] package)
+        {
+            foreach(User user in Globals.users)
+            {
+                NetworkStream networkStream = user.GetStream();
+                networkStream.Write(package, 0, package.Length);
+                networkStream.Flush();
+            }
+        }
     }
 }

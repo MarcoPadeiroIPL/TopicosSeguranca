@@ -8,19 +8,24 @@
     "net6.0": []
   },
   "packageFolders": {
-    "C:\\Users\\Boti\\.nuget\\packages\\": {}
+    "C:\\Users\\marko\\.nuget\\packages\\": {},
+    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Boti\\Desktop\\TS\\projeto\\TopicosSeguranca\\Servidor\\Servidor.csproj",
+      "projectUniqueName": "C:\\Users\\marko\\Documents\\2021_TESP_PSI\\2Semestre\\Seguranca\\Projeto\\master2\\TopicosSeguranca\\Servidor\\Servidor.csproj",
       "projectName": "Servidor",
-      "projectPath": "C:\\Users\\Boti\\Desktop\\TS\\projeto\\TopicosSeguranca\\Servidor\\Servidor.csproj",
-      "packagesPath": "C:\\Users\\Boti\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Boti\\Desktop\\TS\\projeto\\TopicosSeguranca\\Servidor\\obj\\",
+      "projectPath": "C:\\Users\\marko\\Documents\\2021_TESP_PSI\\2Semestre\\Seguranca\\Projeto\\master2\\TopicosSeguranca\\Servidor\\Servidor.csproj",
+      "packagesPath": "C:\\Users\\marko\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\marko\\Documents\\2021_TESP_PSI\\2Semestre\\Seguranca\\Projeto\\master2\\TopicosSeguranca\\Servidor\\obj\\",
       "projectStyle": "PackageReference",
+      "fallbackFolders": [
+        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+      ],
       "configFilePaths": [
-        "C:\\Users\\Boti\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\marko\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -60,7 +65,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.201\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.101\\RuntimeIdentifierGraph.json"
       }
     }
   }

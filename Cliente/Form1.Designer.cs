@@ -30,50 +30,55 @@
         {
             this.label1 = new System.Windows.Forms.Label();
             this.textBoxUsername = new System.Windows.Forms.TextBox();
-            this.buttonEnviarChave = new System.Windows.Forms.Button();
-            this.buttonEnviar = new System.Windows.Forms.Button();
+            this.buttonLogin = new System.Windows.Forms.Button();
             this.buttonClose = new System.Windows.Forms.Button();
             this.textBoxChat = new System.Windows.Forms.TextBox();
             this.textBoxMensagem = new System.Windows.Forms.TextBox();
             this.buttonMinimize = new System.Windows.Forms.Button();
+            this.textBoxPassword = new System.Windows.Forms.TextBox();
+            this.label2 = new System.Windows.Forms.Label();
+            this.buttonEnviar = new System.Windows.Forms.Button();
+            this.buttonRegister = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.BackColor = System.Drawing.SystemColors.Control;
-            this.label1.Location = new System.Drawing.Point(102, 60);
+            this.label1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(24)))), ((int)(((byte)(36)))), ((int)(((byte)(60)))));
+            this.label1.Font = new System.Drawing.Font("Cascadia Mono", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.label1.ForeColor = System.Drawing.Color.White;
+            this.label1.Location = new System.Drawing.Point(57, 134);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(49, 20);
+            this.label1.Size = new System.Drawing.Size(90, 20);
             this.label1.TabIndex = 0;
-            this.label1.Text = "Login:";
+            this.label1.Text = "Username:";
             // 
             // textBoxUsername
             // 
-            this.textBoxUsername.Location = new System.Drawing.Point(58, 94);
+            this.textBoxUsername.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(36)))), ((int)(((byte)(84)))));
+            this.textBoxUsername.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.textBoxUsername.Font = new System.Drawing.Font("Cascadia Mono", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.textBoxUsername.ForeColor = System.Drawing.Color.White;
+            this.textBoxUsername.Location = new System.Drawing.Point(57, 157);
             this.textBoxUsername.Name = "textBoxUsername";
-            this.textBoxUsername.Size = new System.Drawing.Size(144, 27);
+            this.textBoxUsername.Size = new System.Drawing.Size(144, 18);
             this.textBoxUsername.TabIndex = 1;
+            this.textBoxUsername.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBoxUsername_KeyPress);
             // 
-            // buttonEnviarChave
+            // buttonLogin
             // 
-            this.buttonEnviarChave.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(225)))), ((int)(((byte)(255)))), ((int)(((byte)(0)))));
-            this.buttonEnviarChave.Location = new System.Drawing.Point(71, 332);
-            this.buttonEnviarChave.Name = "buttonEnviarChave";
-            this.buttonEnviarChave.Size = new System.Drawing.Size(94, 29);
-            this.buttonEnviarChave.TabIndex = 2;
-            this.buttonEnviarChave.Text = "Enviar";
-            this.buttonEnviarChave.UseVisualStyleBackColor = false;
-            // 
-            // buttonEnviar
-            // 
-            this.buttonEnviar.Location = new System.Drawing.Point(709, 400);
-            this.buttonEnviar.Name = "buttonEnviar";
-            this.buttonEnviar.Size = new System.Drawing.Size(65, 29);
-            this.buttonEnviar.TabIndex = 9;
-            this.buttonEnviar.Text = "Enviar";
-            this.buttonEnviar.UseVisualStyleBackColor = true;
-            this.buttonEnviar.Click += new System.EventHandler(this.buttonEnviar_Click);
+            this.buttonLogin.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(36)))), ((int)(((byte)(84)))));
+            this.buttonLogin.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.buttonLogin.Font = new System.Drawing.Font("Cascadia Mono", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.buttonLogin.ForeColor = System.Drawing.Color.White;
+            this.buttonLogin.Location = new System.Drawing.Point(77, 264);
+            this.buttonLogin.Name = "buttonLogin";
+            this.buttonLogin.Size = new System.Drawing.Size(94, 29);
+            this.buttonLogin.TabIndex = 2;
+            this.buttonLogin.TabStop = false;
+            this.buttonLogin.Text = "Login";
+            this.buttonLogin.UseVisualStyleBackColor = false;
+            this.buttonLogin.Click += new System.EventHandler(this.buttonLogin_Click);
             // 
             // buttonClose
             // 
@@ -86,6 +91,7 @@
             this.buttonClose.Name = "buttonClose";
             this.buttonClose.Size = new System.Drawing.Size(47, 27);
             this.buttonClose.TabIndex = 10;
+            this.buttonClose.TabStop = false;
             this.buttonClose.Text = "X";
             this.buttonClose.UseVisualStyleBackColor = false;
             this.buttonClose.Click += new System.EventHandler(this.buttonClose_Click);
@@ -101,6 +107,7 @@
             this.textBoxChat.ReadOnly = true;
             this.textBoxChat.Size = new System.Drawing.Size(518, 329);
             this.textBoxChat.TabIndex = 7;
+            this.textBoxChat.TabStop = false;
             // 
             // textBoxMensagem
             // 
@@ -111,7 +118,7 @@
             this.textBoxMensagem.Location = new System.Drawing.Point(256, 404);
             this.textBoxMensagem.Name = "textBoxMensagem";
             this.textBoxMensagem.PlaceholderText = "Escreva uma mensagem!";
-            this.textBoxMensagem.Size = new System.Drawing.Size(432, 18);
+            this.textBoxMensagem.Size = new System.Drawing.Size(430, 18);
             this.textBoxMensagem.TabIndex = 11;
             this.textBoxMensagem.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBoxMensagem_KeyPress);
             // 
@@ -126,9 +133,64 @@
             this.buttonMinimize.Name = "buttonMinimize";
             this.buttonMinimize.Size = new System.Drawing.Size(47, 27);
             this.buttonMinimize.TabIndex = 13;
+            this.buttonMinimize.TabStop = false;
             this.buttonMinimize.Text = "-";
             this.buttonMinimize.UseVisualStyleBackColor = false;
             this.buttonMinimize.Click += new System.EventHandler(this.buttonMinimize_Click);
+            // 
+            // textBoxPassword
+            // 
+            this.textBoxPassword.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(36)))), ((int)(((byte)(84)))));
+            this.textBoxPassword.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.textBoxPassword.Font = new System.Drawing.Font("Cascadia Mono", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.textBoxPassword.ForeColor = System.Drawing.Color.White;
+            this.textBoxPassword.Location = new System.Drawing.Point(57, 216);
+            this.textBoxPassword.Name = "textBoxPassword";
+            this.textBoxPassword.Size = new System.Drawing.Size(144, 18);
+            this.textBoxPassword.TabIndex = 2;
+            this.textBoxPassword.UseSystemPasswordChar = true;
+            this.textBoxPassword.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBoxUsername_KeyPress);
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(24)))), ((int)(((byte)(36)))), ((int)(((byte)(60)))));
+            this.label2.Font = new System.Drawing.Font("Cascadia Mono", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.label2.ForeColor = System.Drawing.Color.White;
+            this.label2.Location = new System.Drawing.Point(57, 193);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(90, 20);
+            this.label2.TabIndex = 14;
+            this.label2.Text = "Password:";
+            // 
+            // buttonEnviar
+            // 
+            this.buttonEnviar.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(36)))), ((int)(((byte)(84)))));
+            this.buttonEnviar.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.buttonEnviar.Font = new System.Drawing.Font("Cascadia Mono", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.buttonEnviar.ForeColor = System.Drawing.Color.White;
+            this.buttonEnviar.Location = new System.Drawing.Point(692, 400);
+            this.buttonEnviar.Name = "buttonEnviar";
+            this.buttonEnviar.Size = new System.Drawing.Size(82, 29);
+            this.buttonEnviar.TabIndex = 16;
+            this.buttonEnviar.Text = "Enviar";
+            this.buttonEnviar.UseVisualStyleBackColor = false;
+            this.buttonEnviar.Click += new System.EventHandler(this.buttonEnviar_Click);
+            // 
+            // buttonRegister
+            // 
+            this.buttonRegister.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(36)))), ((int)(((byte)(84)))));
+            this.buttonRegister.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.buttonRegister.Font = new System.Drawing.Font("Cascadia Mono", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.buttonRegister.ForeColor = System.Drawing.Color.White;
+            this.buttonRegister.Location = new System.Drawing.Point(77, 319);
+            this.buttonRegister.Name = "buttonRegister";
+            this.buttonRegister.Size = new System.Drawing.Size(94, 29);
+            this.buttonRegister.TabIndex = 17;
+            this.buttonRegister.TabStop = false;
+            this.buttonRegister.Text = "Registar";
+            this.buttonRegister.UseVisualStyleBackColor = false;
+            this.buttonRegister.Click += new System.EventHandler(this.buttonRegister_Click);
             // 
             // Form1
             // 
@@ -136,12 +198,15 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(24)))), ((int)(((byte)(36)))), ((int)(((byte)(60)))));
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.buttonRegister);
+            this.Controls.Add(this.buttonEnviar);
+            this.Controls.Add(this.textBoxPassword);
+            this.Controls.Add(this.label2);
             this.Controls.Add(this.buttonMinimize);
             this.Controls.Add(this.textBoxMensagem);
             this.Controls.Add(this.textBoxChat);
             this.Controls.Add(this.buttonClose);
-            this.Controls.Add(this.buttonEnviar);
-            this.Controls.Add(this.buttonEnviarChave);
+            this.Controls.Add(this.buttonLogin);
             this.Controls.Add(this.textBoxUsername);
             this.Controls.Add(this.label1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
@@ -157,11 +222,14 @@
 
         private Label label1;
         private TextBox textBoxUsername;
-        private Button buttonEnviarChave;
-        private Button buttonEnviar;
+        private Button buttonLogin;
         private Button buttonClose;
         private TextBox textBoxChat;
         private TextBox textBoxMensagem;
         private Button buttonMinimize;
+        private TextBox textBoxPassword;
+        private Label label2;
+        private Button buttonEnviar;
+        private Button buttonRegister;
     }
 }

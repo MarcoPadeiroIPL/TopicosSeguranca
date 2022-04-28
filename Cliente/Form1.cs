@@ -31,26 +31,23 @@ namespace ProjetoTopicosSegurança
         {
 
         }
-        private void SendMessage(string msg)
+        private void SendMessage(byte[] package)
         {
             // escreve a mensagem no network
-            byte[] pacote = protocolSI.Make(ProtocolSICmdType.DATA, msg);
-            networkStream.Write(pacote, 0, pacote.Length);
+            networkStream.Write(package, 0, package.Length);
             networkStream.Flush();
         }
         private void ReadMessage()
         {
             while (true)
             {
-                    networkStream.Read(protocolSI.Buffer, 0, protocolSI.Buffer.Length);
-                    if (protocolSI.GetCmdType() == ProtocolSICmdType.DATA) { AddText(protocolSI.GetStringFromData()); }
-                   
-               
+                networkStream.Read(protocolSI.Buffer, 0, protocolSI.Buffer.Length);
+                if (protocolSI.GetCmdType() == ProtocolSICmdType.DATA) { AddText(protocolSI.GetStringFromData()); }
             }
         }
-        private void AddText(string text)
+        private void AddText(string text) // Adiciona texto à textbox chat
         {
-            
+            // fix de problemas com manipulação de threads diferentes          #StackOverFlowFTW
             if (InvokeRequired)
             {
                 this.Invoke(new Action<string>(AddText), new object[] { text });
@@ -64,44 +61,49 @@ namespace ProjetoTopicosSegurança
 
         private void buttonEnviar_Click(object sender, EventArgs e)
         {
-            SendMessage(textBoxMensagem.Text.Trim());
+            byte[] package = protocolSI.Make(ProtocolSICmdType.DATA, textBoxMensagem.Text.Trim());
+            SendMessage(package);
             textBoxMensagem.Clear();
         }
 
-        private void buttonMinimize_Click(object sender, EventArgs e)
+        private void buttonMinimize_Click(object sender, EventArgs e) // UI
         {
             this.WindowState = FormWindowState.Minimized;
         }
 
-        private void textBoxMensagem_KeyPress(object sender, KeyPressEventArgs e)
+        private void textBoxMensagem_KeyPress(object sender, KeyPressEventArgs e) // UI
         {
             if (e.KeyChar == 13)
             {
-                SendMessage(textBoxMensagem.Text);
+                byte[] package = protocolSI.Make(ProtocolSICmdType.DATA, textBoxMensagem.Text.Trim());
+                SendMessage(package);
                 textBoxMensagem.Clear();
             }
         }
-        private void buttonClose_Click(object sender, EventArgs e)
+        private void buttonClose_Click(object sender, EventArgs e) // UI
         {
-            // escreve a mensagem no network
-            byte[] pacote = protocolSI.Make(ProtocolSICmdType.EOT);
-            networkStream.Write(pacote, 0, pacote.Length);
+            // escreve a mensagem para o servidor a avisar que o cliente vai encerrar a conexão
+            byte[] package = protocolSI.Make(ProtocolSICmdType.EOT);
+            SendMessage(package); 
+            networkStream.Close();
+            tcpClient.Close();
             Application.Exit();
         }
 
-        private void DesligarLigarChat(bool currState)
+        private void DesligarLigarChat(bool currState) // UI    
         {
             textBoxChat.Enabled = currState;
             textBoxMensagem.Enabled = currState;
             buttonEnviar.Enabled = currState;
         }
-        private void DesligarLigarLogin(bool currState)
+        private void DesligarLigarLogin(bool currState) // UI
         {
             label1.Enabled = currState;
             label2.Enabled = currState;
             textBoxUsername.Enabled = currState;
             textBoxPassword.Enabled = currState;
             buttonLogin.Enabled = currState;
+            buttonRegister.Enabled = currState;
         }
 
         private void buttonLogin_Click(object sender, EventArgs e)
@@ -115,24 +117,30 @@ namespace ProjetoTopicosSegurança
                 string userPass = textBoxUsername.Text.Trim() + '/' + textBoxPassword.Text.Trim();
 
                 // cria um pacote para enviar os dados de autenticação ao servidor
-                byte[] package = protocolSI.Make(ProtocolSICmdType.USER_OPTION_1, userPass);
+                byte[] package = protocolSI.Make(ProtocolSICmdType.USER_OPTION_1, userPass); // USER_OPTION_1 == Tentativa de login
 
                 // envia os dados para o servidor
-                networkStream.Write(package, 0, package.Length);
-
+                SendMessage(package);
+                
+                // vai por um loop e aguarda até a mensagem do servidor seja o pretendido     ACK == valid       NACK == invalid
                 while(protocolSI.GetCmdType() != ProtocolSICmdType.ACK || protocolSI.GetCmdType() != ProtocolSICmdType.NACK)
                 {
-                    networkStream.Read(protocolSI.Buffer, 0, protocolSI.Buffer.Length);
-                    if (protocolSI.GetCmdType() == ProtocolSICmdType.ACK)
+                    networkStream.Read(protocolSI.Buffer, 0, protocolSI.Buffer.Length); // le a mensagem do servidor
+
+                    if (protocolSI.GetCmdType() == ProtocolSICmdType.ACK) // caso seja valido
                     {
-                        DesligarLigarChat(true);
+                        // UI
+                        DesligarLigarChat(true);     
                         DesligarLigarLogin(false);
                         textBoxChat.Text += "Bem-vindo ao chat!" + Environment.NewLine;
-                        Thread ctThread = new Thread(ReadMessage);
-                        ctThread.Start();
+
+                        // Inicia uma nova thread dedicada a este cliente para estar sempre à procura de mensagens do servidor
+                        Thread clientRead = new Thread(ReadMessage);
+                        clientRead.Start();
+
                         return;
                     } 
-                    if(protocolSI.GetCmdType() == ProtocolSICmdType.NACK)
+                    if(protocolSI.GetCmdType() == ProtocolSICmdType.NACK) // caso as credencias sejam invalidas
                     {
                         MessageBox.Show("Credenciais invalidas!");
                         return;
@@ -141,7 +149,7 @@ namespace ProjetoTopicosSegurança
             }
         }
 
-        private void textBoxUsername_KeyPress(object sender, KeyPressEventArgs e)
+        private void textBoxUsername_KeyPress(object sender, KeyPressEventArgs e) // UI
         { 
             if (e.KeyChar == 13)
             {
@@ -150,7 +158,7 @@ namespace ProjetoTopicosSegurança
             }
         }
 
-        private void buttonRegister_Click(object sender, EventArgs e)
+        private void buttonRegister_Click(object sender, EventArgs e) 
         {
             if (String.IsNullOrEmpty(textBoxUsername.Text) || String.IsNullOrEmpty(textBoxPassword.Text))
             {
@@ -158,14 +166,17 @@ namespace ProjetoTopicosSegurança
             }
             else
             {
-                string userPass = textBoxUsername.Text.Trim() + '/' + textBoxPassword.Text.Trim();
+                string userPass = textBoxUsername.Text.Trim() + '/' + textBoxPassword.Text.Trim(); // cria uma nova string para armazenar o username e password
+                // uso da '/' serve para facilitar o envio ao servidor, exemplo   username:teste | password:1234  | resultado:teste/1234
 
                 // cria um pacote para enviar os dados de autenticação ao servidor
+                // USER_OPTION_2 avisa que está a tentar fazer um registo
                 byte[] package = protocolSI.Make(ProtocolSICmdType.USER_OPTION_2, userPass);
 
                 // envia os dados para o servidor
-                networkStream.Write(package, 0, package.Length);
+                SendMessage(package);
 
+                // aguarda por uma mensagem de validação do servidor
                 while(protocolSI.GetCmdType() != ProtocolSICmdType.ACK || protocolSI.GetCmdType() != ProtocolSICmdType.NACK)
                 {
                     networkStream.Read(protocolSI.Buffer, 0, protocolSI.Buffer.Length);

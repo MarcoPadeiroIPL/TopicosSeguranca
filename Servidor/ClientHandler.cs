@@ -9,7 +9,8 @@ namespace Servidor
 {
     static class Globais
     {
-        public static List<string[]> contas = new List<string[]>();
+        // TEMPORARIA: ATÉ SE TRATAR DA BASE DE DADOS
+        public static List<string[]> contas = new List<string[]>(); // variavel global para armazenar as credencias dos clientes
     }
     internal class ClientHandler
     {
@@ -45,9 +46,9 @@ namespace Servidor
             while(protocolSI.GetCmdType() != ProtocolSICmdType.EOT)
             {
                 // lê a informação da possivel mensagem enviada pelo cliente
-                int bytesRead = currStream.Read(protocolSI.Buffer, 0, protocolSI.Buffer.Length);
+                currStream.Read(protocolSI.Buffer, 0, protocolSI.Buffer.Length);
 
-                // cria um pacote responsavel por armazenar a mensagem a ser enviada pelo servidor 
+                // criação um pacote responsavel por armazenar a mensagem a ser enviada pelo servidor 
                 byte[] package;
 
 
@@ -63,19 +64,29 @@ namespace Servidor
                             currUser.ChangeUsername(currUsername);
                             string password = userPass.Substring(userPass.IndexOf('/') + 1, userPass.Length - currUser.GetUsername().Length - 1);
 
+                            // verifica se são validos
                             if (VerifyLogin(currUsername, password)) {
+                                // altera o atribuito do cliente para o codigo reconhecer que está logado
                                 currUser.ChangeLogin(true);
                                 isLogged = true;
+
+                                // envia uma mensagem ao cliente a avisar que o login é valido
                                 package = protocolSI.Make(ProtocolSICmdType.ACK);
                                 currStream.Write(package, 0, package.Length);
-                                string mensagem = currUsername + " entrou no chat!";
+                                currStream.Flush();
+                                
+                                // envia uma mensagem a todos os outros clientes a avisar que alguem entrou no chat
+                                string mensagem = DateTime.Now.ToString("[hh:mm]") + " " + currUsername + " entrou no chat!";
                                 Console.WriteLine(mensagem);
                                 package = protocolSI.Make(ProtocolSICmdType.DATA, mensagem);
                                 Program.SendToEveryone(package);
                             } 
-                            else { package = protocolSI.Make(ProtocolSICmdType.NACK); }
+                            else { // credenciais invalidas 
+                                package = protocolSI.Make(ProtocolSICmdType.NACK);
+                                currStream.Write(package, 0, package.Length);
+                                currStream.Flush();
+                            }
 
-                            currStream.Write(package, 0, package.Length);
                         }
                         else
                         {
@@ -84,28 +95,31 @@ namespace Servidor
                         break;
 
                     case ProtocolSICmdType.USER_OPTION_2:
+                        // obtem o username e password enviada pelo cliente
                         string userPas = protocolSI.GetStringFromData();
                         string username = userPas.Substring(0, userPas.IndexOf('/'));
                         string pass = userPas.Substring(userPas.IndexOf('/') + 1, userPas.Length - username.Length - 1);
-                        bool res = Register(username, pass);
-                        if (res)
+
+                        // regista o cliente e verifica se foi efetuado com succeso ou não
+                        if (Register(username, pass))
                         {
                             package = protocolSI.Make(ProtocolSICmdType.ACK);
                         } else
                         {
                             package = protocolSI.Make(ProtocolSICmdType.NACK);
                         }
-                        currStream.Write(package, 0, package.Length); 
+                        currStream.Write(package, 0, package.Length);
+                        currStream.Flush();
                         break;
                     // caso a informação recebida seja uma mensagem
                     case ProtocolSICmdType.DATA:
                         if (currUser.GetLogin())
                         {
-                            string msg = currUsername + ": " + protocolSI.GetStringFromData();
+                            string msg = DateTime.Now.ToString("[hh:mm]") + " " + currUsername + ": " + protocolSI.GetStringFromData();
                             Console.WriteLine(msg);
 
+                            // envia a todos os clientes
                             package = protocolSI.Make(ProtocolSICmdType.DATA, msg);
-
                             Program.SendToEveryone(package);
                         } else
                         {
@@ -115,13 +129,16 @@ namespace Servidor
                         
                     // caso a informação recebida tenha sido de fim de transmissão
                     case ProtocolSICmdType.EOT:
-                        string mesg = currUsername + " saiu do chat.";
+                        string mesg = DateTime.Now.ToString("[hh:mm]") + " " + currUsername + " saiu do chat.";
                         Console.WriteLine(mesg);
                         // confirma que recebeu a mensagem pelo envio de um ack
                         package = protocolSI.Make(ProtocolSICmdType.DATA, mesg);
 
 
                         Program.SendToEveryone(package);
+
+                        currStream.Close();
+                        currClient.Close();
                         break;
                 }
             }

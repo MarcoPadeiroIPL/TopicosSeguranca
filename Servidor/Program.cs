@@ -51,9 +51,13 @@ namespace Servidor // Note: actual namespace depends on the project name.
         {
             foreach(User user in Globals.users)
             {
-                NetworkStream networkStream = user.GetStream();
-                networkStream.Write(package, 0, package.Length);
-                networkStream.Flush();
+                if(user.GetLogin())
+                {
+                    NetworkStream networkStream = user.GetStream();
+                    networkStream.Write(package, 0, package.Length);
+                    networkStream.Flush();
+                }
+               
             }
         }
     }

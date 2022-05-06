@@ -61,14 +61,15 @@ namespace Servidor
                             // obtem o username e password
                             string userPass = protocolSI.GetStringFromData();
                             currUsername = userPass.Substring(0, userPass.IndexOf('/'));
-                            currUser.ChangeUsername(currUsername);
-                            string password = userPass.Substring(userPass.IndexOf('/') + 1, userPass.Length - currUser.GetUsername().Length - 1);
-
+                            string password = userPass.Substring(userPass.IndexOf('/') + 1, userPass.Length - currUsername.Length - 1);
+                   
                             // verifica se são validos
                             if (VerifyLogin(currUsername, password)) {
                                 // altera o atribuito do cliente para o codigo reconhecer que está logado
                                 currUser.ChangeLogin(true);
                                 isLogged = true;
+
+                                currUser.ChangeUsername(currUsername);
 
                                 // envia uma mensagem ao cliente a avisar que o login é valido
                                 package = protocolSI.Make(ProtocolSICmdType.ACK);
@@ -94,7 +95,7 @@ namespace Servidor
                         }
                         break;
 
-                    case ProtocolSICmdType.USER_OPTION_2:
+                    case ProtocolSICmdType.USER_OPTION_2: //utilizador registar
                         // obtem o username e password enviada pelo cliente
                         string userPas = protocolSI.GetStringFromData();
                         string username = userPas.Substring(0, userPas.IndexOf('/'));
@@ -111,6 +112,7 @@ namespace Servidor
                         currStream.Write(package, 0, package.Length);
                         currStream.Flush();
                         break;
+
                     // caso a informação recebida seja uma mensagem
                     case ProtocolSICmdType.DATA:
                         if (currUser.GetLogin())
@@ -131,10 +133,9 @@ namespace Servidor
                     case ProtocolSICmdType.EOT:
                         string mesg = DateTime.Now.ToString("[hh:mm]") + " " + currUsername + " saiu do chat.";
                         Console.WriteLine(mesg);
-                        // confirma que recebeu a mensagem pelo envio de um ack
                         package = protocolSI.Make(ProtocolSICmdType.DATA, mesg);
 
-
+                        Globals.users.Remove(currUser);
                         Program.SendToEveryone(package);
 
                         currStream.Close();
@@ -154,9 +155,19 @@ namespace Servidor
             Globais.contas.Add(array1);
             Globais.contas.Add(array3);
             // temporario até criar ligação com base de dados
+            foreach(User user in Globals.users)
+            {
+                if(user.GetUsername() == username && user.GetLogin())
+                {
+                    return false;
+                }
+            }
             foreach(string[] conta in Globais.contas)
             {
-                if (username == conta[0] && password == conta[1]) return true;
+                if (username == conta[0] && password == conta[1])
+                {
+                    return true;   
+                }
             }
             return false;
         }

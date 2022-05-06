@@ -6,6 +6,7 @@ using EI.SI;
 
 namespace ProjetoTopicosSegurança
 {
+  
     public partial class Form1 : Form
     {
 
@@ -21,7 +22,6 @@ namespace ProjetoTopicosSegurança
             tcpClient.Connect(endpoint);
             networkStream = tcpClient.GetStream();
             protocolSI = new ProtocolSI();
-
             DesligarLigarChat(false);
             DesligarLigarLogin(true);
         }
@@ -39,7 +39,7 @@ namespace ProjetoTopicosSegurança
         }
         private void ReadMessage()
         {
-            while (true)
+            while (networkStream.CanRead)
             {
                 networkStream.Read(protocolSI.Buffer, 0, protocolSI.Buffer.Length);
                 if (protocolSI.GetCmdType() == ProtocolSICmdType.DATA) { AddText(protocolSI.GetStringFromData()); }
@@ -126,7 +126,6 @@ namespace ProjetoTopicosSegurança
                 while(protocolSI.GetCmdType() != ProtocolSICmdType.ACK || protocolSI.GetCmdType() != ProtocolSICmdType.NACK)
                 {
                     networkStream.Read(protocolSI.Buffer, 0, protocolSI.Buffer.Length); // le a mensagem do servidor
-
                     if (protocolSI.GetCmdType() == ProtocolSICmdType.ACK) // caso seja valido
                     {
                         // UI
@@ -135,8 +134,8 @@ namespace ProjetoTopicosSegurança
                         textBoxChat.Text += "Bem-vindo ao chat!" + Environment.NewLine;
 
                         // Inicia uma nova thread dedicada a este cliente para estar sempre à procura de mensagens do servidor
-                        Thread clientRead = new Thread(ReadMessage);
-                        clientRead.Start();
+                            Thread clientRead = new Thread(ReadMessage);
+                            clientRead.Start();
 
                         return;
                     } 
@@ -154,7 +153,6 @@ namespace ProjetoTopicosSegurança
             if (e.KeyChar == 13)
             {
                 buttonLogin.PerformClick();
-                textBoxMensagem.Clear();
             }
         }
 
@@ -194,5 +192,6 @@ namespace ProjetoTopicosSegurança
             }
 
         }
+
     }
 }

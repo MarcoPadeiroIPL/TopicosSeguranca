@@ -10,6 +10,8 @@ namespace Servidor // Note: actual namespace depends on the project name.
     static class Globals
     {
         public static List<User> users = new List<User>(); // variavel global que armazena todos os users
+        //public static string currentPath = @"C:\temp\servidor\logs\log" + DateTime.Now.ToString("yy-MM-dd_HH:mm:ss") + ".txt";
+        public static string currentPath = Directory.GetCurrentDirectory() + "\\logs\\log" + DateTime.Now.ToString("yy/MM/dd__HH.mm.ss") + ".txt";
     }
     internal class Program
     {
@@ -25,11 +27,11 @@ namespace Servidor // Note: actual namespace depends on the project name.
             listener.Start();
             ProtocolSI protocolSI = new ProtocolSI();
             int clientCounter = 0;
-            Console.WriteLine("A iniciar o servidor " + IPAddress.Loopback + "...");
-            Console.WriteLine("A definir a porta do servidor...");
-            Console.WriteLine("PORTA: " + PORT);
-            Console.WriteLine("Servidor pronto!\n");
-            Console.WriteLine("A aguardar clientes...\n");
+            WriteToLog("A iniciar o servidor " + IPAddress.Loopback + "...");
+            WriteToLog("A definir a porta do servidor");
+            WriteToLog("PORTA: " + PORT);
+            WriteToLog("Servidor pronto!\n");
+            WriteToLog("A aguardar clientes...\n");
 
             // vai à procura de clientes    
             while(true)
@@ -41,7 +43,6 @@ namespace Servidor // Note: actual namespace depends on the project name.
                 User currUtilizador = new User(client, false); // criação de nova instancia de um user 
                 Globals.users.Add(currUtilizador); // adiciona à lista global de todos os users
 
-                Console.WriteLine(DateTime.Now.ToString("[HH:mm]") + " Alguém está a tentar entrar..."); 
 
                 ClientHandler handler = new ClientHandler(currUtilizador);
                 handler.Handle();
@@ -59,6 +60,19 @@ namespace Servidor // Note: actual namespace depends on the project name.
                 }
                
             }
+        }
+        public static void WriteToLog(string msg)
+        {
+            Console.WriteLine(msg);
+
+
+            FileStream fs = new FileStream(Globals.currentPath, FileMode.Append, FileAccess.Write);
+            StreamWriter sw = new StreamWriter(fs);
+
+            sw.WriteLine(msg);
+
+            sw.Close();
+            fs.Close();
         }
     }
 }

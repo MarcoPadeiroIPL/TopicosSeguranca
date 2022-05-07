@@ -42,6 +42,7 @@ namespace Servidor
 
         private void threadHandler()
         {
+            Program.WriteToLog(DateTime.Now.ToString("[HH:mm]") + " Alguém está a tentar entrar...");
             // Enquanto a transmissão com o cliente não acabar
             while(protocolSI.GetCmdType() != ProtocolSICmdType.EOT)
             {
@@ -82,7 +83,7 @@ namespace Servidor
                                 
                                 // envia uma mensagem a todos os outros clientes a avisar que alguem entrou no chat
                                 string mensagem = DateTime.Now.ToString("[HH:mm]") + " " + currUsername + " entrou no chat!";
-                                Console.WriteLine(mensagem);
+                                Program.WriteToLog(mensagem);
 
                                 package = protocolSI.Make(ProtocolSICmdType.USER_OPTION_1, string.Join(",", AllUsers()));
 
@@ -124,7 +125,7 @@ namespace Servidor
                         if (currUser.GetLogin())
                         {
                             string msg = DateTime.Now.ToString("[HH:mm]") + " " + currUsername + ": " + protocolSI.GetStringFromData();
-                            Console.WriteLine(msg);
+                            Program.WriteToLog(msg);
 
                             // envia a todos os clientes
                             package = protocolSI.Make(ProtocolSICmdType.DATA, msg);
@@ -138,7 +139,7 @@ namespace Servidor
                     // caso a informação recebida tenha sido de fim de transmissão
                     case ProtocolSICmdType.EOT:
                         string mesg = DateTime.Now.ToString("[HH:mm]") + " " + currUsername + " saiu do chat.";
-                        Console.WriteLine(mesg);
+                        Program.WriteToLog(mesg);
                         package = protocolSI.Make(ProtocolSICmdType.USER_OPTION_2, currUsername);
                         Globals.users.Remove(currUser);
                         Program.SendToEveryone(package);

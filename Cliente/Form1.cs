@@ -34,8 +34,15 @@ namespace ProjetoTopicosSegurança
         private void SendMessage(byte[] package)
         {
             // escreve a mensagem no network
-            networkStream.Write(package, 0, package.Length);
-            networkStream.Flush();
+            try
+            {
+                networkStream.Write(package, 0, package.Length);
+                networkStream.Flush();
+            }
+            catch
+            {
+
+            }
         }
         private void ReadMessage()
         {

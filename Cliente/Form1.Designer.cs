@@ -39,6 +39,8 @@
             this.label2 = new System.Windows.Forms.Label();
             this.buttonEnviar = new System.Windows.Forms.Button();
             this.buttonRegister = new System.Windows.Forms.Button();
+            this.listBoxOnline = new System.Windows.Forms.ListBox();
+            this.labelOnline = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // label1
@@ -87,7 +89,7 @@
             this.buttonClose.FlatAppearance.BorderSize = 0;
             this.buttonClose.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonClose.ForeColor = System.Drawing.Color.Transparent;
-            this.buttonClose.Location = new System.Drawing.Point(753, -2);
+            this.buttonClose.Location = new System.Drawing.Point(945, -2);
             this.buttonClose.Name = "buttonClose";
             this.buttonClose.Size = new System.Drawing.Size(47, 27);
             this.buttonClose.TabIndex = 10;
@@ -100,6 +102,7 @@
             // 
             this.textBoxChat.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(36)))), ((int)(((byte)(84)))));
             this.textBoxChat.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.textBoxChat.Font = new System.Drawing.Font("Cascadia Mono", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.textBoxChat.ForeColor = System.Drawing.Color.White;
             this.textBoxChat.Location = new System.Drawing.Point(256, 51);
             this.textBoxChat.Multiline = true;
@@ -129,7 +132,7 @@
             this.buttonMinimize.FlatAppearance.BorderSize = 0;
             this.buttonMinimize.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonMinimize.ForeColor = System.Drawing.Color.Transparent;
-            this.buttonMinimize.Location = new System.Drawing.Point(709, -2);
+            this.buttonMinimize.Location = new System.Drawing.Point(902, -2);
             this.buttonMinimize.Name = "buttonMinimize";
             this.buttonMinimize.Size = new System.Drawing.Size(47, 27);
             this.buttonMinimize.TabIndex = 13;
@@ -192,12 +195,38 @@
             this.buttonRegister.UseVisualStyleBackColor = false;
             this.buttonRegister.Click += new System.EventHandler(this.buttonRegister_Click);
             // 
+            // listBoxOnline
+            // 
+            this.listBoxOnline.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(36)))), ((int)(((byte)(84)))));
+            this.listBoxOnline.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.listBoxOnline.Font = new System.Drawing.Font("Cascadia Mono", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.listBoxOnline.ForeColor = System.Drawing.Color.White;
+            this.listBoxOnline.FormattingEnabled = true;
+            this.listBoxOnline.ItemHeight = 20;
+            this.listBoxOnline.Location = new System.Drawing.Point(819, 71);
+            this.listBoxOnline.Name = "listBoxOnline";
+            this.listBoxOnline.Size = new System.Drawing.Size(150, 180);
+            this.listBoxOnline.TabIndex = 18;
+            // 
+            // labelOnline
+            // 
+            this.labelOnline.AutoSize = true;
+            this.labelOnline.Font = new System.Drawing.Font("Cascadia Mono", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.labelOnline.ForeColor = System.Drawing.Color.White;
+            this.labelOnline.Location = new System.Drawing.Point(862, 48);
+            this.labelOnline.Name = "labelOnline";
+            this.labelOnline.Size = new System.Drawing.Size(63, 20);
+            this.labelOnline.TabIndex = 19;
+            this.labelOnline.Text = "Online";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(24)))), ((int)(((byte)(36)))), ((int)(((byte)(60)))));
-            this.ClientSize = new System.Drawing.Size(800, 450);
+            this.ClientSize = new System.Drawing.Size(993, 450);
+            this.Controls.Add(this.labelOnline);
+            this.Controls.Add(this.listBoxOnline);
             this.Controls.Add(this.buttonRegister);
             this.Controls.Add(this.buttonEnviar);
             this.Controls.Add(this.textBoxPassword);
@@ -231,5 +260,7 @@
         private Label label2;
         private Button buttonEnviar;
         private Button buttonRegister;
+        private ListBox listBoxOnline;
+        private Label labelOnline;
     }
 }

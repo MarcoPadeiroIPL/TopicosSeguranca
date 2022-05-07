@@ -45,8 +45,12 @@ namespace Servidor
             // Enquanto a transmissão com o cliente não acabar
             while(protocolSI.GetCmdType() != ProtocolSICmdType.EOT)
             {
-                // lê a informação da possivel mensagem enviada pelo cliente
-                currStream.Read(protocolSI.Buffer, 0, protocolSI.Buffer.Length);
+                try
+                {
+                    // lê a informação da possivel mensagem enviada pelo cliente
+                    currStream.Read(protocolSI.Buffer, 0, protocolSI.Buffer.Length);
+                }
+                catch { }
 
                 // criação um pacote responsavel por armazenar a mensagem a ser enviada pelo servidor 
                 byte[] package;
@@ -77,9 +81,11 @@ namespace Servidor
                                 currStream.Flush();
                                 
                                 // envia uma mensagem a todos os outros clientes a avisar que alguem entrou no chat
-                                string mensagem = DateTime.Now.ToString("[hh:mm]") + " " + currUsername + " entrou no chat!";
+                                string mensagem = DateTime.Now.ToString("[HH:mm]") + " " + currUsername + " entrou no chat!";
                                 Console.WriteLine(mensagem);
-                                package = protocolSI.Make(ProtocolSICmdType.DATA, mensagem);
+
+                                package = protocolSI.Make(ProtocolSICmdType.USER_OPTION_1, string.Join(",", AllUsers()));
+
                                 Program.SendToEveryone(package);
                             } 
                             else { // credenciais invalidas 
@@ -117,7 +123,7 @@ namespace Servidor
                     case ProtocolSICmdType.DATA:
                         if (currUser.GetLogin())
                         {
-                            string msg = DateTime.Now.ToString("[hh:mm]") + " " + currUsername + ": " + protocolSI.GetStringFromData();
+                            string msg = DateTime.Now.ToString("[HH:mm]") + " " + currUsername + ": " + protocolSI.GetStringFromData();
                             Console.WriteLine(msg);
 
                             // envia a todos os clientes
@@ -131,10 +137,9 @@ namespace Servidor
                         
                     // caso a informação recebida tenha sido de fim de transmissão
                     case ProtocolSICmdType.EOT:
-                        string mesg = DateTime.Now.ToString("[hh:mm]") + " " + currUsername + " saiu do chat.";
+                        string mesg = DateTime.Now.ToString("[HH:mm]") + " " + currUsername + " saiu do chat.";
                         Console.WriteLine(mesg);
-                        package = protocolSI.Make(ProtocolSICmdType.DATA, mesg);
-
+                        package = protocolSI.Make(ProtocolSICmdType.USER_OPTION_2, currUsername);
                         Globals.users.Remove(currUser);
                         Program.SendToEveryone(package);
 
@@ -180,6 +185,24 @@ namespace Servidor
             }
             Globais.contas.Add(array);
             return true;
+        }
+        private string[] AllUsers()
+        {
+            string[] agg = new string[Globais.contas.Count];
+            agg[0] = currUsername;
+            int i = 1;
+            foreach(User user in Globals.users)
+            {
+
+                if(user.GetLogin() && user.GetUsername() != currUsername)
+                {
+                    agg[i] = user.GetUsername();
+                    i++;
+                }
+            }
+            return agg;
+                         
+
         }
     }
 }

@@ -41,7 +41,7 @@ namespace Servidor // Note: actual namespace depends on the project name.
                 User currUtilizador = new User(client, false); // criação de nova instancia de um user 
                 Globals.users.Add(currUtilizador); // adiciona à lista global de todos os users
 
-                Console.WriteLine(DateTime.Now.ToString("[hh:mm]") + " Alguém está a tentar entrar..."); 
+                Console.WriteLine(DateTime.Now.ToString("[HH:mm]") + " Alguém está a tentar entrar..."); 
 
                 ClientHandler handler = new ClientHandler(currUtilizador);
                 handler.Handle();

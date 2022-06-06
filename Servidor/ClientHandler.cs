@@ -4,6 +4,8 @@ using System;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading;
+using System.Data.SqlClient;
+using System.Security.Cryptography;
 
 namespace Servidor
 {
@@ -15,7 +17,8 @@ namespace Servidor
     internal class ClientHandler
     {
         private User currUser;
-        
+        private const int SALTSIZE = 8;
+        private const int NUMBER_OF_ITERATIONS = 50000;
 
         // para conveniencia
         private TcpClient currClient;
@@ -85,9 +88,9 @@ namespace Servidor
                                 string mensagem = DateTime.Now.ToString("[HH:mm]") + " " + currUsername + " entrou no chat!";
                                 Program.WriteToLog(mensagem);
 
-                                package = protocolSI.Make(ProtocolSICmdType.USER_OPTION_1, string.Join(",", AllUsers()));
-
+                                package = protocolSI.Make(ProtocolSICmdType.USER_OPTION_1, currUsername);
                                 Program.SendToEveryone(package);
+
                             } 
                             else { // credenciais invalidas 
                                 package = protocolSI.Make(ProtocolSICmdType.NACK);
@@ -108,8 +111,11 @@ namespace Servidor
                         string username = userPas.Substring(0, userPas.IndexOf('/'));
                         string pass = userPas.Substring(userPas.IndexOf('/') + 1, userPas.Length - username.Length - 1);
 
+                        byte[] salt = GenerateSalt(SALTSIZE);
+                        byte[] hash = GenerateSaltedHash(pass, salt);
+
                         // regista o cliente e verifica se foi efetuado com succeso ou não
-                        if (Register(username, pass))
+                        if (Register(username, hash, salt))
                         {
                             package = protocolSI.Make(ProtocolSICmdType.ACK);
                         } else
@@ -153,57 +159,126 @@ namespace Servidor
             currStream.Close();
             currClient.Close();
         }
+        private static byte[] GenerateSalt(int size)
+        {
+            //Generate a cryptographic random number.
+            RNGCryptoServiceProvider rng = new RNGCryptoServiceProvider();
+            byte[] buff = new byte[size];
+            rng.GetBytes(buff);
+            return buff;
+        }
         private bool VerifyLogin(string username, string password)
         {
-            string[] array1 = { "marco", "123" };
-            string[] array3 = { "tomas", "321" };
+            SqlConnection conn = null;
+            try
+            {
+                // Configurar ligação à Base de Dados
+                conn = new SqlConnection();
 
-            Globais.contas.Add(array1);
-            Globais.contas.Add(array3);
-            // temporario até criar ligação com base de dados
-            foreach(User user in Globals.users)
-            {
-                if(user.GetUsername() == username && user.GetLogin())
+
+                conn.ConnectionString = String.Format(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename='C:\Users\Marco\Desktop\Escola\TS\Projeto\Servidor\Database.mdf';Integrated Security=True");
+                // Abrir ligação à Base de Dados
+                conn.Open();
+
+                // Declaração do comando SQL
+                String sql = "SELECT * FROM Users WHERE Username = @username";
+                SqlCommand cmd = new SqlCommand();
+                cmd.CommandText = sql;
+
+                // Declaração dos parâmetros do comando SQL
+                SqlParameter param = new SqlParameter("@username", username);
+
+                // Introduzir valor ao parâmentro registado no comando SQL
+                cmd.Parameters.Add(param);
+
+                // Associar ligação à Base de Dados ao comando a ser executado
+                cmd.Connection = conn;
+
+                // Executar comando SQL
+                SqlDataReader reader = cmd.ExecuteReader();
+
+                if (!reader.HasRows)
                 {
-                    return false;
+                    throw new Exception("Error while trying to access an user");
                 }
+
+                // Ler resultado da pesquisa
+                reader.Read();
+
+                // Obter Hash (password + salt)
+                byte[] saltedPasswordHashStored = (byte[])reader["SaltedPasswordHash"];
+
+                // Obter salt
+                byte[] saltStored = (byte[])reader["Salt"];
+
+                conn.Close();
+
+                //byte[] pass = Encoding.UTF8.GetBytes(password);
+
+                byte[] hash = GenerateSaltedHash(password, saltStored);
+
+                return saltedPasswordHashStored.SequenceEqual(hash);
+
+                //TODO: verificar se a password na base de dados
+                throw new NotImplementedException();
             }
-            foreach(string[] conta in Globais.contas)
+            catch (Exception e)
             {
-                if (username == conta[0] && password == conta[1])
-                {
-                    return true;   
-                }
+                return false;
             }
-            return false;
         }
-        private bool Register(string username, string password)
+        private static byte[] GenerateSaltedHash(string plainText, byte[] salt)
         {
-            string[] array = {username, password};
-            foreach (string[] conta in Globais.contas)
-            {
-                if(username == conta[0]) return false;
-            }
-            Globais.contas.Add(array);
-            return true;
+            Rfc2898DeriveBytes rfc2898 = new Rfc2898DeriveBytes(plainText, salt, NUMBER_OF_ITERATIONS);
+            return rfc2898.GetBytes(32);
         }
-        private string[] AllUsers()
+        private bool Register(string username, byte[] saltedPasswordHash, byte[] salt)
         {
-            string[] agg = new string[Globais.contas.Count];
-            agg[0] = currUsername;
-            int i = 1;
-            foreach(User user in Globals.users)
+            SqlConnection conn = null;
+            try
             {
 
-                if(user.GetLogin() && user.GetUsername() != currUsername)
+                // Configurar ligação à Base de Dados
+                conn = new SqlConnection();
+
+                conn.ConnectionString = String.Format(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename='C:\Users\Marco\Desktop\Escola\TS\Projeto\Servidor\Database.mdf';Integrated Security=True");
+
+                // Abrir ligação à Base de Dados
+                conn.Open();
+
+                // Declaração dos parâmetros do comando SQL
+                SqlParameter paramUsername = new SqlParameter("@username", username);
+                SqlParameter paramPassHash = new SqlParameter("@saltedPasswordHash", saltedPasswordHash);
+                SqlParameter paramSalt = new SqlParameter("@salt", salt);
+
+                // Declaração do comando SQL
+                String sql = "INSERT INTO Users (Username, SaltedPasswordHash, Salt) VALUES (@username,@saltedPasswordHash,@salt)";
+
+                // Prepara comando SQL para ser executado na Base de Dados
+                SqlCommand cmd = new SqlCommand(sql, conn);
+
+                // Introduzir valores aos parâmentros registados no comando SQL
+                cmd.Parameters.Add(paramUsername);
+                cmd.Parameters.Add(paramPassHash);
+                cmd.Parameters.Add(paramSalt);
+
+                // Executar comando SQL
+                int lines = cmd.ExecuteNonQuery();
+
+                // Fechar ligação
+                conn.Close();
+                return true;
+                if (lines == 0)
                 {
-                    agg[i] = user.GetUsername();
-                    i++;
+                    // Se forem devolvidas 0 linhas alteradas então o não foi executado com sucesso
+                    throw new Exception("Error while inserting an user");
                 }
             }
-            return agg;
-                         
-
+            catch (Exception e)
+            {
+                throw new Exception("Error while inserting an user:" + e.Message);
+            }
         }
+        
     }
 }

@@ -94,3 +94,9 @@ C:\Users\Marco\Desktop\Escola\TS\Projeto\Servidor\obj\Debug\net6.0\refint\Servid
 C:\Users\Marco\Desktop\Escola\TS\Projeto\Servidor\obj\Debug\net6.0\Servidor.pdb
 C:\Users\Marco\Desktop\Escola\TS\Projeto\Servidor\obj\Debug\net6.0\Servidor.genruntimeconfig.cache
 C:\Users\Marco\Desktop\Escola\TS\Projeto\Servidor\obj\Debug\net6.0\ref\Servidor.dll
+C:\Users\Marco\Desktop\Escola\TS\Projeto\Servidor\bin\Debug\net6.0\System.Data.SqlClient.dll
+C:\Users\Marco\Desktop\Escola\TS\Projeto\Servidor\bin\Debug\net6.0\runtimes\win-arm64\native\sni.dll
+C:\Users\Marco\Desktop\Escola\TS\Projeto\Servidor\bin\Debug\net6.0\runtimes\win-x64\native\sni.dll
+C:\Users\Marco\Desktop\Escola\TS\Projeto\Servidor\bin\Debug\net6.0\runtimes\win-x86\native\sni.dll
+C:\Users\Marco\Desktop\Escola\TS\Projeto\Servidor\bin\Debug\net6.0\runtimes\unix\lib\netcoreapp2.1\System.Data.SqlClient.dll
+C:\Users\Marco\Desktop\Escola\TS\Projeto\Servidor\bin\Debug\net6.0\runtimes\win\lib\netcoreapp2.1\System.Data.SqlClient.dll

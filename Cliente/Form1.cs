@@ -54,49 +54,17 @@ namespace ProjetoTopicosSegurança
                     if (protocolSI.GetCmdType() == ProtocolSICmdType.DATA) { AddText(protocolSI.GetStringFromData()); }
                     if (protocolSI.GetCmdType() == ProtocolSICmdType.USER_OPTION_1)
                     {
-                        string[] onlineUsers = protocolSI.GetStringFromData().Split(',');
-                        AddText(DateTime.Now.ToString("[HH:mm] ") + onlineUsers[0] + " entrou no chat!");
-                        AddToOnline(onlineUsers);
+                        string onlineUsers = protocolSI.GetStringFromData();
+                        AddText(DateTime.Now.ToString("[HH:mm] ") + onlineUsers + " entrou no chat!");
                     }
                     if(protocolSI.GetCmdType()== ProtocolSICmdType.USER_OPTION_2)
                     {
                         string removerUser = protocolSI.GetStringFromData();
                         AddText(DateTime.Now.ToString("[HH:mm] ") + removerUser + " saiu do chat!");
-                        RemoveFromOnline(removerUser);
                     }
                 }
                 catch (Exception ex) { }
                             }
-        }
-        private void RemoveFromOnline(string user)
-        {
-            if (InvokeRequired)
-            {
-                this.Invoke(new Action<string>(RemoveFromOnline), new object[] { user });
-                return;
-            }
-            for(int i = 0; i < listBoxOnline.Items.Count; i++)
-            {
-                if(listBoxOnline.Items[i].ToString() == user)
-                {
-                    listBoxOnline.Items.RemoveAt(i);
-                }
-
-            }
-
-        }
-        private void AddToOnline(string[] onlineUsers)
-        {
-            if (InvokeRequired)
-            {
-                this.Invoke(new Action<string[]>(AddToOnline), new object[] { onlineUsers });
-                return;
-            }
-            listBoxOnline.Items.Clear();
-            foreach(string onlineUser in onlineUsers)
-            {
-                listBoxOnline.Items.Add(onlineUser);
-            }
         }
         private void AddText(string text) // Adiciona texto à textbox chat
         {
@@ -148,8 +116,6 @@ namespace ProjetoTopicosSegurança
             textBoxChat.Enabled = currState;
             textBoxMensagem.Enabled = currState;
             buttonEnviar.Enabled = currState;
-            labelOnline.Enabled = currState;
-            listBoxOnline.Enabled = currState;
         }
         private void DesligarLigarLogin(bool currState) // UI
         {

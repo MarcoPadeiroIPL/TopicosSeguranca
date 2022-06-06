@@ -39,8 +39,6 @@
             this.label2 = new System.Windows.Forms.Label();
             this.buttonEnviar = new System.Windows.Forms.Button();
             this.buttonRegister = new System.Windows.Forms.Button();
-            this.listBoxOnline = new System.Windows.Forms.ListBox();
-            this.labelOnline = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // label1
@@ -49,9 +47,9 @@
             this.label1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(24)))), ((int)(((byte)(36)))), ((int)(((byte)(60)))));
             this.label1.Font = new System.Drawing.Font("Cascadia Mono", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.label1.ForeColor = System.Drawing.Color.White;
-            this.label1.Location = new System.Drawing.Point(57, 134);
+            this.label1.Location = new System.Drawing.Point(50, 100);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(90, 20);
+            this.label1.Size = new System.Drawing.Size(70, 16);
             this.label1.TabIndex = 0;
             this.label1.Text = "Username:";
             // 
@@ -61,9 +59,10 @@
             this.textBoxUsername.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textBoxUsername.Font = new System.Drawing.Font("Cascadia Mono", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.textBoxUsername.ForeColor = System.Drawing.Color.White;
-            this.textBoxUsername.Location = new System.Drawing.Point(57, 157);
+            this.textBoxUsername.Location = new System.Drawing.Point(50, 118);
+            this.textBoxUsername.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.textBoxUsername.Name = "textBoxUsername";
-            this.textBoxUsername.Size = new System.Drawing.Size(144, 18);
+            this.textBoxUsername.Size = new System.Drawing.Size(126, 14);
             this.textBoxUsername.TabIndex = 1;
             this.textBoxUsername.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBoxUsername_KeyPress);
             // 
@@ -73,9 +72,10 @@
             this.buttonLogin.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.buttonLogin.Font = new System.Drawing.Font("Cascadia Mono", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.buttonLogin.ForeColor = System.Drawing.Color.White;
-            this.buttonLogin.Location = new System.Drawing.Point(77, 264);
+            this.buttonLogin.Location = new System.Drawing.Point(67, 198);
+            this.buttonLogin.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.buttonLogin.Name = "buttonLogin";
-            this.buttonLogin.Size = new System.Drawing.Size(94, 29);
+            this.buttonLogin.Size = new System.Drawing.Size(82, 22);
             this.buttonLogin.TabIndex = 2;
             this.buttonLogin.TabStop = false;
             this.buttonLogin.Text = "Login";
@@ -89,9 +89,10 @@
             this.buttonClose.FlatAppearance.BorderSize = 0;
             this.buttonClose.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonClose.ForeColor = System.Drawing.Color.Transparent;
-            this.buttonClose.Location = new System.Drawing.Point(945, -2);
+            this.buttonClose.Location = new System.Drawing.Point(656, -4);
+            this.buttonClose.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.buttonClose.Name = "buttonClose";
-            this.buttonClose.Size = new System.Drawing.Size(47, 27);
+            this.buttonClose.Size = new System.Drawing.Size(41, 20);
             this.buttonClose.TabIndex = 10;
             this.buttonClose.TabStop = false;
             this.buttonClose.Text = "X";
@@ -104,11 +105,12 @@
             this.textBoxChat.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textBoxChat.Font = new System.Drawing.Font("Cascadia Mono", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.textBoxChat.ForeColor = System.Drawing.Color.White;
-            this.textBoxChat.Location = new System.Drawing.Point(256, 51);
+            this.textBoxChat.Location = new System.Drawing.Point(224, 38);
+            this.textBoxChat.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.textBoxChat.Multiline = true;
             this.textBoxChat.Name = "textBoxChat";
             this.textBoxChat.ReadOnly = true;
-            this.textBoxChat.Size = new System.Drawing.Size(518, 329);
+            this.textBoxChat.Size = new System.Drawing.Size(453, 247);
             this.textBoxChat.TabIndex = 7;
             this.textBoxChat.TabStop = false;
             // 
@@ -118,10 +120,11 @@
             this.textBoxMensagem.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textBoxMensagem.Font = new System.Drawing.Font("Cascadia Mono", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.textBoxMensagem.ForeColor = System.Drawing.Color.White;
-            this.textBoxMensagem.Location = new System.Drawing.Point(256, 404);
+            this.textBoxMensagem.Location = new System.Drawing.Point(224, 303);
+            this.textBoxMensagem.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.textBoxMensagem.Name = "textBoxMensagem";
             this.textBoxMensagem.PlaceholderText = "Escreva uma mensagem!";
-            this.textBoxMensagem.Size = new System.Drawing.Size(430, 18);
+            this.textBoxMensagem.Size = new System.Drawing.Size(376, 14);
             this.textBoxMensagem.TabIndex = 11;
             this.textBoxMensagem.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBoxMensagem_KeyPress);
             // 
@@ -132,9 +135,10 @@
             this.buttonMinimize.FlatAppearance.BorderSize = 0;
             this.buttonMinimize.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonMinimize.ForeColor = System.Drawing.Color.Transparent;
-            this.buttonMinimize.Location = new System.Drawing.Point(902, -2);
+            this.buttonMinimize.Location = new System.Drawing.Point(609, -4);
+            this.buttonMinimize.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.buttonMinimize.Name = "buttonMinimize";
-            this.buttonMinimize.Size = new System.Drawing.Size(47, 27);
+            this.buttonMinimize.Size = new System.Drawing.Size(41, 20);
             this.buttonMinimize.TabIndex = 13;
             this.buttonMinimize.TabStop = false;
             this.buttonMinimize.Text = "-";
@@ -147,9 +151,10 @@
             this.textBoxPassword.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textBoxPassword.Font = new System.Drawing.Font("Cascadia Mono", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.textBoxPassword.ForeColor = System.Drawing.Color.White;
-            this.textBoxPassword.Location = new System.Drawing.Point(57, 216);
+            this.textBoxPassword.Location = new System.Drawing.Point(50, 162);
+            this.textBoxPassword.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.textBoxPassword.Name = "textBoxPassword";
-            this.textBoxPassword.Size = new System.Drawing.Size(144, 18);
+            this.textBoxPassword.Size = new System.Drawing.Size(126, 14);
             this.textBoxPassword.TabIndex = 2;
             this.textBoxPassword.UseSystemPasswordChar = true;
             this.textBoxPassword.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBoxUsername_KeyPress);
@@ -160,9 +165,9 @@
             this.label2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(24)))), ((int)(((byte)(36)))), ((int)(((byte)(60)))));
             this.label2.Font = new System.Drawing.Font("Cascadia Mono", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.label2.ForeColor = System.Drawing.Color.White;
-            this.label2.Location = new System.Drawing.Point(57, 193);
+            this.label2.Location = new System.Drawing.Point(50, 145);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(90, 20);
+            this.label2.Size = new System.Drawing.Size(70, 16);
             this.label2.TabIndex = 14;
             this.label2.Text = "Password:";
             // 
@@ -172,9 +177,10 @@
             this.buttonEnviar.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.buttonEnviar.Font = new System.Drawing.Font("Cascadia Mono", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.buttonEnviar.ForeColor = System.Drawing.Color.White;
-            this.buttonEnviar.Location = new System.Drawing.Point(692, 400);
+            this.buttonEnviar.Location = new System.Drawing.Point(606, 300);
+            this.buttonEnviar.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.buttonEnviar.Name = "buttonEnviar";
-            this.buttonEnviar.Size = new System.Drawing.Size(82, 29);
+            this.buttonEnviar.Size = new System.Drawing.Size(72, 22);
             this.buttonEnviar.TabIndex = 16;
             this.buttonEnviar.Text = "Enviar";
             this.buttonEnviar.UseVisualStyleBackColor = false;
@@ -186,47 +192,22 @@
             this.buttonRegister.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.buttonRegister.Font = new System.Drawing.Font("Cascadia Mono", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.buttonRegister.ForeColor = System.Drawing.Color.White;
-            this.buttonRegister.Location = new System.Drawing.Point(77, 319);
+            this.buttonRegister.Location = new System.Drawing.Point(67, 239);
+            this.buttonRegister.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.buttonRegister.Name = "buttonRegister";
-            this.buttonRegister.Size = new System.Drawing.Size(94, 29);
+            this.buttonRegister.Size = new System.Drawing.Size(82, 22);
             this.buttonRegister.TabIndex = 17;
             this.buttonRegister.TabStop = false;
             this.buttonRegister.Text = "Registar";
             this.buttonRegister.UseVisualStyleBackColor = false;
             this.buttonRegister.Click += new System.EventHandler(this.buttonRegister_Click);
             // 
-            // listBoxOnline
-            // 
-            this.listBoxOnline.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(36)))), ((int)(((byte)(84)))));
-            this.listBoxOnline.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.listBoxOnline.Font = new System.Drawing.Font("Cascadia Mono", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.listBoxOnline.ForeColor = System.Drawing.Color.White;
-            this.listBoxOnline.FormattingEnabled = true;
-            this.listBoxOnline.ItemHeight = 20;
-            this.listBoxOnline.Location = new System.Drawing.Point(819, 71);
-            this.listBoxOnline.Name = "listBoxOnline";
-            this.listBoxOnline.Size = new System.Drawing.Size(150, 180);
-            this.listBoxOnline.TabIndex = 18;
-            // 
-            // labelOnline
-            // 
-            this.labelOnline.AutoSize = true;
-            this.labelOnline.Font = new System.Drawing.Font("Cascadia Mono", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.labelOnline.ForeColor = System.Drawing.Color.White;
-            this.labelOnline.Location = new System.Drawing.Point(862, 48);
-            this.labelOnline.Name = "labelOnline";
-            this.labelOnline.Size = new System.Drawing.Size(63, 20);
-            this.labelOnline.TabIndex = 19;
-            this.labelOnline.Text = "Online";
-            // 
             // Form1
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(24)))), ((int)(((byte)(36)))), ((int)(((byte)(60)))));
-            this.ClientSize = new System.Drawing.Size(993, 450);
-            this.Controls.Add(this.labelOnline);
-            this.Controls.Add(this.listBoxOnline);
+            this.ClientSize = new System.Drawing.Size(693, 338);
             this.Controls.Add(this.buttonRegister);
             this.Controls.Add(this.buttonEnviar);
             this.Controls.Add(this.textBoxPassword);
@@ -239,6 +220,7 @@
             this.Controls.Add(this.textBoxUsername);
             this.Controls.Add(this.label1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
+            this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.Name = "Form1";
             this.Text = "Form1";
             this.Load += new System.EventHandler(this.Form1_Load);
@@ -260,7 +242,5 @@
         private Label label2;
         private Button buttonEnviar;
         private Button buttonRegister;
-        private ListBox listBoxOnline;
-        private Label labelOnline;
     }
 }

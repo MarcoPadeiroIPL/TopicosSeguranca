@@ -1,24 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\2211866\\Desktop\\ts\\Cliente\\Cliente.csproj": {}
+    "C:\\Users\\Marco\\Desktop\\Escola\\TS\\Projeto\\Cliente\\Cliente.csproj": {}
   },
   "projects": {
-    "C:\\Users\\2211866\\Desktop\\ts\\Cliente\\Cliente.csproj": {
+    "C:\\Users\\Marco\\Desktop\\Escola\\TS\\Projeto\\Cliente\\Cliente.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\2211866\\Desktop\\ts\\Cliente\\Cliente.csproj",
+        "projectUniqueName": "C:\\Users\\Marco\\Desktop\\Escola\\TS\\Projeto\\Cliente\\Cliente.csproj",
         "projectName": "Cliente",
-        "projectPath": "C:\\Users\\2211866\\Desktop\\ts\\Cliente\\Cliente.csproj",
-        "packagesPath": "C:\\Users\\2211866\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\2211866\\Desktop\\ts\\Cliente\\obj\\",
+        "projectPath": "C:\\Users\\Marco\\Desktop\\Escola\\TS\\Projeto\\Cliente\\Cliente.csproj",
+        "packagesPath": "C:\\Users\\Marco\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Marco\\Desktop\\Escola\\TS\\Projeto\\Cliente\\obj\\",
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-        ],
         "configFilePaths": [
-          "C:\\Users\\2211866\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Users\\Marco\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -53,7 +49,15 @@
           ],
           "assetTargetFallback": true,
           "warn": true,
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.302\\RuntimeIdentifierGraph.json"
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            },
+            "Microsoft.WindowsDesktop.App.WindowsForms": {
+              "privateAssets": "none"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.300\\RuntimeIdentifierGraph.json"
         }
       }
     }

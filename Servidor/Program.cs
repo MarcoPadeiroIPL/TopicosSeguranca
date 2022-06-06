@@ -63,16 +63,9 @@ namespace Servidor // Note: actual namespace depends on the project name.
         }
         public static void WriteToLog(string msg)
         {
+            File.WriteAllText("log" + DateTime.Now.ToString("yy_MM_dd__HH.mm.ss") + ".txt", msg);
             Console.WriteLine(msg);
-
-
-            FileStream fs = new FileStream(Globals.currentPath, FileMode.Append, FileAccess.Write);
-            StreamWriter sw = new StreamWriter(fs);
-
-            sw.WriteLine(msg);
-
-            sw.Close();
-            fs.Close();
+            
         }
     }
 }

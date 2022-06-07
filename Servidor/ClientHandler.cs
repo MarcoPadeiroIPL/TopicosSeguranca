@@ -175,8 +175,10 @@ namespace Servidor
                 // Configurar ligação à Base de Dados
                 conn = new SqlConnection();
 
-
-                conn.ConnectionString = String.Format(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename='C:\Users\Marco\Desktop\Escola\TS\Projeto\Servidor\Database.mdf';Integrated Security=True");
+                string path = Directory.GetCurrentDirectory();
+                path = path.Remove(path.IndexOf("Servidor") + 9);
+                conn.ConnectionString = String.Format(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename='" + path + "Database.mdf';Integrated Security=True");
+               
                 // Abrir ligação à Base de Dados
                 conn.Open();
 
@@ -240,8 +242,9 @@ namespace Servidor
 
                 // Configurar ligação à Base de Dados
                 conn = new SqlConnection();
-
-                conn.ConnectionString = String.Format(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename='C:\Users\Marco\Desktop\Escola\TS\Projeto\Servidor\Database.mdf';Integrated Security=True");
+                string path = Directory.GetCurrentDirectory();
+                path = path.Remove(path.IndexOf("Servidor") + 9);
+                conn.ConnectionString = String.Format(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename='"+ path + "Database.mdf';Integrated Security=True");
 
                 // Abrir ligação à Base de Dados
                 conn.Open();

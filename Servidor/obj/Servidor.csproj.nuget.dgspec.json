@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Marco\\Desktop\\Escola\\TS\\Projeto\\Servidor\\Servidor.csproj": {}
+    "C:\\Users\\Marco\\Desktop\\TS\\Projeto\\Servidor\\Servidor.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Marco\\Desktop\\Escola\\TS\\Projeto\\Servidor\\Servidor.csproj": {
+    "C:\\Users\\Marco\\Desktop\\TS\\Projeto\\Servidor\\Servidor.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Marco\\Desktop\\Escola\\TS\\Projeto\\Servidor\\Servidor.csproj",
+        "projectUniqueName": "C:\\Users\\Marco\\Desktop\\TS\\Projeto\\Servidor\\Servidor.csproj",
         "projectName": "Servidor",
-        "projectPath": "C:\\Users\\Marco\\Desktop\\Escola\\TS\\Projeto\\Servidor\\Servidor.csproj",
+        "projectPath": "C:\\Users\\Marco\\Desktop\\TS\\Projeto\\Servidor\\Servidor.csproj",
         "packagesPath": "C:\\Users\\Marco\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Marco\\Desktop\\Escola\\TS\\Projeto\\Servidor\\obj\\",
+        "outputPath": "C:\\Users\\Marco\\Desktop\\TS\\Projeto\\Servidor\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\Marco\\AppData\\Roaming\\NuGet\\NuGet.Config",

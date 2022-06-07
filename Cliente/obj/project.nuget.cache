@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "gBRyC1LU9HTfgSNc+YdCsz3IPdWNzcp9qppUZiI7cOiSBmeju0EoMOGISRNjDXrM2Ok1VEhBQQFg2jQs3cjqqg==",
+  "dgSpecHash": "67CX9KzzCDgo05OsHscYPbdyswbcYjwk36lNdjKFvy3EQFmiNJ1U7iSxHnd+dFV7WUyKBEyyQmbtIn6yofofCQ==",
   "success": true,
-  "projectFilePath": "C:\\Users\\Marco\\Desktop\\Escola\\TS\\Projeto\\Cliente\\Cliente.csproj",
+  "projectFilePath": "C:\\Users\\Marco\\Desktop\\TS\\Projeto\\Cliente\\Cliente.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Marco\\.nuget\\packages\\microsoft.netcore.platforms\\3.1.0\\microsoft.netcore.platforms.3.1.0.nupkg.sha512",
     "C:\\Users\\Marco\\.nuget\\packages\\microsoft.win32.registry\\4.7.0\\microsoft.win32.registry.4.7.0.nupkg.sha512",

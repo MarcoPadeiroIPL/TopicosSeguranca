@@ -9,11 +9,6 @@ using System.Security.Cryptography;
 
 namespace Servidor
 {
-    static class Globais
-    {
-        // TEMPORARIA: ATÉ SE TRATAR DA BASE DE DADOS
-        public static List<string[]> contas = new List<string[]>(); // variavel global para armazenar as credencias dos clientes
-    }
     internal class ClientHandler
     {
         private User currUser;
@@ -244,37 +239,60 @@ namespace Servidor
                 conn = new SqlConnection();
                 string path = Directory.GetCurrentDirectory();
                 path = path.Remove(path.IndexOf("Servidor") + 9);
-                conn.ConnectionString = String.Format(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename='"+ path + "Database.mdf';Integrated Security=True");
+                conn.ConnectionString = String.Format(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename='" + path + "Database.mdf';Integrated Security=True");
 
                 // Abrir ligação à Base de Dados
                 conn.Open();
 
+                // Verificação de se o username já existe 
+                String sql = "SELECT * FROM Users WHERE Username = @username";
+                SqlCommand cmd = new SqlCommand();
+                cmd.CommandText = sql;
+
                 // Declaração dos parâmetros do comando SQL
-                SqlParameter paramUsername = new SqlParameter("@username", username);
-                SqlParameter paramPassHash = new SqlParameter("@saltedPasswordHash", saltedPasswordHash);
-                SqlParameter paramSalt = new SqlParameter("@salt", salt);
+                SqlParameter param = new SqlParameter("@username", username);
 
-                // Declaração do comando SQL
-                String sql = "INSERT INTO Users (Username, SaltedPasswordHash, Salt) VALUES (@username,@saltedPasswordHash,@salt)";
+                // Introduzir valor ao parâmentro registado no comando SQL
+                cmd.Parameters.Add(param);
 
-                // Prepara comando SQL para ser executado na Base de Dados
-                SqlCommand cmd = new SqlCommand(sql, conn);
-
-                // Introduzir valores aos parâmentros registados no comando SQL
-                cmd.Parameters.Add(paramUsername);
-                cmd.Parameters.Add(paramPassHash);
-                cmd.Parameters.Add(paramSalt);
+                // Associar ligação à Base de Dados ao comando a ser executado
+                cmd.Connection = conn;
 
                 // Executar comando SQL
-                int lines = cmd.ExecuteNonQuery();
+                SqlDataReader reader = cmd.ExecuteReader();
 
-                // Fechar ligação
-                conn.Close();
-                return true;
-                if (lines == 0)
+                if (!reader.HasRows)
                 {
-                    // Se forem devolvidas 0 linhas alteradas então o não foi executado com sucesso
-                    throw new Exception("Error while inserting an user");
+                    // Declaração dos parâmetros do comando SQL
+                    SqlParameter paramUsername = new SqlParameter("@username", username);
+                    SqlParameter paramPassHash = new SqlParameter("@saltedPasswordHash", saltedPasswordHash);
+                    SqlParameter paramSalt = new SqlParameter("@salt", salt);
+
+                    // Declaração do comando SQL
+                    sql = "INSERT INTO Users (Username, SaltedPasswordHash, Salt) VALUES (@username,@saltedPasswordHash,@salt)";
+
+                    // Prepara comando SQL para ser executado na Base de Dados
+                    cmd = new SqlCommand(sql, conn);
+
+                    // Introduzir valores aos parâmentros registados no comando SQL
+                    cmd.Parameters.Add(paramUsername);
+                    cmd.Parameters.Add(paramPassHash);
+                    cmd.Parameters.Add(paramSalt);
+
+                    // Executar comando SQL
+                    int lines = cmd.ExecuteNonQuery();
+
+                    // Fechar ligação
+                    conn.Close();
+                    return true;
+                    if (lines == 0)
+                    {
+                        // Se forem devolvidas 0 linhas alteradas então o não foi executado com sucesso
+                        throw new Exception("Error while inserting an user");
+                    }
+                } else
+                {
+                    return false;
                 }
             }
             catch (Exception e)

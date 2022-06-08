@@ -3,6 +3,8 @@ using System.Windows.Forms;
 using System.Net;
 using System.Net.Sockets;
 using EI.SI;
+using System.Text;
+using System.Security.Cryptography;
 
 namespace ProjetoTopicosSegurança
 {
@@ -10,18 +12,47 @@ namespace ProjetoTopicosSegurança
     public partial class Form1 : Form
     {
 
+        // Variaveis para comunicação com o servidor
         private const int PORT = 5000;
         NetworkStream networkStream; 
         ProtocolSI protocolSI;
         TcpClient tcpClient;
+
+        // Criação de variaveis responsaveis por armazenar a chave publica do servidor (para encriptar as credenciais)
+        // e para armazenar a chave simetrica (para troca de mensagens com outros cliente)
+        private string serverPubKey;
+        private Aes aes;
+
+        // Criação de variaveis para armazena a chave publica e privada do servidor (para o servidor encriptar a chave simetrica)
+        private string clientPubKey;
+        private string clientPrivKey;
         public Form1()
         {
             InitializeComponent();
+
+            // entrar em ligação com o servidor
             IPEndPoint endpoint = new IPEndPoint(IPAddress.Loopback, PORT);
             tcpClient = new TcpClient();
             tcpClient.Connect(endpoint);
             networkStream = tcpClient.GetStream();
             protocolSI = new ProtocolSI();
+
+            aes = Aes.Create();
+            RSACryptoServiceProvider rsa = new RSACryptoServiceProvider();
+            // definição da chave publica e privada do cliente
+            clientPrivKey = rsa.ToXmlString(true);
+            clientPubKey = rsa.ToXmlString(false);
+
+
+            // enviar a chave publica ao servidor
+            byte[] package = protocolSI.Make(ProtocolSICmdType.PUBLIC_KEY, clientPubKey);
+            networkStream.Write(package, 0, package.Length);
+
+            // Inicia uma nova thread dedicada a este cliente para estar sempre à procura de mensagens do servidor
+            Thread clientRead = new Thread(ReadMessage);
+            clientRead.Start();
+
+            // UI
             DesligarLigarChat(false);
             DesligarLigarLogin(true);
         }
@@ -31,40 +62,115 @@ namespace ProjetoTopicosSegurança
         {
 
         }
-        private void SendMessage(byte[] package)
+        private void SendEncryptedAssym(byte[] data, string pubKey)
         {
-            // escreve a mensagem no network
-            try
-            {
-                networkStream.Write(package, 0, package.Length);
-                networkStream.Flush();
-            }
-            catch
-            {
+            byte[] encryptedData = EncryptAssym(data, pubKey);
+            byte[] package = protocolSI.Make(ProtocolSICmdType.ASSYM_CIPHER_DATA, encryptedData);
+            networkStream.Write(package, 0, package.Length);
+            networkStream.Flush();
+        }
+        private void SendEncryptedSym(byte[] data, byte[] symmKey, byte[] IV)
+        {
+            byte[] encryptedData = EncryptSymm(data, symmKey, IV);
+            byte[] package = protocolSI.Make(ProtocolSICmdType.SYM_CIPHER_DATA, encryptedData);
+            networkStream.Write(package, 0, package.Length);
+            networkStream.Flush();
+        }
+        private byte[] EncryptAssym(byte[] data, string pubKey)
+        {
+            byte[] encryptedData;
+            RSACryptoServiceProvider temp = new RSACryptoServiceProvider();
+            temp.FromXmlString(pubKey);
+            encryptedData = temp.Encrypt(data, false);
 
-            }
+            return encryptedData;
+        }
+        private byte[] DecryptAssym(byte[] encryptedData, string privKey)
+        {
+            RSACryptoServiceProvider temp = new RSACryptoServiceProvider();
+            temp.FromXmlString(privKey);
+            byte[] data = temp.Decrypt(encryptedData, false);
+
+            return data;
+        }
+        private byte[] EncryptSymm(byte[] data, byte[] symmKey, byte[] IV)
+        {
+            byte[] encryptedData;
+
+            Aes temp;               // variavel temporaria para armazenar a chave simetrica com os valores passados por parametro
+            
+            // Inicialização da chave simetrica com os valores passados por parametro
+            temp = Aes.Create();
+            temp.Key = symmKey;
+            temp.IV = IV;
+
+            MemoryStream ms = new MemoryStream();
+            CryptoStream cs = new CryptoStream(ms, temp.CreateEncryptor(), CryptoStreamMode.Write);
+
+            cs.Write(data, 0, data.Length);
+            cs.Close();
+
+            encryptedData = ms.ToArray();
+
+            return encryptedData;
+        }
+        private byte[] DecryptSymm(byte[] encryptedData, byte[] symmKey, byte[] IV)
+        {
+            string msg;             // variavel temporaria para armazenar a mensagem decriptada em formato string
+            Aes temp;               // variavel temporaria para armazenar a chave simetrica com os valores passados por parametro
+            
+            // Inicialização da chave simetrica com os valores passados por parametro
+            temp = Aes.Create();
+            temp.Key = symmKey;
+            temp.IV = IV;
+
+            // decriptação da informação
+            MemoryStream ms = new MemoryStream(encryptedData);
+            CryptoStream cs = new CryptoStream(ms, temp.CreateDecryptor(), CryptoStreamMode.Read);
+            byte[] data = new byte[ms.Length];            // variavel temporaria para armazenar a mensagem decriptada em formato byte
+            int bytesLidos = cs.Read(data, 0, data.Length);
+            cs.Close();
+
+            return data;
         }
         private void ReadMessage()
         {
             while (networkStream.CanRead)
             {
-                try
+                if (networkStream.DataAvailable)
                 {
-                    networkStream.Read(protocolSI.Buffer, 0, protocolSI.Buffer.Length);
-                    if (protocolSI.GetCmdType() == ProtocolSICmdType.DATA) { AddText(protocolSI.GetStringFromData()); }
-                    if (protocolSI.GetCmdType() == ProtocolSICmdType.USER_OPTION_1)
+                    try
                     {
-                        string onlineUsers = protocolSI.GetStringFromData();
-                        AddText(DateTime.Now.ToString("[HH:mm] ") + onlineUsers + " entrou no chat!");
+                        networkStream.Read(protocolSI.Buffer, 0, protocolSI.Buffer.Length);
+
+                        switch (protocolSI.GetCmdType())
+                        {
+                            case ProtocolSICmdType.PUBLIC_KEY: // armazenar a chave publica do servidor
+                                serverPubKey = protocolSI.GetStringFromData();
+                                break;
+                            case ProtocolSICmdType.IV:
+                                byte[] encryptedIV = protocolSI.GetData();
+                                aes.IV = DecryptAssym(encryptedIV, clientPrivKey);
+                                break;
+                            case ProtocolSICmdType.SYM_CIPHER_DATA:
+                                byte[] encrypredData = protocolSI.GetData();
+                                string msg = Encoding.UTF8.GetString(DecryptSymm(encrypredData, aes.Key, aes.IV));
+                                AddText(msg);
+                                break;
+                            case ProtocolSICmdType.SECRET_KEY:
+                                byte[] encryptedKey = protocolSI.GetData();
+                                aes.Key = DecryptAssym(encryptedKey, clientPrivKey);
+                                AddText(Encoding.UTF8.GetString(aes.Key));
+                                ChangeUI(true);
+                                // UI
+                                break;
+                        }
                     }
-                    if(protocolSI.GetCmdType()== ProtocolSICmdType.USER_OPTION_2)
-                    {
-                        string removerUser = protocolSI.GetStringFromData();
-                        AddText(DateTime.Now.ToString("[HH:mm] ") + removerUser + " saiu do chat!");
-                    }
-                }
                 catch (Exception ex) { }
-                            }
+
+
+                }
+                                            }
         }
         private void AddText(string text) // Adiciona texto à textbox chat
         {
@@ -76,14 +182,24 @@ namespace ProjetoTopicosSegurança
             }
             textBoxChat.Text += text + Environment.NewLine;
         }
+        private void ChangeUI(bool res)
+        {
+            // fix de problemas com manipulação de threads diferentes          #StackOverFlowFTW
+            if (InvokeRequired)
+            {
+                this.Invoke(new Action<bool>(DesligarLigarChat), new object[] { res });
+                return;
+            }
+            DesligarLigarChat(res);
+        }
 
 
 
 
         private void buttonEnviar_Click(object sender, EventArgs e)
         {
-            byte[] package = protocolSI.Make(ProtocolSICmdType.DATA, textBoxMensagem.Text.Trim());
-            SendMessage(package);
+            byte[] data = Encoding.UTF8.GetBytes(textBoxMensagem.Text);
+            SendEncryptedSym(data, aes.Key, aes.IV);
             textBoxMensagem.Clear();
         }
 
@@ -96,16 +212,14 @@ namespace ProjetoTopicosSegurança
         {
             if (e.KeyChar == 13)
             {
-                byte[] package = protocolSI.Make(ProtocolSICmdType.DATA, textBoxMensagem.Text.Trim());
-                SendMessage(package);
-                textBoxMensagem.Clear();
+                buttonEnviar.PerformClick();
             }
         }
         private void buttonClose_Click(object sender, EventArgs e) // UI
         {
             // escreve a mensagem para o servidor a avisar que o cliente vai encerrar a conexão
             byte[] package = protocolSI.Make(ProtocolSICmdType.EOT);
-            SendMessage(package); 
+            networkStream.Write(package, 0, package.Length); 
             networkStream.Close();
             tcpClient.Close();
             Application.Exit();
@@ -135,37 +249,12 @@ namespace ProjetoTopicosSegurança
             }
             else
             {
-                string userPass = textBoxUsername.Text.Trim() + '/' + textBoxPassword.Text.Trim();
-
-                // cria um pacote para enviar os dados de autenticação ao servidor
-                byte[] package = protocolSI.Make(ProtocolSICmdType.USER_OPTION_1, userPass); // USER_OPTION_1 == Tentativa de login
-
+                byte[] data = Encoding.UTF8.GetBytes(textBoxUsername.Text.Trim() + '/' + textBoxPassword.Text.Trim());
                 // envia os dados para o servidor
-                SendMessage(package);
-                
-                // vai por um loop e aguarda até a mensagem do servidor seja o pretendido     ACK == valid       NACK == invalid
-                while(protocolSI.GetCmdType() != ProtocolSICmdType.ACK || protocolSI.GetCmdType() != ProtocolSICmdType.NACK)
-                {
-                    networkStream.Read(protocolSI.Buffer, 0, protocolSI.Buffer.Length); // le a mensagem do servidor
-                    if (protocolSI.GetCmdType() == ProtocolSICmdType.ACK) // caso seja valido
-                    {
-                        // UI
-                        DesligarLigarChat(true);     
-                        DesligarLigarLogin(false);
-                        textBoxChat.Text += "Bem-vindo ao chat!" + Environment.NewLine;
-
-                        // Inicia uma nova thread dedicada a este cliente para estar sempre à procura de mensagens do servidor
-                            Thread clientRead = new Thread(ReadMessage);
-                            clientRead.Start();
-
-                        return;
-                    } 
-                    if(protocolSI.GetCmdType() == ProtocolSICmdType.NACK) // caso as credencias sejam invalidas
-                    {
-                        MessageBox.Show("Credenciais invalidas!");
-                        return;
-                    }
-                }
+                byte[] encryptedData = EncryptAssym(data, serverPubKey);
+                byte[] package = protocolSI.Make(ProtocolSICmdType.USER_OPTION_1, encryptedData);
+                networkStream.Write(package, 0, package.Length);
+                networkStream.Flush();
             }
         }
 
@@ -185,15 +274,12 @@ namespace ProjetoTopicosSegurança
             }
             else
             {
-                string userPass = textBoxUsername.Text.Trim() + '/' + textBoxPassword.Text.Trim(); // cria uma nova string para armazenar o username e password
-                // uso da '/' serve para facilitar o envio ao servidor, exemplo   username:teste | password:1234  | resultado:teste/1234
-
-                // cria um pacote para enviar os dados de autenticação ao servidor
-                // USER_OPTION_2 avisa que está a tentar fazer um registo
-                byte[] package = protocolSI.Make(ProtocolSICmdType.USER_OPTION_2, userPass);
-
+                byte[] data = Encoding.UTF8.GetBytes(textBoxUsername.Text.Trim() + '/' + textBoxUsername.Text.Trim());
                 // envia os dados para o servidor
-                SendMessage(package);
+                byte[] encryptedData = EncryptAssym(data, serverPubKey);
+                byte[] package = protocolSI.Make(ProtocolSICmdType.USER_OPTION_1, encryptedData);
+                networkStream.Write(package, 0, package.Length);
+                networkStream.Flush();
 
                 // aguarda por uma mensagem de validação do servidor
                 while(protocolSI.GetCmdType() != ProtocolSICmdType.ACK || protocolSI.GetCmdType() != ProtocolSICmdType.NACK)

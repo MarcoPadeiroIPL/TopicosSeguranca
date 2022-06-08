@@ -4,6 +4,7 @@ using System;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading;
+using System.Security.Cryptography;
 
 namespace Servidor // Note: actual namespace depends on the project name.
 {
@@ -18,6 +19,11 @@ namespace Servidor // Note: actual namespace depends on the project name.
         // porto do servidor
         private const int PORT = 5000;
 
+        // criação da chave simetrica
+        private static Aes aes;
+
+        // criação da chave publica e privada
+
         static void Main(string[] args)
         {
             // criação de um servidor na porta 5000
@@ -27,6 +33,14 @@ namespace Servidor // Note: actual namespace depends on the project name.
             listener.Start();
             ProtocolSI protocolSI = new ProtocolSI();
             int clientCounter = 0;
+
+            // definição da chave simetrica (Criação da key e do IV)
+            aes = Aes.Create();
+            RSACryptoServiceProvider rsa = new RSACryptoServiceProvider();
+            // definição da chave privada
+            string privKey = rsa.ToXmlString(true);
+            string pubKey = rsa.ToXmlString(false);
+
             WriteToLog("A iniciar o servidor " + IPAddress.Loopback + "...");
             WriteToLog("A definir a porta do servidor");
             WriteToLog("PORTA: " + PORT);
@@ -44,7 +58,7 @@ namespace Servidor // Note: actual namespace depends on the project name.
                 Globals.users.Add(currUtilizador); // adiciona à lista global de todos os users
 
 
-                ClientHandler handler = new ClientHandler(currUtilizador);
+                ClientHandler handler = new ClientHandler(currUtilizador, aes.Key, aes.IV, privKey, pubKey);
                 handler.Handle();
             }
         } 

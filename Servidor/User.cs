@@ -10,10 +10,13 @@ namespace Servidor
         private TcpClient client;
         private bool isLogged;
         private string username;
+        public int id;
 
-        public User(TcpClient client, bool isLoggedIn = false){
+        public User(TcpClient client, bool isLoggedIn = false, int id = 0)
+        {
             this.client = client;
             this.isLogged = isLoggedIn;
+            this.id = id;
         }
 
         public TcpClient GetClient()

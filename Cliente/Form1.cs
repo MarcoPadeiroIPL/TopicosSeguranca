@@ -26,6 +26,7 @@ namespace ProjetoTopicosSegurança
         // Criação de variaveis para armazena a chave publica e privada do servidor (para o servidor encriptar a chave simetrica)
         private string clientPubKey;
         private string clientPrivKey;
+
         // Digital Signature
         byte[] signature;
         public Form1()
@@ -58,83 +59,8 @@ namespace ProjetoTopicosSegurança
             DesligarLigarChat(false);
             DesligarLigarLogin(true);
         }
-                
         
-        private void Form1_Load(object sender, EventArgs e)
-        {
-
-        }
-        private void SendEncryptedAssym(byte[] data, string pubKey)
-        {
-            byte[] encryptedData = EncryptAssym(data, pubKey);
-            byte[] package = protocolSI.Make(ProtocolSICmdType.ASSYM_CIPHER_DATA, encryptedData);
-            networkStream.Write(package, 0, package.Length);
-            networkStream.Flush();
-        }
-        private void SendEncryptedSym(byte[] data, byte[] symmKey, byte[] IV)
-        {
-            byte[] encryptedData = EncryptSymm(data, symmKey, IV);
-            byte[] package = protocolSI.Make(ProtocolSICmdType.SYM_CIPHER_DATA, encryptedData);
-            networkStream.Write(package, 0, package.Length);
-            networkStream.Flush();
-        }
-        private byte[] EncryptAssym(byte[] data, string pubKey)
-        {
-            byte[] encryptedData;
-            RSACryptoServiceProvider temp = new RSACryptoServiceProvider();
-            temp.FromXmlString(pubKey);
-            encryptedData = temp.Encrypt(data, false);
-
-            return encryptedData;
-        }
-        private byte[] DecryptAssym(byte[] encryptedData, string privKey)
-        {
-            RSACryptoServiceProvider temp = new RSACryptoServiceProvider();
-            temp.FromXmlString(privKey);
-            byte[] data = temp.Decrypt(encryptedData, false);
-
-            return data;
-        }
-        private byte[] EncryptSymm(byte[] data, byte[] symmKey, byte[] IV)
-        {
-            byte[] encryptedData;
-
-            Aes temp;               // variavel temporaria para armazenar a chave simetrica com os valores passados por parametro
-            
-            // Inicialização da chave simetrica com os valores passados por parametro
-            temp = Aes.Create();
-            temp.Key = symmKey;
-            temp.IV = IV;
-
-            MemoryStream ms = new MemoryStream();
-            CryptoStream cs = new CryptoStream(ms, temp.CreateEncryptor(), CryptoStreamMode.Write);
-
-            cs.Write(data, 0, data.Length);
-            cs.Close();
-
-            encryptedData = ms.ToArray();
-
-            return encryptedData;
-        }
-        private byte[] DecryptSymm(byte[] encryptedData, byte[] symmKey, byte[] IV)
-        {
-            string msg;             // variavel temporaria para armazenar a mensagem decriptada em formato string
-            Aes temp;               // variavel temporaria para armazenar a chave simetrica com os valores passados por parametro
-            
-            // Inicialização da chave simetrica com os valores passados por parametro
-            temp = Aes.Create();
-            temp.Key = symmKey;
-            temp.IV = IV;
-
-            // decriptação da informação
-            MemoryStream ms = new MemoryStream(encryptedData);
-            CryptoStream cs = new CryptoStream(ms, temp.CreateDecryptor(), CryptoStreamMode.Read);
-            byte[] data = new byte[ms.Length];            // variavel temporaria para armazenar a mensagem decriptada em formato byte
-            int bytesLidos = cs.Read(data, 0, data.Length);
-            cs.Close();
-
-            return data;
-        }
+        
         private void ReadMessage()
         {
             while (networkStream.CanRead)
@@ -186,32 +112,22 @@ namespace ProjetoTopicosSegurança
                 }
                                             }
         }
-        private void AddText(string text) // Adiciona texto à textbox chat
+        private void buttonLogin_Click(object sender, EventArgs e)
         {
-            // fix de problemas com manipulação de threads diferentes          #StackOverFlowFTW
-            if (InvokeRequired)
+            if (String.IsNullOrEmpty(textBoxUsername.Text) || String.IsNullOrEmpty(textBoxPassword.Text))
             {
-                this.Invoke(new Action<string>(AddText), new object[] { text });
-                return;
+                MessageBox.Show("Tem de preencher todos os campos!", "Erro de login");
             }
-            textBoxChat.Text += text;
-        }
-        private void ChangeUI(bool res)
-        {
-            // fix de problemas com manipulação de threads diferentes          #StackOverFlowFTW
-            if (InvokeRequired)
+            else
             {
-                this.Invoke(new Action<bool>(DesligarLigarChat), new object[] { res });
-                this.Invoke(new Action<bool>(DesligarLigarLogin), new object[] { !res });
-                return;
+                byte[] data = Encoding.UTF8.GetBytes(textBoxUsername.Text.Trim() + '/' + textBoxPassword.Text.Trim());
+                // envia os dados para o servidor
+                byte[] encryptedData = EncryptAssym(data, serverPubKey);
+                byte[] package = protocolSI.Make(ProtocolSICmdType.USER_OPTION_1, encryptedData);
+                networkStream.Write(package, 0, package.Length);
+                networkStream.Flush();
             }
-            DesligarLigarChat(res);
-            DesligarLigarLogin(!res);
         }
-
-
-
-
         private void buttonEnviar_Click(object sender, EventArgs e)
         {
             byte[] package;
@@ -226,7 +142,6 @@ namespace ProjetoTopicosSegurança
             SendEncryptedSym(data, aes.Key, temp.IV);
             textBoxMensagem.Clear();
         }
-
         private void buttonMinimize_Click(object sender, EventArgs e) // UI
         {
             this.WindowState = FormWindowState.Minimized;
@@ -248,40 +163,6 @@ namespace ProjetoTopicosSegurança
             tcpClient.Close();
             Application.Exit();
         }
-
-        private void DesligarLigarChat(bool currState) // UI    
-        {
-            textBoxChat.Enabled = currState;
-            textBoxMensagem.Enabled = currState;
-            buttonEnviar.Enabled = currState;
-        }
-        private void DesligarLigarLogin(bool currState) // UI
-        {
-            label1.Enabled = currState;
-            label2.Enabled = currState;
-            textBoxUsername.Enabled = currState;
-            textBoxPassword.Enabled = currState;
-            buttonLogin.Enabled = currState;
-            buttonRegister.Enabled = currState;
-        }
-
-        private void buttonLogin_Click(object sender, EventArgs e)
-        {
-            if (String.IsNullOrEmpty(textBoxUsername.Text) || String.IsNullOrEmpty(textBoxPassword.Text))
-            {
-                MessageBox.Show("Tem de preencher todos os campos!", "Erro de login");
-            }
-            else
-            {
-                byte[] data = Encoding.UTF8.GetBytes(textBoxUsername.Text.Trim() + '/' + textBoxPassword.Text.Trim());
-                // envia os dados para o servidor
-                byte[] encryptedData = EncryptAssym(data, serverPubKey);
-                byte[] package = protocolSI.Make(ProtocolSICmdType.USER_OPTION_1, encryptedData);
-                networkStream.Write(package, 0, package.Length);
-                networkStream.Flush();
-            }
-        }
-
         private void textBoxUsername_KeyPress(object sender, KeyPressEventArgs e) // UI
         { 
             if (e.KeyChar == 13)
@@ -289,7 +170,6 @@ namespace ProjetoTopicosSegurança
                 buttonLogin.PerformClick();
             }
         }
-
         private void buttonRegister_Click(object sender, EventArgs e) 
         {
             if (String.IsNullOrEmpty(textBoxUsername.Text) || String.IsNullOrEmpty(textBoxPassword.Text))
@@ -321,8 +201,114 @@ namespace ProjetoTopicosSegurança
                     }
                 }
             }
-
         }
+        private void AddText(string text) // Adiciona texto à textbox chat
+        {
+            // fix de problemas com manipulação de threads diferentes          #StackOverFlowFTW
+            if (InvokeRequired)
+            {
+                this.Invoke(new Action<string>(AddText), new object[] { text });
+                return;
+            }
+            textBoxChat.Text += text;
+        }
+        private void ChangeUI(bool res)
+        {
+            // fix de problemas com manipulação de threads diferentes          #StackOverFlowFTW
+            if (InvokeRequired)
+            {
+                this.Invoke(new Action<bool>(DesligarLigarChat), new object[] { res });
+                this.Invoke(new Action<bool>(DesligarLigarLogin), new object[] { !res });
+                return;
+            }
+            DesligarLigarChat(res);
+            DesligarLigarLogin(!res);
+        }
+        private void DesligarLigarChat(bool currState) // UI    
+        {
+            textBoxChat.Enabled = currState;
+            textBoxMensagem.Enabled = currState;
+            buttonEnviar.Enabled = currState;
+        }
+        private void DesligarLigarLogin(bool currState) // UI
+        {
+            label1.Enabled = currState;
+            label2.Enabled = currState;
+            textBoxUsername.Enabled = currState;
+            textBoxPassword.Enabled = currState;
+            buttonLogin.Enabled = currState;
+            buttonRegister.Enabled = currState;
+        }
+        private void SendEncryptedAssym(byte[] data, string pubKey) // Função dedicada a enviar mensagens encriptadas com uma chave publica | Criptografia assimetrica
+        {
+            byte[] encryptedData = EncryptAssym(data, pubKey);
+            byte[] package = protocolSI.Make(ProtocolSICmdType.ASSYM_CIPHER_DATA, encryptedData);
+            networkStream.Write(package, 0, package.Length);
+            networkStream.Flush();
+        }
+        private void SendEncryptedSym(byte[] data, byte[] symmKey, byte[] IV) // Função dedicada a enviar mensagens encriptadas com uma chave secreta | Criptografia simetrica
+        {
+            byte[] encryptedData = EncryptSymm(data, symmKey, IV);
+            byte[] package = protocolSI.Make(ProtocolSICmdType.SYM_CIPHER_DATA, encryptedData);
+            networkStream.Write(package, 0, package.Length);
+            networkStream.Flush();
+        }
+        private byte[] EncryptAssym(byte[] data, string pubKey) // Função dedicada a encriptar com uma chave publica | Criptografia assimetrica
+        {
+            byte[] encryptedData;
+            RSACryptoServiceProvider temp = new RSACryptoServiceProvider();
+            temp.FromXmlString(pubKey);
+            encryptedData = temp.Encrypt(data, false);
 
+            return encryptedData;
+        }
+        private byte[] DecryptAssym(byte[] encryptedData, string privKey) // Função dedicada a decriptar com uma chave privada | Criptografia assimetrica
+        {
+            RSACryptoServiceProvider temp = new RSACryptoServiceProvider();
+            temp.FromXmlString(privKey);
+            byte[] data = temp.Decrypt(encryptedData, false);
+
+            return data;
+        }
+        private byte[] EncryptSymm(byte[] data, byte[] symmKey, byte[] IV) // Função dedicada a encriptar com uma chave secreta | Criptografia simetrica
+        {
+            byte[] encryptedData;
+
+            Aes temp;               // variavel temporaria para armazenar a chave simetrica com os valores passados por parametro
+            
+            // Inicialização da chave simetrica com os valores passados por parametro
+            temp = Aes.Create();
+            temp.Key = symmKey;
+            temp.IV = IV;
+
+            MemoryStream ms = new MemoryStream();
+            CryptoStream cs = new CryptoStream(ms, temp.CreateEncryptor(), CryptoStreamMode.Write);
+
+            cs.Write(data, 0, data.Length);
+            cs.Close();
+
+            encryptedData = ms.ToArray();
+
+            return encryptedData;
+        }
+        private byte[] DecryptSymm(byte[] encryptedData, byte[] symmKey, byte[] IV) // Função dedicada a encriptar com uma chave secreta | Criptografia simetrica
+        {
+            string msg;             // variavel temporaria para armazenar a mensagem decriptada em formato string
+            Aes temp;               // variavel temporaria para armazenar a chave simetrica com os valores passados por parametro
+            
+            // Inicialização da chave simetrica com os valores passados por parametro
+            temp = Aes.Create();
+            temp.Key = symmKey;
+            temp.IV = IV;
+
+            // decriptação da informação
+            MemoryStream ms = new MemoryStream(encryptedData);
+            CryptoStream cs = new CryptoStream(ms, temp.CreateDecryptor(), CryptoStreamMode.Read);
+            byte[] data = new byte[ms.Length];            // variavel temporaria para armazenar a mensagem decriptada em formato byte
+            int bytesLidos = cs.Read(data, 0, data.Length);
+            cs.Close();
+
+            return data;
+        }
     }
 }

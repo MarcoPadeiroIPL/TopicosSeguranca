@@ -11,38 +11,32 @@ namespace Servidor
 {
     internal class ClientHandler
     {
+        private ProtocolSI protocolSI;
+
         private User currUser;
         private const int SALTSIZE = 8;
         private const int NUMBER_OF_ITERATIONS = 50000;
-
-        // para conveniencia
-        private TcpClient currClient;
-        private NetworkStream currStream;
-        private ProtocolSI protocolSI;
-        private string currUsername;
 
         // armazenamento da chave simetrica, publica e privada do servidor
         private Aes aes;
         private string serverPrivKey;
         private string serverPubKey;
 
+        // armazenamento da chave publica do cliente
         private string clientPubKey;
 
+        // armazenamento da assinatura digital
         private byte[] signature;
 
         internal ClientHandler(User currUser, byte[] symmKey, byte[] IV, string serverPrivKey, string serverPubKey)
         {
             this.currUser = currUser;
-            this.currClient = currUser.GetClient();
-            this.currStream = currUser.GetStream();
-            this.protocolSI = new ProtocolSI();
-            this.isLogged = currUser.GetLogin();
-            this.currUsername = currUser.GetUsername();
+            protocolSI = new ProtocolSI();
             this.aes = Aes.Create();
             this.aes.Key = symmKey;
             this.aes.IV = IV;
             this.serverPrivKey = serverPrivKey;
-            this.serverPubKey = serverPrivKey;
+            this.serverPubKey = serverPubKey;
         }
 
         internal void Handle()
@@ -51,22 +45,157 @@ namespace Servidor
             Thread thread = new Thread(threadHandler);
             thread.Start();
         }
+        private void threadHandler()
+        {
+            Program.WriteToLog(DateTime.Now.ToString("[HH:mm]") + " O cliente " + currUser.id + " está a tentar entrar...");
 
-        private void SendEncryptedAssym(byte[] data, string pubKey)
-        {
-            byte[] encryptedData = EncryptAssym(data, pubKey);
-            byte[] package = protocolSI.Make(ProtocolSICmdType.ASSYM_CIPHER_DATA, encryptedData);
-            currStream.Write(package, 0, package.Length);
-            currStream.Flush();
+            // mal o cliente entra, envia a chave publica ao cliente
+            byte[] package = protocolSI.Make(ProtocolSICmdType.PUBLIC_KEY, serverPubKey);
+            currUser.GetStream().Write(package, 0, package.Length);
+            Program.WriteToLog(DateTime.Now.ToString("[HH:mm]") + " O servidor enviou a sua chave publica ao cliente a tentar entrar");
+
+            // Enquanto a transmissão com o cliente não acabar
+            while (currUser.GetStream().CanRead)
+            {
+                // caso exista informação disponivel na stream
+                if (currUser.GetStream().DataAvailable) 
+                {
+                    // lê a informação da possivel mensagem enviada pelo cliente
+                    currUser.GetStream().Read(protocolSI.Buffer, 0, protocolSI.Buffer.Length);
+
+                    switch (protocolSI.GetCmdType())
+                    {
+                        case ProtocolSICmdType.PUBLIC_KEY:                  // Caso o Servidor receba a chave publica do cliente, armazena na variavel clientPubKey
+                            clientPubKey = protocolSI.GetStringFromData();
+                            Program.WriteToLog(DateTime.Now.ToString("[HH:mm]") + " O cliente " + currUser.id + " enviou a sua chave publica ao servidor");
+                            break;
+                        case ProtocolSICmdType.DIGITAL_SIGNATURE:           // Caso so servidor receba uma assinatura, armazena-a numa variavel para validar o package mais tarde
+                            signature = protocolSI.GetData();
+                            break;
+                        case ProtocolSICmdType.USER_OPTION_1:               // USER_OPTION_1 == Cliente a tentar fazer o login              
+                            if (!currUser.GetLogin())                       // caso o utilizador atual ainda não esteja logado
+                            {
+                                Program.WriteToLog(DateTime.Now.ToString("[HH:mm]") + " O cliente " + currUser.id + " enviou as suas credencias encriptadas pela chave publica do servidor");
+                                // Decripta a mensagem recebida pelo cliente, que neste caso é uma combinação do username e da password dividido por uma '/'
+                                string userPass = System.Text.Encoding.UTF8.GetString(DecryptAssym(protocolSI.GetData(), serverPrivKey));
+
+                                Program.WriteToLog(DateTime.Now.ToString("[HH:mm]") + " O servidor utilizou a sua chave privada para a decriptação das credencias");
+                                currUser.ChangeUsername(userPass.Substring(0, userPass.IndexOf('/')));
+                                string password = userPass.Substring(userPass.IndexOf('/') + 1, userPass.Length - currUser.GetUsername().Length - 1);
+
+                                Program.WriteToLog(DateTime.Now.ToString("[HH:mm]") + " A validar as credenciais do cliente " + currUser.id + "...");
+                                if (VerifyLogin(currUser.GetUsername(), password)) // Validação das credencias enviadas pelo cliente
+                                {
+                                    Program.WriteToLog(DateTime.Now.ToString("[HH:mm]") + " As credenciais do cliente " + currUser.id + " são validas!");
+
+                                    currUser.ChangeLogin(true); // alteração do estado de login do cliente
+                                    currUser.ChangeUsername(currUser.GetUsername()); // alteração do username do cliente para o username enviado pelo cliente
+
+                                    Program.WriteToLog(DateTime.Now.ToString("[HH:mm]") + " A encriptar a chave secreta com a chave publica do cliente " + currUser.GetUsername() + "!");
+                                    Program.WriteToLog(DateTime.Now.ToString("[HH:mm]") + " A enviar a chave secreta ao cliente " + currUser.GetUsername() + "...");
+
+                                    // encripta a chave simetrica com a chave publica do cliente e envia-a
+                                    package = protocolSI.Make(ProtocolSICmdType.SECRET_KEY, EncryptAssym(aes.Key, clientPubKey));
+                                    currUser.GetStream().Write(package, 0, package.Length);
+                                    currUser.GetStream().Flush();
+
+
+                                    // envia uma mensagem a todos os outros clientes a avisar que alguem entrou no chat
+                                    Program.WriteToLog(DateTime.Now.ToString("[HH:mm]") + " A avisar o resto dos clientes que o utilizador " + currUser.GetUsername() + " entrou no chat!");
+                                    string mensagem = DateTime.Now.ToString("[HH:mm]") + " " + currUser.GetUsername() + " entrou no chat!";
+                                    package = protocolSI.Make(ProtocolSICmdType.DATA, mensagem);
+                                    Program.SendToEveryone(package);
+                                }
+                                else // Caso o login não seja valido
+                                {
+                                    Program.WriteToLog(DateTime.Now.ToString("[HH:mm]") + " As credenciais do cliente " + currUser.id + " não são validas!");
+                                    package = protocolSI.Make(ProtocolSICmdType.NACK);
+                                    currUser.GetStream().Write(package, 0, package.Length);
+                                    currUser.GetStream().Flush();
+                                }
+                            }
+                            break;
+                        case ProtocolSICmdType.USER_OPTION_2: //utilizador registar
+                            // obtem o username e password enviada pelo cliente
+                            Program.WriteToLog(DateTime.Now.ToString("[HH:mm]") + " O cliente " + currUser.id + " enviou as suas credencias encriptadas pela chave publica do servidor para se registar!");
+                            string userPas = System.Text.Encoding.UTF8.GetString(DecryptAssym(protocolSI.GetData(), serverPrivKey));
+
+                            Program.WriteToLog(DateTime.Now.ToString("[HH:mm]") + " O servidor utilizou a sua chave privada para a decriptação das credencias");
+                            string username = userPas.Substring(0, userPas.IndexOf('/'));
+                            string pass = userPas.Substring(userPas.IndexOf('/') + 1, userPas.Length - username.Length - 1);
+
+                            
+                            byte[] salt = GenerateSalt(SALTSIZE);
+                            byte[] hash = GenerateSaltedHash(pass, salt);
+
+                            // regista o cliente e verifica se foi efetuado com succeso ou não
+                            if (Register(username, hash, salt))
+                            {
+                                Program.WriteToLog(DateTime.Now.ToString("[hh:MM]") + " O registo foi efetuado com sucesso!");
+                                package = protocolSI.Make(ProtocolSICmdType.ACK);
+                            }
+                            else
+                            {
+                                Program.WriteToLog(DateTime.Now.ToString("[HH:mm]") + " O registo não foi efetuado com sucesso!");
+                                package = protocolSI.Make(ProtocolSICmdType.NACK);
+                            }
+                            currUser.GetStream().Write(package, 0, package.Length);
+                            currUser.GetStream().Flush();
+                            break;
+                        case ProtocolSICmdType.IV:
+                            Program.WriteToLog(DateTime.Now.ToString("[HH:mm]") + " O servidor recebeu um vetor de inicialização");
+                            package = protocolSI.Make(ProtocolSICmdType.IV, protocolSI.GetData());
+                            Program.SendToEveryone(package);
+                            break;
+                        // caso a informação recebida seja uma mensagem
+                        case ProtocolSICmdType.SYM_CIPHER_DATA:
+                            if (currUser.GetLogin())
+                            {
+                                Program.WriteToLog(DateTime.Now.ToString("[HH:mm]") + " O cliente " + currUser.GetUsername() + " enviou uma mensagem encriptada com a chave secreta para o servidor!");
+                                
+
+                                Program.WriteToLog(DateTime.Now.ToString("[HH:mm]") + " O servidor assinou a mensagem enviada pelo cliente " + currUser.GetUsername() + "!");
+                                // assinar o hash
+                                RSACryptoServiceProvider rsa1 = new RSACryptoServiceProvider();
+                                rsa1.FromXmlString(serverPrivKey);
+                                byte[] signature = rsa1.SignData(protocolSI.GetData(), CryptoConfig.MapNameToOID("SHA1"));
+
+                                // envia a todos os clientes
+                                Program.WriteToLog(DateTime.Now.ToString("[HH:mm]") + " O servidor enviou a assinatura para todos os clientes!");
+                                package = protocolSI.Make(ProtocolSICmdType.DIGITAL_SIGNATURE, signature);
+                                Program.SendToEveryone(package);
+
+                                Program.WriteToLog(DateTime.Now.ToString("[HH:mm]") + " O servidor enviou a mensagem encriptada e assinada para todos os clientes!");
+                                package = protocolSI.Make(ProtocolSICmdType.DATA, DateTime.Now.ToString("[HH:mm]") + " " + currUser.GetUsername() + ": ");
+                                Program.SendToEveryone(package);
+                                package = protocolSI.Make(ProtocolSICmdType.SYM_CIPHER_DATA, protocolSI.GetData());
+                                Program.SendToEveryone(package);
+
+                            }
+                            else
+                            {
+                                // erro, não está logado
+                            }
+                            break;
+                        // caso a informação recebida tenha sido de fim de transmissão
+                        case ProtocolSICmdType.EOT:
+                            string mesg = DateTime.Now.ToString("[HH:mm]") + " " + currUser.GetUsername() + " saiu do chat.";
+                            Program.WriteToLog(mesg);
+                            package = protocolSI.Make(ProtocolSICmdType.USER_OPTION_2, currUser.GetUsername());
+                            Globals.users.Remove(currUser);
+                            Program.SendToEveryone(package);
+
+                            currUser.GetStream().Close();
+                            currUser.GetClient().Close();
+                            break;
+                    }
+                }
+            }
+            // encerramento de ligação com o cliente
+            currUser.GetStream().Close();
+            currUser.GetClient().Close();
         }
-        private void SendEncryptedSym(byte[] data, byte[] symmKey, byte[] IV)
-        {
-            byte[] encryptedData = EncryptSymm(data, symmKey, IV);
-            byte[] package = protocolSI.Make(ProtocolSICmdType.SYM_CIPHER_DATA, encryptedData);
-            currStream.Write(package, 0, package.Length);
-            currStream.Flush();
-        }
-        private byte[] EncryptAssym(byte[] data, string pubKey)
+        private byte[] EncryptAssym(byte[] data, string pubKey) // Função que encripta apartir da chave publica | Criptografia assimetrica 
         {
             byte[] encryptedData;
 
@@ -76,7 +205,7 @@ namespace Servidor
 
             return encryptedData;
         }
-        private byte[] DecryptAssym(byte[] encryptedData, string privKey)
+        private byte[] DecryptAssym(byte[] encryptedData, string privKey) // Função que decripta apartir da chave privada | Criptografia assimetrica
         {
             RSACryptoServiceProvider temp = new RSACryptoServiceProvider();
             temp.FromXmlString(privKey);
@@ -84,176 +213,8 @@ namespace Servidor
 
             return data;
         }
-        private byte[] EncryptSymm(byte[] data, byte[] symmKey, byte[] IV)
-        {
-            byte[] encryptedData;
-
-            Aes temp;               // variavel temporaria para armazenar a chave simetrica com os valores passados por parametro
-            
-            // Inicialização da chave simetrica com os valores passados por parametro
-            temp = Aes.Create();
-            temp.Key = symmKey;
-            temp.IV = IV;
-
-            MemoryStream ms = new MemoryStream();
-            CryptoStream cs = new CryptoStream(ms, temp.CreateEncryptor(), CryptoStreamMode.Write);
-
-            cs.Write(data, 0, data.Length);
-            cs.Close();
-
-            encryptedData = ms.ToArray();
-
-            return encryptedData;
-        }
-        private byte[] DecryptSymm(byte[] encryptedData, byte[] symmKey, byte[] IV)
-        {
-            string msg;             // variavel temporaria para armazenar a mensagem decriptada em formato string
-            Aes temp;               // variavel temporaria para armazenar a chave simetrica com os valores passados por parametro
-            
-            // Inicialização da chave simetrica com os valores passados por parametro
-            temp = Aes.Create();
-            temp.Key = symmKey;
-            temp.IV = IV;
-
-            // decriptação da informação
-            MemoryStream ms = new MemoryStream(encryptedData);
-            CryptoStream cs = new CryptoStream(ms, temp.CreateDecryptor(), CryptoStreamMode.Read);
-            byte[] data = new byte[ms.Length];            // variavel temporaria para armazenar a mensagem decriptada em formato byte
-            int bytesLidos = cs.Read(data, 0, data.Length);
-            cs.Close();
-
-            return data;
-        }
-        private void threadHandler()
-        {
-            Program.WriteToLog(DateTime.Now.ToString("[HH:mm]") + " Alguém está a tentar entrar...");
-
-            // mal o cliente entra, envia a chave publica ao cliente
-            byte[] package = protocolSI.Make(ProtocolSICmdType.PUBLIC_KEY, serverPubKey);
-            currStream.Write(package, 0, package.Length);
-
-            // Enquanto a transmissão com o cliente não acabar
-            while (currStream.CanRead)
-            {
-                if (currStream.DataAvailable)
-                {
-                    // lê a informação da possivel mensagem enviada pelo cliente
-                    currStream.Read(protocolSI.Buffer, 0, protocolSI.Buffer.Length);
-                    switch (protocolSI.GetCmdType())
-                    {
-                        case ProtocolSICmdType.PUBLIC_KEY:
-                            clientPubKey = protocolSI.GetStringFromData();
-                            break;
-                        case ProtocolSICmdType.DIGITAL_SIGNATURE:
-                            signature = protocolSI.GetData();
-                            Console.WriteLine(System.Text.Encoding.UTF8.GetString(signature));
-                            break;
-                        case ProtocolSICmdType.USER_OPTION_1:
-                            if (!currUser.GetLogin())
-                            {
-                                string userPass = System.Text.Encoding.UTF8.GetString(DecryptAssym(protocolSI.GetData(), serverPrivKey));
-                                currUsername = userPass.Substring(0, userPass.IndexOf('/'));
-                                string password = userPass.Substring(userPass.IndexOf('/') + 1, userPass.Length - currUsername.Length - 1);
-                                if(VerifyLogin(currUsername, password))
-                                {
-                                    currUser.ChangeLogin(true);
-                                    isLogged = true;
-
-                                    currUser.ChangeUsername(currUsername);
-
-                                    // envia uma mensagem ao cliente a avisar que o login é valido
-                                    package = protocolSI.Make(ProtocolSICmdType.SECRET_KEY, EncryptAssym(aes.Key, clientPubKey));
-                                    currStream.Write(package, 0, package.Length);
-                                    currStream.Flush();
-
-
-                                    // envia uma mensagem a todos os outros clientes a avisar que alguem entrou no chat
-                                    string mensagem = DateTime.Now.ToString("[HH:mm]") + " " + currUsername + " entrou no chat!";
-                                    Program.WriteToLog(mensagem);
-
-                                    package = protocolSI.Make(ProtocolSICmdType.DATA, mensagem);
-                                    Program.SendToEveryone(package);
-                                } else
-                                {
-                                    package = protocolSI.Make(ProtocolSICmdType.NACK);
-                                    currStream.Write(package, 0, package.Length);
-                                    currStream.Flush();
-                                }
-                            }
-                            break;
-                        case ProtocolSICmdType.USER_OPTION_2: //utilizador registar
-                            // obtem o username e password enviada pelo cliente
-                            string userPas = System.Text.Encoding.UTF8.GetString(DecryptAssym(protocolSI.GetData(), serverPrivKey));
-                            string username = userPas.Substring(0, userPas.IndexOf('/'));
-                            string pass = userPas.Substring(userPas.IndexOf('/') + 1, userPas.Length - username.Length - 1);
-
-                            byte[] salt = GenerateSalt(SALTSIZE);
-                            byte[] hash = GenerateSaltedHash(pass, salt);
-
-                            // regista o cliente e verifica se foi efetuado com succeso ou não
-                            if (Register(username, hash, salt))
-                            {
-                                package = protocolSI.Make(ProtocolSICmdType.ACK);
-                            } else {
-                                package = protocolSI.Make(ProtocolSICmdType.NACK);
-                            }
-                            currStream.Write(package, 0, package.Length);
-                            currStream.Flush();
-                            break;
-                        case ProtocolSICmdType.IV:
-                            package = protocolSI.Make(ProtocolSICmdType.IV, protocolSI.GetData());
-                            Program.SendToEveryone(package);
-                            break;
-                        // caso a informação recebida seja uma mensagem
-                        case ProtocolSICmdType.SYM_CIPHER_DATA:
-                            if (currUser.GetLogin())
-                            {
-                                Console.WriteLine(currUsername + " enviou uma mensagem.");
-                                // assinar o hash
-                                RSACryptoServiceProvider rsa1 = new RSACryptoServiceProvider();
-                                rsa1.FromXmlString(serverPrivKey);
-                                byte[] signature = rsa1.SignData(protocolSI.GetData(), CryptoConfig.MapNameToOID("SHA1"));
-
-                                // envia a todos os clientes
-                                package = protocolSI.Make(ProtocolSICmdType.DIGITAL_SIGNATURE, signature);
-                                Program.SendToEveryone(package);
-                                package = protocolSI.Make(ProtocolSICmdType.DATA, DateTime.Now.ToString("[HH:mm]") + " " + currUsername + ": ");
-                                Program.SendToEveryone(package);
-                                package = protocolSI.Make(ProtocolSICmdType.SYM_CIPHER_DATA, protocolSI.GetData());
-                                Program.SendToEveryone(package);
-                                
-                            } else
-                            {
-                                // erro, não está logado
-                            }
-                            break;
-                        // caso a informação recebida tenha sido de fim de transmissão
-                        case ProtocolSICmdType.EOT:
-                            string mesg = DateTime.Now.ToString("[HH:mm]") + " " + currUsername + " saiu do chat.";
-                            Program.WriteToLog(mesg);
-                            package = protocolSI.Make(ProtocolSICmdType.USER_OPTION_2, currUsername);
-                            Globals.users.Remove(currUser);
-                            Program.SendToEveryone(package);
-
-                            currStream.Close();
-                            currClient.Close();
-                            break;
-                    }
-                }
-        }
-        // encerramento de ligação com o cliente
-        currStream.Close();
-        currClient.Close();
-    }
-        private static byte[] GenerateSalt(int size)
-        {
-            //Generate a cryptographic random number.
-            RNGCryptoServiceProvider rng = new RNGCryptoServiceProvider();
-            byte[] buff = new byte[size];
-            rng.GetBytes(buff);
-            return buff;
-        }
-        private bool VerifyLogin(string username, string password)
+        
+        private bool VerifyLogin(string username, string password) // Verifica as credenciais recebida por parametro e acede à base de dados
         {
             SqlConnection conn = null;
             try
@@ -315,17 +276,12 @@ namespace Servidor
                 return false;
             }
         }
-        private static byte[] GenerateSaltedHash(string plainText, byte[] salt)
-        {
-            Rfc2898DeriveBytes rfc2898 = new Rfc2898DeriveBytes(plainText, salt, NUMBER_OF_ITERATIONS);
-            return rfc2898.GetBytes(32);
-        }
-        private bool Register(string username, byte[] saltedPasswordHash, byte[] salt)
+        
+        private bool Register(string username, byte[] saltedPasswordHash, byte[] salt) // Regista um novo utilizador e armazena a password encriptada na base de dados
         {
             SqlConnection conn = null;
             try
             {
-
                 // Configurar ligação à Base de Dados
                 conn = new SqlConnection();
                 string path = Directory.GetCurrentDirectory();
@@ -391,6 +347,18 @@ namespace Servidor
                 throw new Exception("Error while inserting an user:" + e.Message);
             }
         }
-        
+        private static byte[] GenerateSalt(int size) // Criação de um salt aleatorio para a password
+        {
+            //Generate a cryptographic random number.
+            RNGCryptoServiceProvider rng = new RNGCryptoServiceProvider();
+            byte[] buff = new byte[size];
+            rng.GetBytes(buff);
+            return buff;
+        }
+        private static byte[] GenerateSaltedHash(string plainText, byte[] salt) // Criação de um hash baseado no salt enviado por parametro
+        {
+            Rfc2898DeriveBytes rfc2898 = new Rfc2898DeriveBytes(plainText, salt, NUMBER_OF_ITERATIONS);
+            return rfc2898.GetBytes(32);
+        }
     }
 }

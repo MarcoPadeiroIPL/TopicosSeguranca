@@ -54,7 +54,7 @@ namespace Servidor // Note: actual namespace depends on the project name.
                 
                 // adiciona à lista de utilizadores
                 clientCounter++;
-                User currUtilizador = new User(client, false); // criação de nova instancia de um user 
+                User currUtilizador = new User(client, false, clientCounter); // criação de nova instancia de um user 
                 Globals.users.Add(currUtilizador); // adiciona à lista global de todos os users
 
                 // executa a função da class ClienteHandler que é responsavel por criar uma nova thread dedicada ao cliente

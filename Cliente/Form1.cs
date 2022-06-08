@@ -116,6 +116,7 @@ namespace ProjetoTopicosSegurança
         }
         private byte[] DecryptSymm(byte[] encryptedData, byte[] symmKey, byte[] IV)
         {
+            AddText(Encoding.UTF8.GetString(encryptedData));
             string msg;             // variavel temporaria para armazenar a mensagem decriptada em formato string
             Aes temp;               // variavel temporaria para armazenar a chave simetrica com os valores passados por parametro
             
@@ -160,9 +161,14 @@ namespace ProjetoTopicosSegurança
                             case ProtocolSICmdType.SECRET_KEY:
                                 byte[] encryptedKey = protocolSI.GetData();
                                 aes.Key = DecryptAssym(encryptedKey, clientPrivKey);
-                                AddText(Encoding.UTF8.GetString(aes.Key));
                                 ChangeUI(true);
                                 // UI
+                                break;
+                            case ProtocolSICmdType.NACK: // erro no login
+                                MessageBox.Show("Erro no login");
+                                break;
+                            case ProtocolSICmdType.DATA:
+                                AddText(Environment.NewLine + protocolSI.GetStringFromData());
                                 break;
                         }
                     }
@@ -180,7 +186,7 @@ namespace ProjetoTopicosSegurança
                 this.Invoke(new Action<string>(AddText), new object[] { text });
                 return;
             }
-            textBoxChat.Text += text + Environment.NewLine;
+            textBoxChat.Text += text;
         }
         private void ChangeUI(bool res)
         {
@@ -188,9 +194,11 @@ namespace ProjetoTopicosSegurança
             if (InvokeRequired)
             {
                 this.Invoke(new Action<bool>(DesligarLigarChat), new object[] { res });
+                this.Invoke(new Action<bool>(DesligarLigarLogin), new object[] { !res });
                 return;
             }
             DesligarLigarChat(res);
+            DesligarLigarLogin(!res);
         }
 
 

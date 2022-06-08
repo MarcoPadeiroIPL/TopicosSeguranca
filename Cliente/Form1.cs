@@ -150,12 +150,11 @@ namespace ProjetoTopicosSegurança
                             case ProtocolSICmdType.PUBLIC_KEY: // armazenar a chave publica do servidor
                                 serverPubKey = protocolSI.GetStringFromData();
                                 break;
-                            case ProtocolSICmdType.IV:
-                                byte[] encryptedIV = protocolSI.GetData();
-                                aes.IV = DecryptAssym(encryptedIV, clientPrivKey);
-                                break;
                             case ProtocolSICmdType.DIGITAL_SIGNATURE:
                                 signature = protocolSI.GetData();
+                                break;
+                            case ProtocolSICmdType.IV:
+                                aes.IV = protocolSI.GetData();
                                 break;
                             case ProtocolSICmdType.SYM_CIPHER_DATA:
                                 RSACryptoServiceProvider temp = new RSACryptoServiceProvider();
@@ -215,8 +214,16 @@ namespace ProjetoTopicosSegurança
 
         private void buttonEnviar_Click(object sender, EventArgs e)
         {
+            byte[] package;
+            // assinar o hash
+
+            Aes temp = Aes.Create();
+            temp.Key = aes.Key;
+
+            package = protocolSI.Make(ProtocolSICmdType.IV, temp.IV);
+            networkStream.Write(package, 0, package.Length);
             byte[] data = Encoding.UTF8.GetBytes(textBoxMensagem.Text);
-            SendEncryptedSym(data, aes.Key, aes.IV);
+            SendEncryptedSym(data, aes.Key, temp.IV);
             textBoxMensagem.Clear();
         }
 

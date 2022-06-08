@@ -11,8 +11,7 @@ namespace Servidor // Note: actual namespace depends on the project name.
     static class Globals
     {
         public static List<User> users = new List<User>(); // variavel global que armazena todos os users
-        //public static string currentPath = @"C:\temp\servidor\logs\log" + DateTime.Now.ToString("yy-MM-dd_HH:mm:ss") + ".txt";
-        public static string currentPath = Directory.GetCurrentDirectory() + "\\logs\\log" + DateTime.Now.ToString("yy/MM/dd__HH.mm.ss") + ".txt";
+        public static string currentPath = Directory.GetCurrentDirectory() + "\\logs\\log" + DateTime.Now.ToString("yy_MM_dd__HH.mm.ss") + ".txt";
     }
     internal class Program
     {
@@ -21,8 +20,6 @@ namespace Servidor // Note: actual namespace depends on the project name.
 
         // criação da chave simetrica
         private static Aes aes;
-
-        // criação da chave publica e privada
 
         static void Main(string[] args)
         {
@@ -36,6 +33,8 @@ namespace Servidor // Note: actual namespace depends on the project name.
 
             // definição da chave simetrica (Criação da key e do IV)
             aes = Aes.Create();
+
+            // definição da chave publica e privada
             RSACryptoServiceProvider rsa = new RSACryptoServiceProvider();
             // definição da chave privada
             string privKey = rsa.ToXmlString(true);
@@ -52,34 +51,48 @@ namespace Servidor // Note: actual namespace depends on the project name.
             {
                 // quando acha um cliente
                 TcpClient client = listener.AcceptTcpClient();
-
+                
+                // adiciona à lista de utilizadores
                 clientCounter++;
                 User currUtilizador = new User(client, false); // criação de nova instancia de um user 
                 Globals.users.Add(currUtilizador); // adiciona à lista global de todos os users
 
-
+                // executa a função da class ClienteHandler que é responsavel por criar uma nova thread dedicada ao cliente
                 ClientHandler handler = new ClientHandler(currUtilizador, aes.Key, aes.IV, privKey, pubKey);
                 handler.Handle();
             }
         } 
         public static void SendToEveryone(byte[] package) // faz um broadcast de uma mensagem para todos os clientes
         {
+            // vai por todos os utilizadores na lista
             foreach(User user in Globals.users)
             {
+                // caso estejam logados
                 if(user.GetLogin())
                 {
+                    // obtem a stream entre o servidor e o cliente
                     NetworkStream networkStream = user.GetStream();
+                    // envia a mensagem ao cliente
                     networkStream.Write(package, 0, package.Length);
                     networkStream.Flush();
                 }
                
             }
         }
-        public static void WriteToLog(string msg)
+        public static void WriteToLog(string msg) // função chamada quando se quer escrever no servidor
         {
-            File.WriteAllText("log" + DateTime.Now.ToString("yy_MM_dd__HH.mm.ss") + ".txt", msg);
+
+            // escreve na consola os dados enviados por parametro
             Console.WriteLine(msg);
-            
+
+            FileStream fs = new FileStream(Globals.currentPath, FileMode.Append, FileAccess.Write);
+            StreamWriter sw = new StreamWriter(fs);
+
+            sw.WriteLine(msg);
+
+            sw.Close();
+            fs.Close();
+
         }
     }
 }

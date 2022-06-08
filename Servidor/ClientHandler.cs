@@ -19,7 +19,6 @@ namespace Servidor
         private TcpClient currClient;
         private NetworkStream currStream;
         private ProtocolSI protocolSI;
-        private bool isLogged;
         private string currUsername;
 
         // armazenamento da chave simetrica, publica e privada do servidor
@@ -28,6 +27,8 @@ namespace Servidor
         private string serverPubKey;
 
         private string clientPubKey;
+
+        private byte[] signature;
 
         internal ClientHandler(User currUser, byte[] symmKey, byte[] IV, string serverPrivKey, string serverPubKey)
         {
@@ -143,6 +144,10 @@ namespace Servidor
                         case ProtocolSICmdType.PUBLIC_KEY:
                             clientPubKey = protocolSI.GetStringFromData();
                             break;
+                        case ProtocolSICmdType.DIGITAL_SIGNATURE:
+                            signature = protocolSI.GetData();
+                            Console.WriteLine(System.Text.Encoding.UTF8.GetString(signature));
+                            break;
                         case ProtocolSICmdType.USER_OPTION_1:
                             if (!currUser.GetLogin())
                             {
@@ -161,9 +166,6 @@ namespace Servidor
                                     currStream.Write(package, 0, package.Length);
                                     currStream.Flush();
 
-                                    package = protocolSI.Make(ProtocolSICmdType.IV, EncryptAssym(aes.IV, clientPubKey));
-                                    currStream.Write(package, 0, package.Length);
-                                    currStream.Flush();
 
                                     // envia uma mensagem a todos os outros clientes a avisar que alguem entrou no chat
                                     string mensagem = DateTime.Now.ToString("[HH:mm]") + " " + currUsername + " entrou no chat!";
@@ -198,15 +200,19 @@ namespace Servidor
                             currStream.Write(package, 0, package.Length);
                             currStream.Flush();
                             break;
+                        case ProtocolSICmdType.IV:
+                            package = protocolSI.Make(ProtocolSICmdType.IV, protocolSI.GetData());
+                            Program.SendToEveryone(package);
+                            break;
                         // caso a informação recebida seja uma mensagem
                         case ProtocolSICmdType.SYM_CIPHER_DATA:
                             if (currUser.GetLogin())
                             {
                                 Console.WriteLine(currUsername + " enviou uma mensagem.");
                                 // assinar o hash
-                                RSACryptoServiceProvider asd = new RSACryptoServiceProvider();
-                                asd.FromXmlString(serverPrivKey);
-                                byte[] signature = asd.SignData(protocolSI.GetData(), CryptoConfig.MapNameToOID("SHA1"));
+                                RSACryptoServiceProvider rsa1 = new RSACryptoServiceProvider();
+                                rsa1.FromXmlString(serverPrivKey);
+                                byte[] signature = rsa1.SignData(protocolSI.GetData(), CryptoConfig.MapNameToOID("SHA1"));
 
                                 // envia a todos os clientes
                                 package = protocolSI.Make(ProtocolSICmdType.DIGITAL_SIGNATURE, signature);
@@ -215,6 +221,7 @@ namespace Servidor
                                 Program.SendToEveryone(package);
                                 package = protocolSI.Make(ProtocolSICmdType.SYM_CIPHER_DATA, protocolSI.GetData());
                                 Program.SendToEveryone(package);
+                                
                             } else
                             {
                                 // erro, não está logado

@@ -142,7 +142,6 @@ namespace Servidor
                     {
                         case ProtocolSICmdType.PUBLIC_KEY:
                             clientPubKey = protocolSI.GetStringFromData();
-                            Console.WriteLine("Cliente PUB key: " + clientPubKey);
                             break;
                         case ProtocolSICmdType.USER_OPTION_1:
                             if (!currUser.GetLogin())
@@ -150,10 +149,8 @@ namespace Servidor
                                 string userPass = System.Text.Encoding.UTF8.GetString(DecryptAssym(protocolSI.GetData(), serverPrivKey));
                                 currUsername = userPass.Substring(0, userPass.IndexOf('/'));
                                 string password = userPass.Substring(userPass.IndexOf('/') + 1, userPass.Length - currUsername.Length - 1);
-                                Console.WriteLine(userPass + currUsername + password);
                                 if(VerifyLogin(currUsername, password))
                                 {
-                                    Console.WriteLine("AAAAAAAAa");
                                     currUser.ChangeLogin(true);
                                     isLogged = true;
 
@@ -205,11 +202,16 @@ namespace Servidor
                         case ProtocolSICmdType.SYM_CIPHER_DATA:
                             if (currUser.GetLogin())
                             {
-                                Console.WriteLine(System.Text.Encoding.UTF8.GetString(protocolSI.GetData()));
-                                Program.WriteToLog("Alguem envio mensagem");
+                                Console.WriteLine(currUsername + " enviou uma mensagem.");
+                                // assinar o hash
+                                RSACryptoServiceProvider asd = new RSACryptoServiceProvider();
+                                asd.FromXmlString(serverPrivKey);
+                                byte[] signature = asd.SignData(protocolSI.GetData(), CryptoConfig.MapNameToOID("SHA1"));
 
                                 // envia a todos os clientes
-                                package = protocolSI.Make(ProtocolSICmdType.DATA, currUsername + ": ");
+                                package = protocolSI.Make(ProtocolSICmdType.DIGITAL_SIGNATURE, signature);
+                                Program.SendToEveryone(package);
+                                package = protocolSI.Make(ProtocolSICmdType.DATA, DateTime.Now.ToString("[HH:mm]") + " " + currUsername + ": ");
                                 Program.SendToEveryone(package);
                                 package = protocolSI.Make(ProtocolSICmdType.SYM_CIPHER_DATA, protocolSI.GetData());
                                 Program.SendToEveryone(package);

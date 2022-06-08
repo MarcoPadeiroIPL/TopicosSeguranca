@@ -26,6 +26,8 @@ namespace ProjetoTopicosSegurança
         // Criação de variaveis para armazena a chave publica e privada do servidor (para o servidor encriptar a chave simetrica)
         private string clientPubKey;
         private string clientPrivKey;
+        // Digital Signature
+        byte[] signature;
         public Form1()
         {
             InitializeComponent();
@@ -116,7 +118,6 @@ namespace ProjetoTopicosSegurança
         }
         private byte[] DecryptSymm(byte[] encryptedData, byte[] symmKey, byte[] IV)
         {
-            AddText(Encoding.UTF8.GetString(encryptedData));
             string msg;             // variavel temporaria para armazenar a mensagem decriptada em formato string
             Aes temp;               // variavel temporaria para armazenar a chave simetrica com os valores passados por parametro
             
@@ -153,10 +154,18 @@ namespace ProjetoTopicosSegurança
                                 byte[] encryptedIV = protocolSI.GetData();
                                 aes.IV = DecryptAssym(encryptedIV, clientPrivKey);
                                 break;
+                            case ProtocolSICmdType.DIGITAL_SIGNATURE:
+                                signature = protocolSI.GetData();
+                                break;
                             case ProtocolSICmdType.SYM_CIPHER_DATA:
+                                RSACryptoServiceProvider temp = new RSACryptoServiceProvider();
+                                temp.FromXmlString(serverPubKey);
                                 byte[] encrypredData = protocolSI.GetData();
-                                string msg = Encoding.UTF8.GetString(DecryptSymm(encrypredData, aes.Key, aes.IV));
-                                AddText(msg);
+                                if (temp.VerifyData(encrypredData, CryptoConfig.MapNameToOID("SHA1"), signature))
+                                {
+                                    string msg = Encoding.UTF8.GetString(DecryptSymm(encrypredData, aes.Key, aes.IV));
+                                    AddText(msg);
+                                }
                                 break;
                             case ProtocolSICmdType.SECRET_KEY:
                                 byte[] encryptedKey = protocolSI.GetData();

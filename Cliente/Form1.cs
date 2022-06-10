@@ -107,7 +107,7 @@ namespace ProjetoTopicosSegurança
                                 ShowError("Utilizador já existe!"); 
                                 break;
                             case ProtocolSICmdType.DATA:            // para avisar de utilizadores que entraram e sairam
-                                AddText(protocolSI.GetStringFromData());
+                                AddText(protocolSI.GetStringFromData() + Environment.NewLine);
                                 break;
                         }
                     }

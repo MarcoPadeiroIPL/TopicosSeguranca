@@ -8,6 +8,7 @@ using System.Security.Cryptography;
 
 namespace Servidor // Note: actual namespace depends on the project name.
 {
+    
     static class Globals
     {
         public static List<User> users = new List<User>(); // variavel global que armazena todos os users
@@ -82,6 +83,7 @@ namespace Servidor // Note: actual namespace depends on the project name.
         public static void WriteToLog(string msg) // função chamada quando se quer escrever no servidor
         {
 
+            Directory.CreateDirectory(Directory.GetCurrentDirectory() + "\\logs");
             // escreve na consola os dados enviados por parametro
             Console.WriteLine(msg);
 

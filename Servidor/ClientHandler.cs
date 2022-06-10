@@ -45,6 +45,27 @@ namespace Servidor
             Thread thread = new Thread(threadHandler);
             thread.Start();
         }
+        private string DecryptSymm(byte[] encryptedData, byte[] symmKey, byte[] IV) // Função dedicada a encriptar com uma chave secreta | Criptografia simetrica
+        {
+            using (Aes temp = Aes.Create())
+            {
+                temp.Key = symmKey;
+                temp.IV = IV;
+                ICryptoTransform decryptor = temp.CreateDecryptor(temp.Key, temp.IV);
+
+                using (MemoryStream memoryStream = new MemoryStream(encryptedData))
+                {
+                    using (CryptoStream cryptoStream = new CryptoStream((Stream)memoryStream, decryptor, CryptoStreamMode.Read))
+                    {
+                        using (StreamReader streamReader = new StreamReader((Stream)cryptoStream))
+                        {
+                            return streamReader.ReadToEnd();
+                        }
+                    }
+                }
+            }
+        }
+
         private void threadHandler()
         {
             Program.WriteToLog(DateTime.Now.ToString("[HH:mm]") + " O cliente " + currUser.id + " está a tentar entrar...");
@@ -58,7 +79,7 @@ namespace Servidor
             while (currUser.GetStream().CanRead)
             {
                 // caso exista informação disponivel na stream
-                if (currUser.GetStream().DataAvailable) 
+                if (currUser.GetStream().DataAvailable)
                 {
                     // lê a informação da possivel mensagem enviada pelo cliente
                     currUser.GetStream().Read(protocolSI.Buffer, 0, protocolSI.Buffer.Length);
@@ -124,7 +145,7 @@ namespace Servidor
                             string username = userPas.Substring(0, userPas.IndexOf('/'));
                             string pass = userPas.Substring(userPas.IndexOf('/') + 1, userPas.Length - username.Length - 1);
 
-                            
+
                             byte[] salt = GenerateSalt(SALTSIZE);
                             byte[] hash = GenerateSaltedHash(pass, salt);
 
@@ -144,6 +165,7 @@ namespace Servidor
                             break;
                         case ProtocolSICmdType.IV:
                             Program.WriteToLog(DateTime.Now.ToString("[HH:mm]") + " O servidor recebeu um vetor de inicialização");
+                            aes.IV = protocolSI.GetData();
                             package = protocolSI.Make(ProtocolSICmdType.IV, protocolSI.GetData());
                             Program.SendToEveryone(package);
                             break;
@@ -152,13 +174,14 @@ namespace Servidor
                             if (currUser.GetLogin())
                             {
                                 Program.WriteToLog(DateTime.Now.ToString("[HH:mm]") + " O cliente " + currUser.GetUsername() + " enviou uma mensagem encriptada com a chave secreta para o servidor!");
-                                
+
+                                byte[] textWithUsername = System.Text.Encoding.UTF8.GetBytes(DateTime.Now.ToString("[HH:mm]") + " " + currUser.GetUsername() + ": " + DecryptSymm(protocolSI.GetData(), aes.Key, aes.IV));
 
                                 Program.WriteToLog(DateTime.Now.ToString("[HH:mm]") + " O servidor assinou a mensagem enviada pelo cliente " + currUser.GetUsername() + "!");
                                 // assinar o hash
                                 RSACryptoServiceProvider rsa1 = new RSACryptoServiceProvider();
                                 rsa1.FromXmlString(serverPrivKey);
-                                byte[] signature = rsa1.SignData(protocolSI.GetData(), CryptoConfig.MapNameToOID("SHA1"));
+                                byte[] signature = rsa1.SignData(textWithUsername, CryptoConfig.MapNameToOID("SHA1"));
 
                                 // envia a todos os clientes
                                 Program.WriteToLog(DateTime.Now.ToString("[HH:mm]") + " O servidor enviou a assinatura para todos os clientes!");
@@ -166,9 +189,7 @@ namespace Servidor
                                 Program.SendToEveryone(package);
 
                                 Program.WriteToLog(DateTime.Now.ToString("[HH:mm]") + " O servidor enviou a mensagem encriptada e assinada para todos os clientes!");
-                                package = protocolSI.Make(ProtocolSICmdType.DATA, DateTime.Now.ToString("[HH:mm]") + " " + currUser.GetUsername() + ": ");
-                                Program.SendToEveryone(package);
-                                package = protocolSI.Make(ProtocolSICmdType.SYM_CIPHER_DATA, protocolSI.GetData());
+                                package = protocolSI.Make(ProtocolSICmdType.SYM_CIPHER_DATA, EncryptSymm(textWithUsername, aes.Key, aes.IV));
                                 Program.SendToEveryone(package);
 
                             }
@@ -189,11 +210,38 @@ namespace Servidor
                             currUser.GetClient().Close();
                             break;
                     }
+                    currUser.GetStream().Flush();
                 }
             }
             // encerramento de ligação com o cliente
             currUser.GetStream().Close();
             currUser.GetClient().Close();
+        }
+        private byte[] EncryptSymm(byte[] data, byte[] symmKey, byte[] IV) // Função dedicada a encriptar com uma chave secreta | Criptografia simetrica
+        {
+            byte[] encryptedData;
+
+            using (Aes temp = Aes.Create())
+            {
+                temp.Key = symmKey;
+                temp.IV = IV;
+
+                ICryptoTransform encryptor = temp.CreateEncryptor(temp.Key, temp.IV);
+
+                using (MemoryStream memoryStream = new MemoryStream())
+                {
+                    using (CryptoStream cryptoStream = new CryptoStream((Stream)memoryStream, encryptor, CryptoStreamMode.Write))
+                    {
+                        using (StreamWriter streamWriter = new StreamWriter((Stream)cryptoStream))
+                        {
+                            streamWriter.Write(System.Text.Encoding.UTF8.GetString(data));
+                        }
+
+                        encryptedData = memoryStream.ToArray();
+                    }
+                }
+            }
+            return encryptedData;
         }
         private byte[] EncryptAssym(byte[] data, string pubKey) // Função que encripta apartir da chave publica | Criptografia assimetrica 
         {
@@ -213,7 +261,7 @@ namespace Servidor
 
             return data;
         }
-        
+
         private bool VerifyLogin(string username, string password) // Verifica as credenciais recebida por parametro e acede à base de dados
         {
             SqlConnection conn = null;
@@ -225,7 +273,7 @@ namespace Servidor
                 string path = Directory.GetCurrentDirectory();
                 path = path.Remove(path.IndexOf("Servidor") + 9);
                 conn.ConnectionString = String.Format(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename='" + path + "Database.mdf';Integrated Security=True");
-               
+
                 // Abrir ligação à Base de Dados
                 conn.Open();
 
@@ -276,7 +324,7 @@ namespace Servidor
                 return false;
             }
         }
-        
+
         private bool Register(string username, byte[] saltedPasswordHash, byte[] salt) // Regista um novo utilizador e armazena a password encriptada na base de dados
         {
             SqlConnection conn = null;
@@ -337,7 +385,8 @@ namespace Servidor
                         // Se forem devolvidas 0 linhas alteradas então o não foi executado com sucesso
                         throw new Exception("Error while inserting an user");
                     }
-                } else
+                }
+                else
                 {
                     return false;
                 }

@@ -153,12 +153,12 @@ namespace Servidor
                             if (Register(username, hash, salt))
                             {
                                 Program.WriteToLog(DateTime.Now.ToString("[hh:MM]") + " O registo foi efetuado com sucesso!");
-                                package = protocolSI.Make(ProtocolSICmdType.ACK);
+                                package = protocolSI.Make(ProtocolSICmdType.USER_OPTION_1);
                             }
                             else
                             {
                                 Program.WriteToLog(DateTime.Now.ToString("[HH:mm]") + " O registo não foi efetuado com sucesso!");
-                                package = protocolSI.Make(ProtocolSICmdType.NACK);
+                                package = protocolSI.Make(ProtocolSICmdType.USER_OPTION_2);
                             }
                             currUser.GetStream().Write(package, 0, package.Length);
                             currUser.GetStream().Flush();

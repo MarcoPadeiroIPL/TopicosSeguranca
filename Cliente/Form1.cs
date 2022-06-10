@@ -98,7 +98,16 @@ namespace ProjetoTopicosSegurança
                                 // UI
                                 break;
                             case ProtocolSICmdType.NACK: // erro no login
-                                MessageBox.Show("Erro no login");
+                                ShowError("Credenciais invalidas!"); 
+                                break;
+                            case ProtocolSICmdType.USER_OPTION_1: // sucesso no registo
+                                ShowError("Registo com sucesso!"); 
+                                break;
+                            case ProtocolSICmdType.USER_OPTION_2: // erro no registo
+                                ShowError("Utilizador já existe!"); 
+                                break;
+                            case ProtocolSICmdType.DATA:            // para avisar de utilizadores que entraram e sairam
+                                AddText(protocolSI.GetStringFromData());
                                 break;
                         }
                     }
@@ -210,6 +219,16 @@ namespace ProjetoTopicosSegurança
                 return;
             }
             textBoxChat.AppendText(text);
+        }
+        private void ShowError(string error) // Adiciona texto à textbox chat
+        {
+            // fix de problemas com manipulação de threads diferentes          #StackOverFlowFTW
+            if (InvokeRequired)
+            {
+                this.Invoke(new Action<string>(ShowError), new object[] { error });
+                return;
+            }
+            MessageBox.Show(error);
         }
         private void ChangeUI(bool res)
         {

@@ -459,11 +459,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Marco\\Desktop\\TS\\ProjetoPrincipal\\Cliente\\Cliente.csproj",
+      "projectUniqueName": "C:\\Users\\Marco\\Desktop\\TS\\Projeto\\Cliente\\Cliente.csproj",
       "projectName": "Cliente",
-      "projectPath": "C:\\Users\\Marco\\Desktop\\TS\\ProjetoPrincipal\\Cliente\\Cliente.csproj",
+      "projectPath": "C:\\Users\\Marco\\Desktop\\TS\\Projeto\\Cliente\\Cliente.csproj",
       "packagesPath": "C:\\Users\\Marco\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Marco\\Desktop\\TS\\ProjetoPrincipal\\Cliente\\obj\\",
+      "outputPath": "C:\\Users\\Marco\\Desktop\\TS\\Projeto\\Cliente\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\Marco\\AppData\\Roaming\\NuGet\\NuGet.Config",

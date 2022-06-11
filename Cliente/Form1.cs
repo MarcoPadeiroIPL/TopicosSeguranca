@@ -192,22 +192,6 @@ namespace ProjetoTopicosSegurança
                 byte[] package = protocolSI.Make(ProtocolSICmdType.USER_OPTION_1, encryptedData);
                 networkStream.Write(package, 0, package.Length);
                 networkStream.Flush();
-
-                // aguarda por uma mensagem de validação do servidor
-                while (protocolSI.GetCmdType() != ProtocolSICmdType.ACK || protocolSI.GetCmdType() != ProtocolSICmdType.NACK)
-                {
-                    networkStream.Read(protocolSI.Buffer, 0, protocolSI.Buffer.Length);
-                    if (protocolSI.GetCmdType() == ProtocolSICmdType.ACK)
-                    {
-                        MessageBox.Show("Registado com sucesso!");
-                        return;
-                    }
-                    if (protocolSI.GetCmdType() == ProtocolSICmdType.NACK)
-                    {
-                        MessageBox.Show("Conta já existe");
-                        return;
-                    }
-                }
             }
         }
         private void AddText(string text) // Adiciona texto à textbox chat

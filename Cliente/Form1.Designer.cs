@@ -110,6 +110,7 @@
             this.textBoxChat.Multiline = true;
             this.textBoxChat.Name = "textBoxChat";
             this.textBoxChat.ReadOnly = true;
+            this.textBoxChat.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.textBoxChat.Size = new System.Drawing.Size(453, 247);
             this.textBoxChat.TabIndex = 7;
             this.textBoxChat.TabStop = false;

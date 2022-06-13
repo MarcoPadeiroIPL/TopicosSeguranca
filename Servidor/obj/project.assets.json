@@ -454,19 +454,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Marco\\.nuget\\packages\\": {}
+    "C:\\Users\\Boti\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Marco\\Desktop\\TS\\Projeto\\Servidor\\Servidor.csproj",
+      "projectUniqueName": "C:\\Users\\Boti\\Desktop\\projetots\\TopicosSeguranca\\Servidor\\Servidor.csproj",
       "projectName": "Servidor",
-      "projectPath": "C:\\Users\\Marco\\Desktop\\TS\\Projeto\\Servidor\\Servidor.csproj",
-      "packagesPath": "C:\\Users\\Marco\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Marco\\Desktop\\TS\\Projeto\\Servidor\\obj\\",
+      "projectPath": "C:\\Users\\Boti\\Desktop\\projetots\\TopicosSeguranca\\Servidor\\Servidor.csproj",
+      "packagesPath": "C:\\Users\\Boti\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\Boti\\Desktop\\projetots\\TopicosSeguranca\\Servidor\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\Marco\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\Boti\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [

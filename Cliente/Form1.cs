@@ -138,20 +138,25 @@ namespace ProjetoTopicosSegurança
         }
         private void buttonEnviar_Click(object sender, EventArgs e)
         {
-            byte[] package;
-            // assinar o hash
 
-            Aes temp = Aes.Create();
-            temp.Key = aes.Key;
+            if (!String.IsNullOrEmpty(textBoxMensagem.Text))
+            {
+                byte[] package;
+                // assinar o hash
 
-            package = protocolSI.Make(ProtocolSICmdType.IV, temp.IV);
-            networkStream.Write(package, 0, package.Length);
-            networkStream.Flush();
+                Aes temp = Aes.Create();
+                temp.Key = aes.Key;
 
-            package = protocolSI.Make(ProtocolSICmdType.SYM_CIPHER_DATA, EncryptSymm(textBoxMensagem.Text.Trim(), aes.Key, temp.IV));
-            networkStream.Write(package, 0, package.Length);
-            networkStream.Flush();
-            textBoxMensagem.Clear();
+                package = protocolSI.Make(ProtocolSICmdType.IV, temp.IV);
+                networkStream.Write(package, 0, package.Length);
+                networkStream.Flush();
+
+                package = protocolSI.Make(ProtocolSICmdType.SYM_CIPHER_DATA, EncryptSymm(textBoxMensagem.Text.Trim(), aes.Key, temp.IV));
+                networkStream.Write(package, 0, package.Length);
+                networkStream.Flush();
+                textBoxMensagem.Clear();
+            }
+               
         }
         private void buttonMinimize_Click(object sender, EventArgs e) // UI
         {

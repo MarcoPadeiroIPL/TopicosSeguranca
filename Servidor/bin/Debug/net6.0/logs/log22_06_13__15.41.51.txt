@@ -1,0 +1,18 @@
+A iniciar o servidor 127.0.0.1...
+A definir a porta do servidor
+PORTA: 5000
+Servidor pronto!
+
+A aguardar clientes...
+
+[15:41] O cliente 1 está a tentar entrar...
+[15:41] O servidor enviou a sua chave publica ao cliente a tentar entrar
+[15:41] O cliente 1 enviou a sua chave publica ao servidor
+[15:41] O cliente 1 enviou as suas credencias encriptadas pela chave publica do servidor
+[15:41] O servidor utilizou a sua chave privada para a decriptação das credencias
+[15:41] A validar as credenciais do cliente 1...
+[15:41] As credenciais do cliente 1 são validas!
+[15:41] A encriptar a chave secreta com a chave publica do cliente marco!
+[15:41] A enviar a chave secreta ao cliente marco...
+[15:41] A avisar o resto dos clientes que o utilizador marco entrou no chat!
+[15:41] marco saiu do chat.

@@ -202,12 +202,10 @@ namespace Servidor
                         case ProtocolSICmdType.EOT:
                             string mesg = DateTime.Now.ToString("[HH:mm]") + " " + currUser.GetUsername() + " saiu do chat.";
                             Program.WriteToLog(mesg);
-                            package = protocolSI.Make(ProtocolSICmdType.USER_OPTION_2, currUser.GetUsername());
+                            package = protocolSI.Make(ProtocolSICmdType.USER_OPTION_3, mesg);
                             Globals.users.Remove(currUser);
                             Program.SendToEveryone(package);
 
-                            currUser.GetStream().Close();
-                            currUser.GetClient().Close();
                             break;
                     }
                     currUser.GetStream().Flush();
@@ -264,6 +262,13 @@ namespace Servidor
 
         private bool VerifyLogin(string username, string password) // Verifica as credenciais recebida por parametro e acede à base de dados
         {
+            foreach (User user in Globals.users)
+            {
+                if (user.GetUsername() == username && user.GetLogin())
+                {
+                    return false;
+                }
+            }
             SqlConnection conn = null;
             try
             {
@@ -325,13 +330,15 @@ namespace Servidor
             }
         }
 
-        private bool Register(string username, byte[] saltedPasswordHash, byte[] salt) // Regista um novo utilizador e armazena a password encriptada na base de dados
+
+        private bool VerificaSeContaExiste(string username)
         {
             SqlConnection conn = null;
             try
             {
                 // Configurar ligação à Base de Dados
                 conn = new SqlConnection();
+
                 string path = Directory.GetCurrentDirectory();
                 path = path.Remove(path.IndexOf("Servidor") + 9);
                 conn.ConnectionString = String.Format(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename='" + path + "Database.mdf';Integrated Security=True");
@@ -339,7 +346,7 @@ namespace Servidor
                 // Abrir ligação à Base de Dados
                 conn.Open();
 
-                // Verificação de se o username já existe 
+                // Declaração do comando SQL
                 String sql = "SELECT * FROM Users WHERE Username = @username";
                 SqlCommand cmd = new SqlCommand();
                 cmd.CommandText = sql;
@@ -356,7 +363,36 @@ namespace Servidor
                 // Executar comando SQL
                 SqlDataReader reader = cmd.ExecuteReader();
 
-                if (!reader.HasRows)
+                if (reader.HasRows)
+                {
+                    return true;
+                } else
+                {
+                    return false;
+                }
+
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+
+        }
+        private bool Register(string username, byte[] saltedPasswordHash, byte[] salt) // Regista um novo utilizador e armazena a password encriptada na base de dados
+        {
+            SqlConnection conn = null;
+            try
+            {
+                // Configurar ligação à Base de Dados
+                conn = new SqlConnection();
+                string path = Directory.GetCurrentDirectory();
+                path = path.Remove(path.IndexOf("Servidor") + 9);
+                conn.ConnectionString = String.Format(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename='" + path + "Database.mdf';Integrated Security=True");
+
+                // Abrir ligação à Base de Dados
+                conn.Open();
+
+                if (!VerificaSeContaExiste(username))
                 {
                     // Declaração dos parâmetros do comando SQL
                     SqlParameter paramUsername = new SqlParameter("@username", username);
@@ -364,10 +400,10 @@ namespace Servidor
                     SqlParameter paramSalt = new SqlParameter("@salt", salt);
 
                     // Declaração do comando SQL
-                    sql = "INSERT INTO Users (Username, SaltedPasswordHash, Salt) VALUES (@username,@saltedPasswordHash,@salt)";
+                    string sql = "INSERT INTO Users (Username, SaltedPasswordHash, Salt) VALUES (@username,@saltedPasswordHash,@salt)";
 
                     // Prepara comando SQL para ser executado na Base de Dados
-                    cmd = new SqlCommand(sql, conn);
+                    SqlCommand cmd = new SqlCommand(sql, conn);
 
                     // Introduzir valores aos parâmentros registados no comando SQL
                     cmd.Parameters.Add(paramUsername);
@@ -385,11 +421,13 @@ namespace Servidor
                         // Se forem devolvidas 0 linhas alteradas então o não foi executado com sucesso
                         throw new Exception("Error while inserting an user");
                     }
-                }
-                else
+
+                } else
                 {
                     return false;
                 }
+
+                
             }
             catch (Exception e)
             {

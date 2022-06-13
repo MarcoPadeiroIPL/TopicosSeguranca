@@ -1,0 +1,44 @@
+A iniciar o servidor 127.0.0.1...
+A definir a porta do servidor
+PORTA: 5000
+Servidor pronto!
+
+A aguardar clientes...
+
+[15:42] O cliente 1 está a tentar entrar...
+[15:42] O servidor enviou a sua chave publica ao cliente a tentar entrar
+[15:42] O cliente 1 enviou a sua chave publica ao servidor
+[15:42] O cliente 2 está a tentar entrar...
+[15:42] O servidor enviou a sua chave publica ao cliente a tentar entrar
+[15:42] O cliente 2 enviou a sua chave publica ao servidor
+[15:42] O cliente 2 enviou as suas credencias encriptadas pela chave publica do servidor
+[15:42] O servidor utilizou a sua chave privada para a decriptação das credencias
+[15:42] A validar as credenciais do cliente 2...
+[15:42] As credenciais do cliente 2 são validas!
+[15:42] A encriptar a chave secreta com a chave publica do cliente marco!
+[15:42] A enviar a chave secreta ao cliente marco...
+[15:42] A avisar o resto dos clientes que o utilizador marco entrou no chat!
+[15:42] O cliente 1 enviou as suas credencias encriptadas pela chave publica do servidor
+[15:42] O servidor utilizou a sua chave privada para a decriptação das credencias
+[15:42] A validar as credenciais do cliente 1...
+[15:42] As credenciais do cliente 1 são validas!
+[15:42] A encriptar a chave secreta com a chave publica do cliente tomas!
+[15:42] A enviar a chave secreta ao cliente tomas...
+[15:42] A avisar o resto dos clientes que o utilizador tomas entrou no chat!
+[15:42] O servidor recebeu um vetor de inicialização
+[15:42] O cliente tomas enviou uma mensagem encriptada com a chave secreta para o servidor!
+[15:42] O servidor assinou a mensagem enviada pelo cliente tomas!
+[15:42] O servidor enviou a assinatura para todos os clientes!
+[15:42] O servidor enviou a mensagem encriptada e assinada para todos os clientes!
+[15:42] tomas saiu do chat.
+[15:42] O servidor recebeu um vetor de inicialização
+[15:42] O cliente marco enviou uma mensagem encriptada com a chave secreta para o servidor!
+[15:42] O servidor assinou a mensagem enviada pelo cliente marco!
+[15:42] O servidor enviou a assinatura para todos os clientes!
+[15:42] O servidor enviou a mensagem encriptada e assinada para todos os clientes!
+[15:42] O servidor recebeu um vetor de inicialização
+[15:42] O cliente marco enviou uma mensagem encriptada com a chave secreta para o servidor!
+[15:42] O servidor assinou a mensagem enviada pelo cliente marco!
+[15:42] O servidor enviou a assinatura para todos os clientes!
+[15:42] O servidor enviou a mensagem encriptada e assinada para todos os clientes!
+[15:42] marco saiu do chat.

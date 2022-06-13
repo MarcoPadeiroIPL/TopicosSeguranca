@@ -1,0 +1,240 @@
+A iniciar o servidor 127.0.0.1...
+A definir a porta do servidor
+PORTA: 5000
+Servidor pronto!
+
+A aguardar clientes...
+
+[23:58] O cliente 1 está a tentar entrar...
+[23:58] O servidor enviou a sua chave publica ao cliente a tentar entrar
+[23:58] O cliente 1 enviou a sua chave publica ao servidor
+[23:58] O cliente 1 enviou as suas credencias encriptadas pela chave publica do servidor
+[23:58] O servidor utilizou a sua chave privada para a decriptação das credencias
+[23:58] A validar as credenciais do cliente 1...
+[23:58] As credenciais do cliente 1 são validas!
+[23:58] A encriptar a chave secreta com a chave publica do cliente marco!
+[23:58] A enviar a chave secreta ao cliente marco...
+[23:58] A avisar o resto dos clientes que o utilizador marco entrou no chat!
+[23:58] O servidor recebeu um vetor de inicialização
+[23:58] O cliente marco enviou uma mensagem encriptada com a chave secreta para o servidor!
+[23:58] O servidor assinou a mensagem enviada pelo cliente marco!
+[23:58] O servidor enviou a assinatura para todos os clientes!
+[23:58] O servidor enviou a mensagem encriptada e assinada para todos os clientes!
+[23:58] O servidor recebeu um vetor de inicialização
+[23:58] O cliente marco enviou uma mensagem encriptada com a chave secreta para o servidor!
+[23:58] O servidor assinou a mensagem enviada pelo cliente marco!
+[23:58] O servidor enviou a assinatura para todos os clientes!
+[23:58] O servidor enviou a mensagem encriptada e assinada para todos os clientes!
+[23:58] O servidor recebeu um vetor de inicialização
+[23:58] O cliente marco enviou uma mensagem encriptada com a chave secreta para o servidor!
+[23:58] O servidor assinou a mensagem enviada pelo cliente marco!
+[23:58] O servidor enviou a assinatura para todos os clientes!
+[23:58] O servidor enviou a mensagem encriptada e assinada para todos os clientes!
+[23:58] O servidor recebeu um vetor de inicialização
+[23:58] O cliente marco enviou uma mensagem encriptada com a chave secreta para o servidor!
+[23:58] O servidor assinou a mensagem enviada pelo cliente marco!
+[23:58] O servidor enviou a assinatura para todos os clientes!
+[23:58] O servidor enviou a mensagem encriptada e assinada para todos os clientes!
+[23:58] O servidor recebeu um vetor de inicialização
+[23:58] O cliente marco enviou uma mensagem encriptada com a chave secreta para o servidor!
+[23:58] O servidor assinou a mensagem enviada pelo cliente marco!
+[23:58] O servidor enviou a assinatura para todos os clientes!
+[23:58] O servidor enviou a mensagem encriptada e assinada para todos os clientes!
+[23:58] O servidor recebeu um vetor de inicialização
+[23:58] O cliente marco enviou uma mensagem encriptada com a chave secreta para o servidor!
+[23:58] O servidor assinou a mensagem enviada pelo cliente marco!
+[23:58] O servidor enviou a assinatura para todos os clientes!
+[23:58] O servidor enviou a mensagem encriptada e assinada para todos os clientes!
+[23:58] O servidor recebeu um vetor de inicialização
+[23:58] O cliente marco enviou uma mensagem encriptada com a chave secreta para o servidor!
+[23:58] O servidor assinou a mensagem enviada pelo cliente marco!
+[23:58] O servidor enviou a assinatura para todos os clientes!
+[23:58] O servidor enviou a mensagem encriptada e assinada para todos os clientes!
+[23:58] O servidor recebeu um vetor de inicialização
+[23:58] O cliente marco enviou uma mensagem encriptada com a chave secreta para o servidor!
+[23:58] O servidor assinou a mensagem enviada pelo cliente marco!
+[23:58] O servidor enviou a assinatura para todos os clientes!
+[23:58] O servidor enviou a mensagem encriptada e assinada para todos os clientes!
+[23:58] O servidor recebeu um vetor de inicialização
+[23:58] O cliente marco enviou uma mensagem encriptada com a chave secreta para o servidor!
+[23:58] O servidor assinou a mensagem enviada pelo cliente marco!
+[23:58] O servidor enviou a assinatura para todos os clientes!
+[23:58] O servidor enviou a mensagem encriptada e assinada para todos os clientes!
+[23:58] O servidor recebeu um vetor de inicialização
+[23:58] O cliente marco enviou uma mensagem encriptada com a chave secreta para o servidor!
+[23:58] O servidor assinou a mensagem enviada pelo cliente marco!
+[23:58] O servidor enviou a assinatura para todos os clientes!
+[23:58] O servidor enviou a mensagem encriptada e assinada para todos os clientes!
+[23:58] O servidor recebeu um vetor de inicialização
+[23:58] O cliente marco enviou uma mensagem encriptada com a chave secreta para o servidor!
+[23:58] O servidor assinou a mensagem enviada pelo cliente marco!
+[23:58] O servidor enviou a assinatura para todos os clientes!
+[23:58] O servidor enviou a mensagem encriptada e assinada para todos os clientes!
+[23:58] O servidor recebeu um vetor de inicialização
+[23:58] O cliente marco enviou uma mensagem encriptada com a chave secreta para o servidor!
+[23:58] O servidor assinou a mensagem enviada pelo cliente marco!
+[23:58] O servidor enviou a assinatura para todos os clientes!
+[23:58] O servidor enviou a mensagem encriptada e assinada para todos os clientes!
+[23:58] O servidor recebeu um vetor de inicialização
+[23:58] O cliente marco enviou uma mensagem encriptada com a chave secreta para o servidor!
+[23:58] O servidor assinou a mensagem enviada pelo cliente marco!
+[23:58] O servidor enviou a assinatura para todos os clientes!
+[23:58] O servidor enviou a mensagem encriptada e assinada para todos os clientes!
+[23:58] O servidor recebeu um vetor de inicialização
+[23:58] O cliente marco enviou uma mensagem encriptada com a chave secreta para o servidor!
+[23:58] O servidor assinou a mensagem enviada pelo cliente marco!
+[23:58] O servidor enviou a assinatura para todos os clientes!
+[23:58] O servidor enviou a mensagem encriptada e assinada para todos os clientes!
+[23:58] O servidor recebeu um vetor de inicialização
+[23:58] O cliente marco enviou uma mensagem encriptada com a chave secreta para o servidor!
+[23:58] O servidor assinou a mensagem enviada pelo cliente marco!
+[23:58] O servidor enviou a assinatura para todos os clientes!
+[23:58] O servidor enviou a mensagem encriptada e assinada para todos os clientes!
+[23:58] O servidor recebeu um vetor de inicialização
+[23:58] O cliente marco enviou uma mensagem encriptada com a chave secreta para o servidor!
+[23:58] O servidor assinou a mensagem enviada pelo cliente marco!
+[23:58] O servidor enviou a assinatura para todos os clientes!
+[23:58] O servidor enviou a mensagem encriptada e assinada para todos os clientes!
+[23:58] O servidor recebeu um vetor de inicialização
+[23:58] O cliente marco enviou uma mensagem encriptada com a chave secreta para o servidor!
+[23:58] O servidor assinou a mensagem enviada pelo cliente marco!
+[23:58] O servidor enviou a assinatura para todos os clientes!
+[23:58] O servidor enviou a mensagem encriptada e assinada para todos os clientes!
+[23:58] O servidor recebeu um vetor de inicialização
+[23:58] O cliente marco enviou uma mensagem encriptada com a chave secreta para o servidor!
+[23:58] O servidor assinou a mensagem enviada pelo cliente marco!
+[23:58] O servidor enviou a assinatura para todos os clientes!
+[23:58] O servidor enviou a mensagem encriptada e assinada para todos os clientes!
+[23:58] O servidor recebeu um vetor de inicialização
+[23:58] O servidor recebeu um vetor de inicialização
+[23:58] O cliente marco enviou uma mensagem encriptada com a chave secreta para o servidor!
+[23:58] O servidor assinou a mensagem enviada pelo cliente marco!
+[23:58] O servidor enviou a assinatura para todos os clientes!
+[23:58] O servidor enviou a mensagem encriptada e assinada para todos os clientes!
+[23:58] O servidor recebeu um vetor de inicialização
+[23:58] O cliente marco enviou uma mensagem encriptada com a chave secreta para o servidor!
+[23:58] O servidor assinou a mensagem enviada pelo cliente marco!
+[23:58] O servidor enviou a assinatura para todos os clientes!
+[23:58] O servidor enviou a mensagem encriptada e assinada para todos os clientes!
+[23:58] O servidor recebeu um vetor de inicialização
+[23:58] O cliente marco enviou uma mensagem encriptada com a chave secreta para o servidor!
+[23:58] O servidor assinou a mensagem enviada pelo cliente marco!
+[23:58] O servidor enviou a assinatura para todos os clientes!
+[23:58] O servidor enviou a mensagem encriptada e assinada para todos os clientes!
+[23:58] O servidor recebeu um vetor de inicialização
+[23:58] O cliente marco enviou uma mensagem encriptada com a chave secreta para o servidor!
+[23:58] O servidor assinou a mensagem enviada pelo cliente marco!
+[23:58] O servidor enviou a assinatura para todos os clientes!
+[23:58] O servidor enviou a mensagem encriptada e assinada para todos os clientes!
+[23:58] O servidor recebeu um vetor de inicialização
+[23:58] O cliente marco enviou uma mensagem encriptada com a chave secreta para o servidor!
+[23:58] O servidor assinou a mensagem enviada pelo cliente marco!
+[23:58] O servidor enviou a assinatura para todos os clientes!
+[23:58] O servidor enviou a mensagem encriptada e assinada para todos os clientes!
+[23:58] O servidor recebeu um vetor de inicialização
+[23:58] O cliente marco enviou uma mensagem encriptada com a chave secreta para o servidor!
+[23:58] O servidor assinou a mensagem enviada pelo cliente marco!
+[23:58] O servidor enviou a assinatura para todos os clientes!
+[23:58] O servidor enviou a mensagem encriptada e assinada para todos os clientes!
+[23:58] O servidor recebeu um vetor de inicialização
+[23:58] O cliente marco enviou uma mensagem encriptada com a chave secreta para o servidor!
+[23:58] O servidor assinou a mensagem enviada pelo cliente marco!
+[23:58] O servidor enviou a assinatura para todos os clientes!
+[23:58] O servidor enviou a mensagem encriptada e assinada para todos os clientes!
+[23:58] O servidor recebeu um vetor de inicialização
+[23:58] O cliente marco enviou uma mensagem encriptada com a chave secreta para o servidor!
+[23:58] O servidor assinou a mensagem enviada pelo cliente marco!
+[23:58] O servidor enviou a assinatura para todos os clientes!
+[23:58] O servidor enviou a mensagem encriptada e assinada para todos os clientes!
+[23:58] O servidor recebeu um vetor de inicialização
+[23:58] O cliente marco enviou uma mensagem encriptada com a chave secreta para o servidor!
+[23:58] O servidor assinou a mensagem enviada pelo cliente marco!
+[23:58] O servidor enviou a assinatura para todos os clientes!
+[23:58] O servidor enviou a mensagem encriptada e assinada para todos os clientes!
+[23:58] O servidor recebeu um vetor de inicialização
+[23:58] O cliente marco enviou uma mensagem encriptada com a chave secreta para o servidor!
+[23:58] O servidor assinou a mensagem enviada pelo cliente marco!
+[23:58] O servidor enviou a assinatura para todos os clientes!
+[23:58] O servidor enviou a mensagem encriptada e assinada para todos os clientes!
+[23:58] O servidor recebeu um vetor de inicialização
+[23:58] O cliente marco enviou uma mensagem encriptada com a chave secreta para o servidor!
+[23:58] O servidor assinou a mensagem enviada pelo cliente marco!
+[23:58] O servidor enviou a assinatura para todos os clientes!
+[23:58] O servidor enviou a mensagem encriptada e assinada para todos os clientes!
+[23:58] O servidor recebeu um vetor de inicialização
+[23:59] O servidor recebeu um vetor de inicialização
+[23:59] O cliente marco enviou uma mensagem encriptada com a chave secreta para o servidor!
+[23:59] O servidor assinou a mensagem enviada pelo cliente marco!
+[23:59] O servidor enviou a assinatura para todos os clientes!
+[23:59] O servidor enviou a mensagem encriptada e assinada para todos os clientes!
+[23:59] O servidor recebeu um vetor de inicialização
+[23:59] O cliente marco enviou uma mensagem encriptada com a chave secreta para o servidor!
+[23:59] O servidor assinou a mensagem enviada pelo cliente marco!
+[23:59] O servidor enviou a assinatura para todos os clientes!
+[23:59] O servidor enviou a mensagem encriptada e assinada para todos os clientes!
+[23:59] O servidor recebeu um vetor de inicialização
+[23:59] O cliente marco enviou uma mensagem encriptada com a chave secreta para o servidor!
+[23:59] O servidor assinou a mensagem enviada pelo cliente marco!
+[23:59] O servidor enviou a assinatura para todos os clientes!
+[23:59] O servidor enviou a mensagem encriptada e assinada para todos os clientes!
+[23:59] O servidor recebeu um vetor de inicialização
+[23:59] O cliente marco enviou uma mensagem encriptada com a chave secreta para o servidor!
+[23:59] O servidor assinou a mensagem enviada pelo cliente marco!
+[23:59] O servidor enviou a assinatura para todos os clientes!
+[23:59] O servidor enviou a mensagem encriptada e assinada para todos os clientes!
+[23:59] O servidor recebeu um vetor de inicialização
+[23:59] O cliente marco enviou uma mensagem encriptada com a chave secreta para o servidor!
+[23:59] O servidor assinou a mensagem enviada pelo cliente marco!
+[23:59] O servidor enviou a assinatura para todos os clientes!
+[23:59] O servidor enviou a mensagem encriptada e assinada para todos os clientes!
+[23:59] O servidor recebeu um vetor de inicialização
+[23:59] O servidor recebeu um vetor de inicialização
+[23:59] O cliente marco enviou uma mensagem encriptada com a chave secreta para o servidor!
+[23:59] O servidor assinou a mensagem enviada pelo cliente marco!
+[23:59] O servidor enviou a assinatura para todos os clientes!
+[23:59] O servidor enviou a mensagem encriptada e assinada para todos os clientes!
+[23:59] O servidor recebeu um vetor de inicialização
+[23:59] O cliente marco enviou uma mensagem encriptada com a chave secreta para o servidor!
+[23:59] O servidor assinou a mensagem enviada pelo cliente marco!
+[23:59] O servidor enviou a assinatura para todos os clientes!
+[23:59] O servidor enviou a mensagem encriptada e assinada para todos os clientes!
+[23:59] O servidor recebeu um vetor de inicialização
+[23:59] O cliente marco enviou uma mensagem encriptada com a chave secreta para o servidor!
+[23:59] O servidor assinou a mensagem enviada pelo cliente marco!
+[23:59] O servidor enviou a assinatura para todos os clientes!
+[23:59] O servidor enviou a mensagem encriptada e assinada para todos os clientes!
+[23:59] O servidor recebeu um vetor de inicialização
+[23:59] O cliente marco enviou uma mensagem encriptada com a chave secreta para o servidor!
+[23:59] O servidor assinou a mensagem enviada pelo cliente marco!
+[23:59] O servidor enviou a assinatura para todos os clientes!
+[23:59] O servidor enviou a mensagem encriptada e assinada para todos os clientes!
+[23:59] O servidor recebeu um vetor de inicialização
+[23:59] O cliente marco enviou uma mensagem encriptada com a chave secreta para o servidor!
+[23:59] O servidor assinou a mensagem enviada pelo cliente marco!
+[23:59] O servidor enviou a assinatura para todos os clientes!
+[23:59] O servidor enviou a mensagem encriptada e assinada para todos os clientes!
+[23:59] O servidor recebeu um vetor de inicialização
+[23:59] O cliente marco enviou uma mensagem encriptada com a chave secreta para o servidor!
+[23:59] O servidor assinou a mensagem enviada pelo cliente marco!
+[23:59] O servidor enviou a assinatura para todos os clientes!
+[23:59] O servidor enviou a mensagem encriptada e assinada para todos os clientes!
+[23:59] O servidor recebeu um vetor de inicialização
+[23:59] O cliente marco enviou uma mensagem encriptada com a chave secreta para o servidor!
+[23:59] O servidor assinou a mensagem enviada pelo cliente marco!
+[23:59] O servidor enviou a assinatura para todos os clientes!
+[23:59] O servidor enviou a mensagem encriptada e assinada para todos os clientes!
+[23:59] O servidor recebeu um vetor de inicialização
+[23:59] O cliente marco enviou uma mensagem encriptada com a chave secreta para o servidor!
+[23:59] O servidor assinou a mensagem enviada pelo cliente marco!
+[23:59] O servidor enviou a assinatura para todos os clientes!
+[23:59] O servidor enviou a mensagem encriptada e assinada para todos os clientes!
+[23:59] O servidor recebeu um vetor de inicialização
+[23:59] O cliente marco enviou uma mensagem encriptada com a chave secreta para o servidor!
+[23:59] O servidor assinou a mensagem enviada pelo cliente marco!
+[23:59] O servidor enviou a assinatura para todos os clientes!
+[23:59] O servidor enviou a mensagem encriptada e assinada para todos os clientes!
+[23:59] O servidor recebeu um vetor de inicialização
+[23:59] O cliente marco enviou uma mensagem encriptada com a chave secreta para o servidor!
+[23:59] O servidor assinou a mensagem enviada pelo cliente marco!
+[23:59] O servidor enviou a assinatura para todos os clientes!
+[23:59] O servidor enviou a mensagem encriptada e assinada para todos os clientes!

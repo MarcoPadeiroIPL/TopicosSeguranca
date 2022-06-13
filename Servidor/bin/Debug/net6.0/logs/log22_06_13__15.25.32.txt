@@ -1,0 +1,12 @@
+A iniciar o servidor 127.0.0.1...
+A definir a porta do servidor
+PORTA: 5000
+Servidor pronto!
+
+A aguardar clientes...
+
+[15:25] O cliente 1 está a tentar entrar...
+[15:25] O servidor enviou a sua chave publica ao cliente a tentar entrar
+[15:25] O cliente 1 enviou a sua chave publica ao servidor
+[15:25] O cliente 1 enviou as suas credencias encriptadas pela chave publica do servidor para se registar!
+[15:25] O servidor utilizou a sua chave privada para a decriptação das credencias

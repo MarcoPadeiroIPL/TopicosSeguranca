@@ -106,6 +106,9 @@ namespace ProjetoTopicosSegurança
                             case ProtocolSICmdType.USER_OPTION_2: // erro no registo
                                 ShowError("Utilizador já existe!"); 
                                 break;
+                            case ProtocolSICmdType.USER_OPTION_3: // um utilizador saiu
+                                AddText(protocolSI.GetStringFromData() + Environment.NewLine);
+                                break;
                             case ProtocolSICmdType.DATA:            // para avisar de utilizadores que entraram e sairam
                                 AddText(protocolSI.GetStringFromData() + Environment.NewLine);
                                 break;
@@ -186,10 +189,10 @@ namespace ProjetoTopicosSegurança
             }
             else
             {
-                byte[] data = Encoding.UTF8.GetBytes(textBoxUsername.Text.Trim() + '/' + textBoxUsername.Text.Trim());
+                byte[] data = Encoding.UTF8.GetBytes(textBoxUsername.Text.Trim() + '/' + textBoxPassword.Text.Trim());
                 // envia os dados para o servidor
                 byte[] encryptedData = EncryptAssym(data, serverPubKey);
-                byte[] package = protocolSI.Make(ProtocolSICmdType.USER_OPTION_1, encryptedData);
+                byte[] package = protocolSI.Make(ProtocolSICmdType.USER_OPTION_2, encryptedData);
                 networkStream.Write(package, 0, package.Length);
                 networkStream.Flush();
             }

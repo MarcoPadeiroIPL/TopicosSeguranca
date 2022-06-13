@@ -60,39 +60,44 @@ namespace ProjetoTopicosSegurança
         }
 
 
-        private void ReadMessage()
+        private void ReadMessage() // função responsavel por receber mensagens do servidor
         {
-            while (networkStream.CanRead)
+            while (networkStream.CanRead)  // repete enquanto o network continuar disponivel
             {
-                if (networkStream.DataAvailable)
+                if (networkStream.DataAvailable)  // caso haja informação disponivel na stream
                 {
                     try
                     {
-                        networkStream.Read(protocolSI.Buffer, 0, protocolSI.Buffer.Length);
+                        networkStream.Read(protocolSI.Buffer, 0, protocolSI.Buffer.Length); // le a mensagem
 
-                        switch (protocolSI.GetCmdType())
+                        switch (protocolSI.GetCmdType()) // verifica o objetivo da mensagem
                         {
                             case ProtocolSICmdType.PUBLIC_KEY: // armazenar a chave publica do servidor
                                 serverPubKey = protocolSI.GetStringFromData();
                                 break;
-                            case ProtocolSICmdType.DIGITAL_SIGNATURE:
+                            case ProtocolSICmdType.DIGITAL_SIGNATURE: // armazenar a assinatura digital da mensagem recebida
                                 signature = protocolSI.GetData();
                                 break;
-                            case ProtocolSICmdType.IV:
+                            case ProtocolSICmdType.IV:              // armazenar o vetor de inicialização 
                                 aes.IV = protocolSI.GetData();
                                 break;
-                            case ProtocolSICmdType.SYM_CIPHER_DATA:
+                            case ProtocolSICmdType.SYM_CIPHER_DATA:     // receber uma mensagem cifrada por uma chave simetrica
+
+                                // inicializa um RSA para verificar a assinatura da mensagem
                                 RSACryptoServiceProvider temp = new RSACryptoServiceProvider();
                                 temp.FromXmlString(serverPubKey);
                                 byte[] encrypredData = protocolSI.GetData();
+
+                                // verifica se a mensagem foi assinada pelo servidor
                                 if (temp.VerifyData(Encoding.UTF8.GetBytes(DecryptSymm(encrypredData, aes.Key, aes.IV)), CryptoConfig.MapNameToOID("SHA1"), signature))
                                 {
+                                    // caso tenha sido, decripta com a chave secreta apresenta o texto no chat
                                     string msg = DecryptSymm(encrypredData, aes.Key, aes.IV);
                                     AddText(msg + Environment.NewLine);
                                 }
                                 break;
-                            case ProtocolSICmdType.SECRET_KEY:
-                                byte[] encryptedKey = protocolSI.GetData();
+                            case ProtocolSICmdType.SECRET_KEY:                          // armazenar a chave secreta
+                                byte[] encryptedKey = protocolSI.GetData();             
                                 aes.Key = DecryptAssym(encryptedKey, clientPrivKey);
                                 ChangeUI(true);
                                 // UI
@@ -105,9 +110,6 @@ namespace ProjetoTopicosSegurança
                                 break;
                             case ProtocolSICmdType.USER_OPTION_2: // erro no registo
                                 ShowError("Utilizador já existe!"); 
-                                break;
-                            case ProtocolSICmdType.USER_OPTION_3: // um utilizador saiu
-                                AddText(protocolSI.GetStringFromData() + Environment.NewLine);
                                 break;
                             case ProtocolSICmdType.DATA:            // para avisar de utilizadores que entraram e sairam
                                 AddText(protocolSI.GetStringFromData() + Environment.NewLine);
@@ -129,7 +131,7 @@ namespace ProjetoTopicosSegurança
             else
             {
                 byte[] data = Encoding.UTF8.GetBytes(textBoxUsername.Text.Trim() + '/' + textBoxPassword.Text.Trim());
-                // envia os dados para o servidor
+                // envia as credenciais encriptadas para o servidor
                 byte[] encryptedData = EncryptAssym(data, serverPubKey);
                 byte[] package = protocolSI.Make(ProtocolSICmdType.USER_OPTION_1, encryptedData);
                 networkStream.Write(package, 0, package.Length);
@@ -142,8 +144,8 @@ namespace ProjetoTopicosSegurança
             if (!String.IsNullOrEmpty(textBoxMensagem.Text))
             {
                 byte[] package;
-                // assinar o hash
 
+                // gera um novo vetor de incialização, envia-o e encripta a mensagem com a chave secreta e o vetor de inicialização
                 Aes temp = Aes.Create();
                 temp.Key = aes.Key;
 
@@ -158,26 +160,12 @@ namespace ProjetoTopicosSegurança
             }
                
         }
-        private void buttonMinimize_Click(object sender, EventArgs e) // UI
-        {
-            this.WindowState = FormWindowState.Minimized;
-        }
-
         private void textBoxMensagem_KeyPress(object sender, KeyPressEventArgs e) // UI
         {
             if (e.KeyChar == 13)
             {
                 buttonEnviar.PerformClick();
             }
-        }
-        private void buttonClose_Click(object sender, EventArgs e) // UI
-        {
-            // escreve a mensagem para o servidor a avisar que o cliente vai encerrar a conexão
-            byte[] package = protocolSI.Make(ProtocolSICmdType.EOT);
-            networkStream.Write(package, 0, package.Length);
-            networkStream.Close();
-            tcpClient.Close();
-            Application.Exit();
         }
         private void textBoxUsername_KeyPress(object sender, KeyPressEventArgs e) // UI
         {
@@ -311,6 +299,14 @@ namespace ProjetoTopicosSegurança
                     }
                 }
             }
+        }
+        private void Form1_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            // escreve a mensagem para o servidor a avisar que o cliente vai encerrar a conexão
+            byte[] package = protocolSI.Make(ProtocolSICmdType.EOT);
+            networkStream.Write(package, 0, package.Length);
+            networkStream.Close();
+            tcpClient.Close();
         }
     }
 }

@@ -202,7 +202,7 @@ namespace Servidor
                         case ProtocolSICmdType.EOT:
                             string mesg = DateTime.Now.ToString("[HH:mm]") + " " + currUser.GetUsername() + " saiu do chat.";
                             Program.WriteToLog(mesg);
-                            package = protocolSI.Make(ProtocolSICmdType.USER_OPTION_3, mesg);
+                            package = protocolSI.Make(ProtocolSICmdType.DATA, mesg);
                             Globals.users.Remove(currUser);
                             Program.SendToEveryone(package);
 

@@ -31,10 +31,8 @@
             this.label1 = new System.Windows.Forms.Label();
             this.textBoxUsername = new System.Windows.Forms.TextBox();
             this.buttonLogin = new System.Windows.Forms.Button();
-            this.buttonClose = new System.Windows.Forms.Button();
             this.textBoxChat = new System.Windows.Forms.TextBox();
             this.textBoxMensagem = new System.Windows.Forms.TextBox();
-            this.buttonMinimize = new System.Windows.Forms.Button();
             this.textBoxPassword = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.buttonEnviar = new System.Windows.Forms.Button();
@@ -82,23 +80,6 @@
             this.buttonLogin.UseVisualStyleBackColor = false;
             this.buttonLogin.Click += new System.EventHandler(this.buttonLogin_Click);
             // 
-            // buttonClose
-            // 
-            this.buttonClose.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(50)))), ((int)(((byte)(10)))));
-            this.buttonClose.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.buttonClose.FlatAppearance.BorderSize = 0;
-            this.buttonClose.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.buttonClose.ForeColor = System.Drawing.Color.Transparent;
-            this.buttonClose.Location = new System.Drawing.Point(656, -4);
-            this.buttonClose.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.buttonClose.Name = "buttonClose";
-            this.buttonClose.Size = new System.Drawing.Size(41, 20);
-            this.buttonClose.TabIndex = 10;
-            this.buttonClose.TabStop = false;
-            this.buttonClose.Text = "X";
-            this.buttonClose.UseVisualStyleBackColor = false;
-            this.buttonClose.Click += new System.EventHandler(this.buttonClose_Click);
-            // 
             // textBoxChat
             // 
             this.textBoxChat.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(36)))), ((int)(((byte)(84)))));
@@ -128,23 +109,6 @@
             this.textBoxMensagem.Size = new System.Drawing.Size(376, 14);
             this.textBoxMensagem.TabIndex = 11;
             this.textBoxMensagem.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBoxMensagem_KeyPress);
-            // 
-            // buttonMinimize
-            // 
-            this.buttonMinimize.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(24)))), ((int)(((byte)(36)))), ((int)(((byte)(60)))));
-            this.buttonMinimize.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.buttonMinimize.FlatAppearance.BorderSize = 0;
-            this.buttonMinimize.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.buttonMinimize.ForeColor = System.Drawing.Color.Transparent;
-            this.buttonMinimize.Location = new System.Drawing.Point(609, -4);
-            this.buttonMinimize.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.buttonMinimize.Name = "buttonMinimize";
-            this.buttonMinimize.Size = new System.Drawing.Size(41, 20);
-            this.buttonMinimize.TabIndex = 13;
-            this.buttonMinimize.TabStop = false;
-            this.buttonMinimize.Text = "-";
-            this.buttonMinimize.UseVisualStyleBackColor = false;
-            this.buttonMinimize.Click += new System.EventHandler(this.buttonMinimize_Click);
             // 
             // textBoxPassword
             // 
@@ -213,17 +177,16 @@
             this.Controls.Add(this.buttonEnviar);
             this.Controls.Add(this.textBoxPassword);
             this.Controls.Add(this.label2);
-            this.Controls.Add(this.buttonMinimize);
             this.Controls.Add(this.textBoxMensagem);
             this.Controls.Add(this.textBoxChat);
-            this.Controls.Add(this.buttonClose);
             this.Controls.Add(this.buttonLogin);
             this.Controls.Add(this.textBoxUsername);
             this.Controls.Add(this.label1);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.Name = "Form1";
             this.Text = "Form1";
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Form1_FormClosed);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -234,10 +197,8 @@
         private Label label1;
         private TextBox textBoxUsername;
         private Button buttonLogin;
-        private Button buttonClose;
         private TextBox textBoxChat;
         private TextBox textBoxMensagem;
-        private Button buttonMinimize;
         private TextBox textBoxPassword;
         private Label label2;
         private Button buttonEnviar;

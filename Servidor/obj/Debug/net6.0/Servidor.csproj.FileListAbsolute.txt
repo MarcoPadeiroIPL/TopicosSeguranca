@@ -210,3 +210,25 @@ C:\Users\Boti\Desktop\projetots\TopicosSeguranca\Servidor\obj\Debug\net6.0\refin
 C:\Users\Boti\Desktop\projetots\TopicosSeguranca\Servidor\obj\Debug\net6.0\Servidor.pdb
 C:\Users\Boti\Desktop\projetots\TopicosSeguranca\Servidor\obj\Debug\net6.0\Servidor.genruntimeconfig.cache
 C:\Users\Boti\Desktop\projetots\TopicosSeguranca\Servidor\obj\Debug\net6.0\ref\Servidor.dll
+C:\Users\Marco\Desktop\Escola\TS\Projeto - Copy\Servidor\bin\Debug\net6.0\Servidor.exe
+C:\Users\Marco\Desktop\Escola\TS\Projeto - Copy\Servidor\bin\Debug\net6.0\Servidor.deps.json
+C:\Users\Marco\Desktop\Escola\TS\Projeto - Copy\Servidor\bin\Debug\net6.0\Servidor.runtimeconfig.json
+C:\Users\Marco\Desktop\Escola\TS\Projeto - Copy\Servidor\bin\Debug\net6.0\Servidor.dll
+C:\Users\Marco\Desktop\Escola\TS\Projeto - Copy\Servidor\bin\Debug\net6.0\Servidor.pdb
+C:\Users\Marco\Desktop\Escola\TS\Projeto - Copy\Servidor\bin\Debug\net6.0\System.Data.SqlClient.dll
+C:\Users\Marco\Desktop\Escola\TS\Projeto - Copy\Servidor\bin\Debug\net6.0\runtimes\win-arm64\native\sni.dll
+C:\Users\Marco\Desktop\Escola\TS\Projeto - Copy\Servidor\bin\Debug\net6.0\runtimes\win-x64\native\sni.dll
+C:\Users\Marco\Desktop\Escola\TS\Projeto - Copy\Servidor\bin\Debug\net6.0\runtimes\win-x86\native\sni.dll
+C:\Users\Marco\Desktop\Escola\TS\Projeto - Copy\Servidor\bin\Debug\net6.0\runtimes\unix\lib\netcoreapp2.1\System.Data.SqlClient.dll
+C:\Users\Marco\Desktop\Escola\TS\Projeto - Copy\Servidor\bin\Debug\net6.0\runtimes\win\lib\netcoreapp2.1\System.Data.SqlClient.dll
+C:\Users\Marco\Desktop\Escola\TS\Projeto - Copy\Servidor\obj\Debug\net6.0\Servidor.csproj.AssemblyReference.cache
+C:\Users\Marco\Desktop\Escola\TS\Projeto - Copy\Servidor\obj\Debug\net6.0\Servidor.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Marco\Desktop\Escola\TS\Projeto - Copy\Servidor\obj\Debug\net6.0\Servidor.AssemblyInfoInputs.cache
+C:\Users\Marco\Desktop\Escola\TS\Projeto - Copy\Servidor\obj\Debug\net6.0\Servidor.AssemblyInfo.cs
+C:\Users\Marco\Desktop\Escola\TS\Projeto - Copy\Servidor\obj\Debug\net6.0\Servidor.csproj.CoreCompileInputs.cache
+C:\Users\Marco\Desktop\Escola\TS\Projeto - Copy\Servidor\obj\Debug\net6.0\Servidor.csproj.CopyComplete
+C:\Users\Marco\Desktop\Escola\TS\Projeto - Copy\Servidor\obj\Debug\net6.0\Servidor.dll
+C:\Users\Marco\Desktop\Escola\TS\Projeto - Copy\Servidor\obj\Debug\net6.0\refint\Servidor.dll
+C:\Users\Marco\Desktop\Escola\TS\Projeto - Copy\Servidor\obj\Debug\net6.0\Servidor.pdb
+C:\Users\Marco\Desktop\Escola\TS\Projeto - Copy\Servidor\obj\Debug\net6.0\Servidor.genruntimeconfig.cache
+C:\Users\Marco\Desktop\Escola\TS\Projeto - Copy\Servidor\obj\Debug\net6.0\ref\Servidor.dll

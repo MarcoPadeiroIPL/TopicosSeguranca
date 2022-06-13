@@ -1,0 +1,263 @@
+A iniciar o servidor 127.0.0.1...
+A definir a porta do servidor
+PORTA: 5000
+Servidor pronto!
+
+A aguardar clientes...
+
+[22:10] O cliente 1 está a tentar entrar...
+[22:10] O servidor enviou a sua chave publica ao cliente a tentar entrar
+[22:10] O cliente 1 enviou a sua chave publica ao servidor
+[22:10] O cliente 1 enviou as suas credencias encriptadas pela chave publica do servidor
+[22:10] O servidor utilizou a sua chave privada para a decriptação das credencias
+[22:10] A validar as credenciais do cliente 1...
+[22:10] As credenciais do cliente 1 são validas!
+[22:10] A encriptar a chave secreta com a chave publica do cliente marco!
+[22:10] A enviar a chave secreta ao cliente marco...
+[22:10] O servidor enviou a assinatura para o cliente!
+[22:10] A avisar o resto dos clientes que o utilizador marco entrou no chat!
+[22:10] O servidor recebeu um vetor de inicialização
+[22:10] O cliente marco enviou uma mensagem encriptada com a chave secreta para o servidor!
+[22:10] O servidor assinou a mensagem enviada pelo cliente marco!
+[22:10] O servidor enviou a assinatura para todos os clientes!
+[22:10] O servidor enviou a mensagem encriptada e assinada para todos os clientes!
+[22:10] O servidor recebeu um vetor de inicialização
+[22:10] O cliente marco enviou uma mensagem encriptada com a chave secreta para o servidor!
+[22:10] O servidor assinou a mensagem enviada pelo cliente marco!
+[22:10] O servidor enviou a assinatura para todos os clientes!
+[22:10] O servidor enviou a mensagem encriptada e assinada para todos os clientes!
+[22:10] O servidor recebeu um vetor de inicialização
+[22:10] O cliente marco enviou uma mensagem encriptada com a chave secreta para o servidor!
+[22:10] O servidor assinou a mensagem enviada pelo cliente marco!
+[22:10] O servidor enviou a assinatura para todos os clientes!
+[22:10] O servidor enviou a mensagem encriptada e assinada para todos os clientes!
+[22:10] O servidor recebeu um vetor de inicialização
+[22:10] O cliente marco enviou uma mensagem encriptada com a chave secreta para o servidor!
+[22:10] O servidor assinou a mensagem enviada pelo cliente marco!
+[22:10] O servidor enviou a assinatura para todos os clientes!
+[22:10] O servidor enviou a mensagem encriptada e assinada para todos os clientes!
+[22:10] O servidor recebeu um vetor de inicialização
+[22:10] O cliente marco enviou uma mensagem encriptada com a chave secreta para o servidor!
+[22:10] O servidor assinou a mensagem enviada pelo cliente marco!
+[22:10] O servidor enviou a assinatura para todos os clientes!
+[22:10] O servidor enviou a mensagem encriptada e assinada para todos os clientes!
+[22:10] O servidor recebeu um vetor de inicialização
+[22:10] O cliente marco enviou uma mensagem encriptada com a chave secreta para o servidor!
+[22:10] O servidor assinou a mensagem enviada pelo cliente marco!
+[22:10] O servidor enviou a assinatura para todos os clientes!
+[22:10] O servidor enviou a mensagem encriptada e assinada para todos os clientes!
+[22:10] O servidor recebeu um vetor de inicialização
+[22:10] O cliente marco enviou uma mensagem encriptada com a chave secreta para o servidor!
+[22:10] O servidor assinou a mensagem enviada pelo cliente marco!
+[22:10] O servidor enviou a assinatura para todos os clientes!
+[22:10] O servidor enviou a mensagem encriptada e assinada para todos os clientes!
+[22:10] O servidor recebeu um vetor de inicialização
+[22:10] O cliente marco enviou uma mensagem encriptada com a chave secreta para o servidor!
+[22:10] O servidor assinou a mensagem enviada pelo cliente marco!
+[22:10] O servidor enviou a assinatura para todos os clientes!
+[22:10] O servidor enviou a mensagem encriptada e assinada para todos os clientes!
+[22:10] O servidor recebeu um vetor de inicialização
+[22:10] O cliente marco enviou uma mensagem encriptada com a chave secreta para o servidor!
+[22:10] O servidor assinou a mensagem enviada pelo cliente marco!
+[22:10] O servidor enviou a assinatura para todos os clientes!
+[22:10] O servidor enviou a mensagem encriptada e assinada para todos os clientes!
+[22:10] O servidor recebeu um vetor de inicialização
+[22:10] O cliente marco enviou uma mensagem encriptada com a chave secreta para o servidor!
+[22:10] O servidor assinou a mensagem enviada pelo cliente marco!
+[22:10] O servidor enviou a assinatura para todos os clientes!
+[22:10] O servidor enviou a mensagem encriptada e assinada para todos os clientes!
+[22:10] O servidor recebeu um vetor de inicialização
+[22:10] O cliente marco enviou uma mensagem encriptada com a chave secreta para o servidor!
+[22:10] O servidor assinou a mensagem enviada pelo cliente marco!
+[22:10] O servidor enviou a assinatura para todos os clientes!
+[22:10] O servidor enviou a mensagem encriptada e assinada para todos os clientes!
+[22:10] O servidor recebeu um vetor de inicialização
+[22:10] O cliente marco enviou uma mensagem encriptada com a chave secreta para o servidor!
+[22:10] O servidor assinou a mensagem enviada pelo cliente marco!
+[22:10] O servidor enviou a assinatura para todos os clientes!
+[22:10] O servidor enviou a mensagem encriptada e assinada para todos os clientes!
+[22:10] O cliente 2 está a tentar entrar...
+[22:10] O servidor enviou a sua chave publica ao cliente a tentar entrar
+[22:10] O cliente 2 enviou a sua chave publica ao servidor
+[22:11] O cliente 3 está a tentar entrar...
+[22:11] O servidor enviou a sua chave publica ao cliente a tentar entrar
+[22:11] O cliente 3 enviou a sua chave publica ao servidor
+[22:11] O cliente 4 está a tentar entrar...
+[22:11] O servidor enviou a sua chave publica ao cliente a tentar entrar
+[22:11] O cliente 4 enviou a sua chave publica ao servidor
+[22:11] O cliente 5 está a tentar entrar...
+[22:11] O servidor enviou a sua chave publica ao cliente a tentar entrar
+[22:11] O cliente 5 enviou a sua chave publica ao servidor
+[22:11] O cliente 6 está a tentar entrar...
+[22:11] O servidor enviou a sua chave publica ao cliente a tentar entrar
+[22:11] O cliente 6 enviou a sua chave publica ao servidor
+[22:11] O cliente 7 está a tentar entrar...
+[22:11] O servidor enviou a sua chave publica ao cliente a tentar entrar
+[22:11] O cliente 7 enviou a sua chave publica ao servidor
+[22:11] O cliente 8 está a tentar entrar...
+[22:11] O servidor enviou a sua chave publica ao cliente a tentar entrar
+[22:11] O cliente 8 enviou a sua chave publica ao servidor
+[22:11] O cliente 9 está a tentar entrar...
+[22:11] O servidor enviou a sua chave publica ao cliente a tentar entrar
+[22:11] O cliente 9 enviou a sua chave publica ao servidor
+[22:12] O cliente 2 enviou as suas credencias encriptadas pela chave publica do servidor
+[22:12] O servidor utilizou a sua chave privada para a decriptação das credencias
+[22:12] A validar as credenciais do cliente 2...
+[22:12] As credenciais do cliente 2 são validas!
+[22:12] A encriptar a chave secreta com a chave publica do cliente tomas!
+[22:12] A enviar a chave secreta ao cliente tomas...
+[22:12] O servidor enviou a assinatura para o cliente!
+[22:12] A avisar o resto dos clientes que o utilizador tomas entrou no chat!
+[22:12] O cliente 3 enviou as suas credencias encriptadas pela chave publica do servidor
+[22:12] O servidor utilizou a sua chave privada para a decriptação das credencias
+[22:12] A validar as credenciais do cliente 3...
+[22:12] As credenciais do cliente 3 são validas!
+[22:12] A encriptar a chave secreta com a chave publica do cliente bernardo!
+[22:12] A enviar a chave secreta ao cliente bernardo...
+[22:12] O servidor enviou a assinatura para o cliente!
+[22:12] A avisar o resto dos clientes que o utilizador bernardo entrou no chat!
+[22:12] O cliente 4 enviou as suas credencias encriptadas pela chave publica do servidor
+[22:12] O servidor utilizou a sua chave privada para a decriptação das credencias
+[22:12] A validar as credenciais do cliente 4...
+[22:12] As credenciais do cliente 4 são validas!
+[22:12] A encriptar a chave secreta com a chave publica do cliente luis!
+[22:12] A enviar a chave secreta ao cliente luis...
+[22:12] O servidor enviou a assinatura para o cliente!
+[22:12] A avisar o resto dos clientes que o utilizador luis entrou no chat!
+[22:12] O cliente 5 enviou as suas credencias encriptadas pela chave publica do servidor
+[22:12] O servidor utilizou a sua chave privada para a decriptação das credencias
+[22:12] A validar as credenciais do cliente 5...
+[22:12] As credenciais do cliente 5 não são validas!
+[22:12] O cliente 5 enviou as suas credencias encriptadas pela chave publica do servidor para se registar!
+[22:12] O servidor utilizou a sua chave privada para a decriptação das credencias
+[10:06] O registo foi efetuado com sucesso!
+[22:12] O cliente 5 enviou as suas credencias encriptadas pela chave publica do servidor
+[22:12] O servidor utilizou a sua chave privada para a decriptação das credencias
+[22:12] A validar as credenciais do cliente 5...
+[22:12] As credenciais do cliente 5 são validas!
+[22:12] A encriptar a chave secreta com a chave publica do cliente joao!
+[22:12] A enviar a chave secreta ao cliente joao...
+[22:12] O servidor enviou a assinatura para o cliente!
+[22:12] A avisar o resto dos clientes que o utilizador joao entrou no chat!
+[22:12] O cliente 6 enviou as suas credencias encriptadas pela chave publica do servidor
+[22:12] O servidor utilizou a sua chave privada para a decriptação das credencias
+[22:12] A validar as credenciais do cliente 6...
+[22:12] As credenciais do cliente 6 são validas!
+[22:12] A encriptar a chave secreta com a chave publica do cliente pedro!
+[22:12] A enviar a chave secreta ao cliente pedro...
+[22:12] O servidor enviou a assinatura para o cliente!
+[22:12] A avisar o resto dos clientes que o utilizador pedro entrou no chat!
+[22:12] O cliente 7 enviou as suas credencias encriptadas pela chave publica do servidor
+[22:12] O servidor utilizou a sua chave privada para a decriptação das credencias
+[22:13] A validar as credenciais do cliente 7...
+[22:13] As credenciais do cliente 7 não são validas!
+[22:13] O cliente 7 enviou as suas credencias encriptadas pela chave publica do servidor
+[22:13] O servidor utilizou a sua chave privada para a decriptação das credencias
+[22:13] A validar as credenciais do cliente 7...
+[22:13] As credenciais do cliente 7 não são validas!
+[22:13] O cliente 7 enviou as suas credencias encriptadas pela chave publica do servidor
+[22:13] O servidor utilizou a sua chave privada para a decriptação das credencias
+[22:13] A validar as credenciais do cliente 7...
+[22:13] As credenciais do cliente 7 não são validas!
+[22:13] O cliente 7 enviou as suas credencias encriptadas pela chave publica do servidor para se registar!
+[22:13] O servidor utilizou a sua chave privada para a decriptação das credencias
+[10:06] O registo foi efetuado com sucesso!
+[22:13] O cliente 7 enviou as suas credencias encriptadas pela chave publica do servidor
+[22:13] O servidor utilizou a sua chave privada para a decriptação das credencias
+[22:13] A validar as credenciais do cliente 7...
+[22:13] As credenciais do cliente 7 são validas!
+[22:13] A encriptar a chave secreta com a chave publica do cliente guilherme!
+[22:13] A enviar a chave secreta ao cliente guilherme...
+[22:13] O servidor enviou a assinatura para o cliente!
+[22:13] A avisar o resto dos clientes que o utilizador guilherme entrou no chat!
+[22:13] O cliente 8 enviou as suas credencias encriptadas pela chave publica do servidor para se registar!
+[22:13] O servidor utilizou a sua chave privada para a decriptação das credencias
+[10:06] O registo foi efetuado com sucesso!
+[22:13] O cliente 8 enviou as suas credencias encriptadas pela chave publica do servidor
+[22:13] O servidor utilizou a sua chave privada para a decriptação das credencias
+[22:13] A validar as credenciais do cliente 8...
+[22:13] As credenciais do cliente 8 são validas!
+[22:13] A encriptar a chave secreta com a chave publica do cliente fernando!
+[22:13] A enviar a chave secreta ao cliente fernando...
+[22:13] O servidor enviou a assinatura para o cliente!
+[22:13] A avisar o resto dos clientes que o utilizador fernando entrou no chat!
+[22:13] O cliente 9 enviou as suas credencias encriptadas pela chave publica do servidor
+[22:13] O servidor utilizou a sua chave privada para a decriptação das credencias
+[22:13] A validar as credenciais do cliente 9...
+[22:13] As credenciais do cliente 9 são validas!
+[22:13] A encriptar a chave secreta com a chave publica do cliente goncalo!
+[22:13] A enviar a chave secreta ao cliente goncalo...
+[22:13] O servidor enviou a assinatura para o cliente!
+[22:13] A avisar o resto dos clientes que o utilizador goncalo entrou no chat!
+[22:14] O servidor recebeu um vetor de inicialização
+[22:14] O servidor recebeu um vetor de inicialização
+[22:14] O servidor recebeu um vetor de inicialização
+[22:14] O cliente tomas enviou uma mensagem encriptada com a chave secreta para o servidor!
+[22:14] O servidor assinou a mensagem enviada pelo cliente tomas!
+[22:14] O servidor enviou a assinatura para todos os clientes!
+[22:14] O servidor enviou a mensagem encriptada e assinada para todos os clientes!
+[22:14] O servidor recebeu um vetor de inicialização
+[22:14] O servidor recebeu um vetor de inicialização
+[22:14] O cliente luis enviou uma mensagem encriptada com a chave secreta para o servidor!
+[22:14] O servidor assinou a mensagem enviada pelo cliente luis!
+[22:14] O servidor enviou a assinatura para todos os clientes!
+[22:14] O servidor enviou a mensagem encriptada e assinada para todos os clientes!
+[22:14] O servidor recebeu um vetor de inicialização
+[22:14] O cliente pedro enviou uma mensagem encriptada com a chave secreta para o servidor!
+[22:14] O servidor assinou a mensagem enviada pelo cliente pedro!
+[22:14] O servidor enviou a assinatura para todos os clientes!
+[22:14] O servidor enviou a mensagem encriptada e assinada para todos os clientes!
+[22:14] O servidor recebeu um vetor de inicialização
+[22:14] O servidor recebeu um vetor de inicialização
+[22:14] O servidor recebeu um vetor de inicialização
+[22:14] O cliente joao enviou uma mensagem encriptada com a chave secreta para o servidor!
+[22:14] O servidor assinou a mensagem enviada pelo cliente joao!
+[22:14] O servidor enviou a assinatura para todos os clientes!
+[22:14] O servidor enviou a mensagem encriptada e assinada para todos os clientes!
+[22:14] O servidor recebeu um vetor de inicialização
+[22:14] O cliente fernando enviou uma mensagem encriptada com a chave secreta para o servidor!
+[22:14] O servidor assinou a mensagem enviada pelo cliente fernando!
+[22:14] O servidor enviou a assinatura para todos os clientes!
+[22:14] O servidor enviou a mensagem encriptada e assinada para todos os clientes!
+[22:14] O servidor recebeu um vetor de inicialização
+[22:14] O cliente guilherme enviou uma mensagem encriptada com a chave secreta para o servidor!
+[22:14] O servidor assinou a mensagem enviada pelo cliente guilherme!
+[22:14] O servidor enviou a assinatura para todos os clientes!
+[22:14] O servidor enviou a mensagem encriptada e assinada para todos os clientes!
+[22:14] O servidor recebeu um vetor de inicialização
+[22:14] O servidor recebeu um vetor de inicialização
+[22:14] O cliente goncalo enviou uma mensagem encriptada com a chave secreta para o servidor!
+[22:14] O servidor assinou a mensagem enviada pelo cliente goncalo!
+[22:14] O servidor enviou a assinatura para todos os clientes!
+[22:14] O servidor enviou a mensagem encriptada e assinada para todos os clientes!
+[22:15] O servidor recebeu um vetor de inicialização
+[22:15] O cliente marco enviou uma mensagem encriptada com a chave secreta para o servidor!
+[22:15] O servidor assinou a mensagem enviada pelo cliente marco!
+[22:15] O servidor enviou a assinatura para todos os clientes!
+[22:15] O servidor enviou a mensagem encriptada e assinada para todos os clientes!
+[22:15] O servidor recebeu um vetor de inicialização
+[22:15] O cliente tomas enviou uma mensagem encriptada com a chave secreta para o servidor!
+[22:15] O servidor assinou a mensagem enviada pelo cliente tomas!
+[22:15] O servidor enviou a assinatura para todos os clientes!
+[22:15] O servidor enviou a mensagem encriptada e assinada para todos os clientes!
+[22:15] O servidor recebeu um vetor de inicialização
+[22:15] O servidor recebeu um vetor de inicialização
+[22:15] O servidor recebeu um vetor de inicialização
+[22:15] O servidor recebeu um vetor de inicialização
+[22:15] O servidor recebeu um vetor de inicialização
+[22:15] O cliente tomas enviou uma mensagem encriptada com a chave secreta para o servidor!
+[22:15] O servidor assinou a mensagem enviada pelo cliente tomas!
+[22:15] O servidor enviou a assinatura para todos os clientes!
+[22:15] O servidor enviou a mensagem encriptada e assinada para todos os clientes!
+[22:15] O servidor recebeu um vetor de inicialização
+[22:15] O cliente tomas enviou uma mensagem encriptada com a chave secreta para o servidor!
+[22:15] O servidor assinou a mensagem enviada pelo cliente tomas!
+[22:15] O servidor enviou a assinatura para todos os clientes!
+[22:15] O servidor enviou a mensagem encriptada e assinada para todos os clientes!
+[22:15] guilherme saiu do chat.
+[22:15] marco saiu do chat.
+[22:15] luis saiu do chat.
+[22:15] tomas saiu do chat.
+[22:15] bernardo saiu do chat.
+[22:15] joao saiu do chat.
+[22:15] goncalo saiu do chat.

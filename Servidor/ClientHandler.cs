@@ -23,10 +23,8 @@ namespace Servidor
         private string serverPubKey;
 
         // armazenamento da chave publica do cliente
-        private string clientPubKey;
+        private string clientPubKey { get; set; }
 
-        // armazenamento da assinatura digital
-        private byte[] signature;
 
         internal ClientHandler(User currUser, byte[] symmKey, byte[] IV, string serverPrivKey, string serverPubKey)
         {
@@ -90,9 +88,6 @@ namespace Servidor
                             clientPubKey = protocolSI.GetStringFromData();
                             Program.WriteToLog(DateTime.Now.ToString("[HH:mm]") + " O cliente " + currUser.id + " enviou a sua chave publica ao servidor");
                             break;
-                        case ProtocolSICmdType.DIGITAL_SIGNATURE:           // Caso so servidor receba uma assinatura, armazena-a numa variavel para validar o package mais tarde
-                            signature = protocolSI.GetData();
-                            break;
                         case ProtocolSICmdType.USER_OPTION_1:               // USER_OPTION_1 == Cliente a tentar fazer o login              
                             if (!currUser.GetLogin())                       // caso o utilizador atual ainda não esteja logado
                             {
@@ -109,11 +104,28 @@ namespace Servidor
                                 {
                                     Program.WriteToLog(DateTime.Now.ToString("[HH:mm]") + " As credenciais do cliente " + currUser.id + " são validas!");
 
-                                    currUser.ChangeLogin(true); // alteração do estado de login do cliente
-                                    currUser.ChangeUsername(currUser.GetUsername()); // alteração do username do cliente para o username enviado pelo cliente
+                                    foreach (User user in Globals.users)
+                                    {
+                                        if (user == currUser)
+                                        {
+                                            user.ChangeLogin(true);
+                                            user.ChangeUsername(currUser.GetUsername());
+                                            break;
+                                        }
+                                    }
 
                                     Program.WriteToLog(DateTime.Now.ToString("[HH:mm]") + " A encriptar a chave secreta com a chave publica do cliente " + currUser.GetUsername() + "!");
                                     Program.WriteToLog(DateTime.Now.ToString("[HH:mm]") + " A enviar a chave secreta ao cliente " + currUser.GetUsername() + "...");
+
+                                    RSACryptoServiceProvider rsa1 = new RSACryptoServiceProvider();
+                                    rsa1.FromXmlString(serverPrivKey);
+                                    byte[] signature = rsa1.SignData(aes.Key, CryptoConfig.MapNameToOID("SHA1"));
+
+                                    // envia a todos os clientes
+                                    Program.WriteToLog(DateTime.Now.ToString("[HH:mm]") + " O servidor enviou a assinatura para o cliente!");
+                                    package = protocolSI.Make(ProtocolSICmdType.DIGITAL_SIGNATURE, signature);
+                                    currUser.GetStream().Write(package, 0, package.Length);
+                                    currUser.GetStream().Flush();
 
                                     // encripta a chave simetrica com a chave publica do cliente e envia-a
                                     package = protocolSI.Make(ProtocolSICmdType.SECRET_KEY, EncryptAssym(aes.Key, clientPubKey));
@@ -162,6 +174,20 @@ namespace Servidor
                             }
                             currUser.GetStream().Write(package, 0, package.Length);
                             currUser.GetStream().Flush();
+                            break;
+                        case ProtocolSICmdType.USER_OPTION_3: // Utilizador quer fazer o logout
+                            foreach(User user in Globals.users)
+                            {
+                                if(user == currUser)
+                                {
+                                    user.ChangeLogin(false);
+                                    break;
+                                }
+                            }
+                            string messg = DateTime.Now.ToString("[HH:mm]") + " " + currUser.GetUsername() + " saiu do chat.";
+                            Program.WriteToLog(messg);
+                            package = protocolSI.Make(ProtocolSICmdType.DATA, messg);
+                            Program.SendToEveryone(package);
                             break;
                         case ProtocolSICmdType.IV:
                             Program.WriteToLog(DateTime.Now.ToString("[HH:mm]") + " O servidor recebeu um vetor de inicialização");
@@ -437,7 +463,7 @@ namespace Servidor
         private static byte[] GenerateSalt(int size) // Criação de um salt aleatorio para a password
         {
             //Generate a cryptographic random number.
-            RNGCryptoServiceProvider rng = new RNGCryptoServiceProvider();
+            RandomNumberGenerator rng = RandomNumberGenerator.Create();
             byte[] buff = new byte[size];
             rng.GetBytes(buff);
             return buff;

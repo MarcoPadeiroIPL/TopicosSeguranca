@@ -27,7 +27,7 @@ namespace ProjetoTopicosSegurança
         private string clientPrivKey;
 
         // Digital Signature
-        byte[] signature;
+        private byte[] signature;
         public Form1()
         {
             InitializeComponent();
@@ -97,10 +97,19 @@ namespace ProjetoTopicosSegurança
                                 }
                                 break;
                             case ProtocolSICmdType.SECRET_KEY:                          // armazenar a chave secreta
-                                byte[] encryptedKey = protocolSI.GetData();             
-                                aes.Key = DecryptAssym(encryptedKey, clientPrivKey);
-                                ChangeUI(true);
-                                // UI
+
+                                // inicializa um RSA para verificar a assinatura da mensagem
+                                RSACryptoServiceProvider temp1 = new RSACryptoServiceProvider();
+                                temp1.FromXmlString(serverPubKey);
+                                byte[] encryptedKey = protocolSI.GetData();
+
+                                // verifica se a mensagem foi assinada pelo servidor
+                                if (temp1.VerifyData(DecryptAssym(encryptedKey, clientPrivKey), CryptoConfig.MapNameToOID("SHA1"), signature))
+                                {
+                                    aes.Key = DecryptAssym(encryptedKey, clientPrivKey);
+                                    ChangeUI(true);
+                                    // UI
+                                }
                                 break;
                             case ProtocolSICmdType.NACK: // erro no login
                                 ShowError("Credenciais invalidas!"); 
@@ -227,6 +236,7 @@ namespace ProjetoTopicosSegurança
             textBoxChat.Enabled = currState;
             textBoxMensagem.Enabled = currState;
             buttonEnviar.Enabled = currState;
+            buttonLogout.Visible = currState;
         }
         private void DesligarLigarLogin(bool currState) // UI
         {
@@ -234,8 +244,9 @@ namespace ProjetoTopicosSegurança
             label2.Enabled = currState;
             textBoxUsername.Enabled = currState;
             textBoxPassword.Enabled = currState;
-            buttonLogin.Enabled = currState;
-            buttonRegister.Enabled = currState;
+            buttonLogin.Visible = currState;
+            buttonRegister.Visible = currState;
+            buttonLogout.Visible = !currState;
         }
         private byte[] EncryptAssym(byte[] data, string pubKey) // Função dedicada a encriptar com uma chave publica | Criptografia assimetrica
         {
@@ -304,9 +315,30 @@ namespace ProjetoTopicosSegurança
         {
             // escreve a mensagem para o servidor a avisar que o cliente vai encerrar a conexão
             byte[] package = protocolSI.Make(ProtocolSICmdType.EOT);
+            try
+            {
+                networkStream.Write(package, 0, package.Length);
+                networkStream.Close();
+                tcpClient.Close();
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+
+        private void buttonLogout_Click(object sender, EventArgs e)
+        {
+            byte[] package = protocolSI.Make(ProtocolSICmdType.USER_OPTION_3);
             networkStream.Write(package, 0, package.Length);
-            networkStream.Close();
-            tcpClient.Close();
+            networkStream.Flush();
+            DesligarLigarChat(false);
+            DesligarLigarLogin(true);
+            textBoxChat.Clear();
+            aes.Clear();
+            textBoxMensagem.Clear();
+            textBoxUsername.Clear();
+            textBoxPassword.Clear();
         }
     }
 }

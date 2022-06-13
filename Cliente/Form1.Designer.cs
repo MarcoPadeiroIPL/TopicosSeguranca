@@ -37,6 +37,7 @@
             this.label2 = new System.Windows.Forms.Label();
             this.buttonEnviar = new System.Windows.Forms.Button();
             this.buttonRegister = new System.Windows.Forms.Button();
+            this.buttonLogout = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // label1
@@ -73,7 +74,7 @@
             this.buttonLogin.Location = new System.Drawing.Point(67, 198);
             this.buttonLogin.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.buttonLogin.Name = "buttonLogin";
-            this.buttonLogin.Size = new System.Drawing.Size(82, 22);
+            this.buttonLogin.Size = new System.Drawing.Size(82, 27);
             this.buttonLogin.TabIndex = 2;
             this.buttonLogin.TabStop = false;
             this.buttonLogin.Text = "Login";
@@ -86,13 +87,13 @@
             this.textBoxChat.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textBoxChat.Font = new System.Drawing.Font("Cascadia Mono", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.textBoxChat.ForeColor = System.Drawing.Color.White;
-            this.textBoxChat.Location = new System.Drawing.Point(224, 38);
+            this.textBoxChat.Location = new System.Drawing.Point(224, 21);
             this.textBoxChat.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.textBoxChat.Multiline = true;
             this.textBoxChat.Name = "textBoxChat";
             this.textBoxChat.ReadOnly = true;
             this.textBoxChat.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.textBoxChat.Size = new System.Drawing.Size(453, 247);
+            this.textBoxChat.Size = new System.Drawing.Size(457, 268);
             this.textBoxChat.TabIndex = 7;
             this.textBoxChat.TabStop = false;
             // 
@@ -104,9 +105,10 @@
             this.textBoxMensagem.ForeColor = System.Drawing.Color.White;
             this.textBoxMensagem.Location = new System.Drawing.Point(224, 303);
             this.textBoxMensagem.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.textBoxMensagem.Multiline = true;
             this.textBoxMensagem.Name = "textBoxMensagem";
             this.textBoxMensagem.PlaceholderText = "Escreva uma mensagem!";
-            this.textBoxMensagem.Size = new System.Drawing.Size(376, 14);
+            this.textBoxMensagem.Size = new System.Drawing.Size(376, 27);
             this.textBoxMensagem.TabIndex = 11;
             this.textBoxMensagem.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBoxMensagem_KeyPress);
             // 
@@ -142,10 +144,10 @@
             this.buttonEnviar.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.buttonEnviar.Font = new System.Drawing.Font("Cascadia Mono", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.buttonEnviar.ForeColor = System.Drawing.Color.White;
-            this.buttonEnviar.Location = new System.Drawing.Point(606, 300);
+            this.buttonEnviar.Location = new System.Drawing.Point(606, 303);
             this.buttonEnviar.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.buttonEnviar.Name = "buttonEnviar";
-            this.buttonEnviar.Size = new System.Drawing.Size(72, 22);
+            this.buttonEnviar.Size = new System.Drawing.Size(82, 27);
             this.buttonEnviar.TabIndex = 16;
             this.buttonEnviar.Text = "Enviar";
             this.buttonEnviar.UseVisualStyleBackColor = false;
@@ -160,12 +162,28 @@
             this.buttonRegister.Location = new System.Drawing.Point(67, 239);
             this.buttonRegister.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.buttonRegister.Name = "buttonRegister";
-            this.buttonRegister.Size = new System.Drawing.Size(82, 22);
+            this.buttonRegister.Size = new System.Drawing.Size(82, 27);
             this.buttonRegister.TabIndex = 17;
             this.buttonRegister.TabStop = false;
             this.buttonRegister.Text = "Registar";
             this.buttonRegister.UseVisualStyleBackColor = false;
             this.buttonRegister.Click += new System.EventHandler(this.buttonRegister_Click);
+            // 
+            // buttonLogout
+            // 
+            this.buttonLogout.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(36)))), ((int)(((byte)(84)))));
+            this.buttonLogout.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.buttonLogout.Font = new System.Drawing.Font("Cascadia Mono", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.buttonLogout.ForeColor = System.Drawing.Color.White;
+            this.buttonLogout.Location = new System.Drawing.Point(67, 217);
+            this.buttonLogout.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.buttonLogout.Name = "buttonLogout";
+            this.buttonLogout.Size = new System.Drawing.Size(82, 27);
+            this.buttonLogout.TabIndex = 18;
+            this.buttonLogout.TabStop = false;
+            this.buttonLogout.Text = "Logout";
+            this.buttonLogout.UseVisualStyleBackColor = false;
+            this.buttonLogout.Click += new System.EventHandler(this.buttonLogout_Click);
             // 
             // Form1
             // 
@@ -173,6 +191,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(24)))), ((int)(((byte)(36)))), ((int)(((byte)(60)))));
             this.ClientSize = new System.Drawing.Size(693, 338);
+            this.Controls.Add(this.buttonLogout);
             this.Controls.Add(this.buttonRegister);
             this.Controls.Add(this.buttonEnviar);
             this.Controls.Add(this.textBoxPassword);
@@ -184,6 +203,9 @@
             this.Controls.Add(this.label1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.MaximizeBox = false;
+            this.MaximumSize = new System.Drawing.Size(709, 377);
+            this.MinimumSize = new System.Drawing.Size(709, 377);
             this.Name = "Form1";
             this.Text = "Form1";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Form1_FormClosed);
@@ -203,5 +225,6 @@
         private Label label2;
         private Button buttonEnviar;
         private Button buttonRegister;
+        private Button buttonLogout;
     }
 }
